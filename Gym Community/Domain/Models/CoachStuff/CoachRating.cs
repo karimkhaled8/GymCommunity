@@ -1,5 +1,4 @@
-﻿using Gym_Community.Data;
-using Gym_Community.Domain.Models;
+﻿using Gym_Community.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Gym_Community.Domain.Models.CoachStuff

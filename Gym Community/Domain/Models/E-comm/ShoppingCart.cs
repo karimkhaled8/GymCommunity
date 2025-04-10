@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Gym_Community.Data;
 using Gym_Community.Domain.Models;
 
 namespace Gym_Community.Domain.Data.Models.E_comm

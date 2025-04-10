@@ -1,5 +1,4 @@
-﻿using Gym_Community.Data;
-using Gym_Community.Domain.Models;
+﻿using Gym_Community.Domain.Models;
 using System.Threading;
 
 namespace Gym_Community.Domain.Models.Forum

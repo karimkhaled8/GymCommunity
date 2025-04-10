@@ -8,13 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Domain\Enum\**" />
+    <Content Remove="Domain\Enum\**" />
+    <EmbeddedResource Remove="Domain\Enum\**" />
+    <None Remove="Domain\Enum\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.4">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -27,7 +30,6 @@
     <Folder Include="API\DTOs\" />
     <Folder Include="Application\Interfaces\" />
     <Folder Include="Application\Services\" />
-    <Folder Include="Domain\Enum\" />
     <Folder Include="Infrastructure\Interfaces\" />
     <Folder Include="Infrastructure\Repositories\" />
   </ItemGroup>

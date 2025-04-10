@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Gym_Community.Data;
 using Gym_Community.Domain.Data.Models.E_comms;
 using Gym_Community.Domain.Models;
 
