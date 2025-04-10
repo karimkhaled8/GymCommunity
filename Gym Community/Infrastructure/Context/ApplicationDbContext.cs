@@ -7,6 +7,7 @@ using Gym_Community.Domain.Models;
 using Gym_Community.Domain.Models.ClientStuff;
 using Gym_Community.Domain.Models.CoachStuff;
 using Gym_Community.Domain.Models.Forum;
+using Gym_Community.Domain.Models.Gym;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +60,13 @@ namespace Gym_Community.Infrastructure.Context
         //public DbSet<StaticDailyPlan> StaticDailyPlans { get; set; }
         public DbSet<StaticPlan> StaticPlans { get; set; }
         public DbSet<StaticWorkoutDay> StaticWorkoutDays { get; set; }
+        //Gym
+        public DbSet<Gym> Gym { get; set; }
+        public DbSet<GymPlan> GymPlans { get; set; }
+        public DbSet<GymCoach> GymCoaches { get; set; }
+        public DbSet<GymImgs> GymImgs { get; set; }
+        public DbSet<UserSubscription> UserSubscriptions { get; set; }
+
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
