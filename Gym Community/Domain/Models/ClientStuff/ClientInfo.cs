@@ -1,6 +1,6 @@
-﻿using Gym_Community.Domain.Data.Enums;
+﻿using Gym_Community.Domain.Enums;
 
-namespace Gym_Community.Domain.Data.Models.ClientStuff
+namespace Gym_Community.Domain.Models.ClientStuff
 {
     public class ClientInfo
     {

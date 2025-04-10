@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Hosting;
 
-namespace Gym_Community.Domain.Data.Models.Forum;
+namespace Gym_Community.Domain.Models.Forum;
 
 public class Sub
 {

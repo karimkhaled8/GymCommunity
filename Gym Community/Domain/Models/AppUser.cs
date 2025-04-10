@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Gym_Community.Domain.Data.Models
+namespace Gym_Community.Domain.Models
 {
-    public class AppUser :IdentityUser
+    public class AppUser : IdentityUser
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -19,7 +19,7 @@ namespace Gym_Community.Domain.Data.Models
 
         public double? AvgRating { get; set; } = 0;
 
-        public string Gender { get; set; } 
+        public string Gender { get; set; }
 
 
 

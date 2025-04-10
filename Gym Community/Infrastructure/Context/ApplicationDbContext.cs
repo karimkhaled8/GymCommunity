@@ -1,14 +1,14 @@
-﻿using Gym_Community.Domain.Data.Models;
+﻿using Gym_Community.Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gym_Community.Domain.Data.Context
+namespace Gym_Community.Infrastructure.Context
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options ): base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        
+
     }
 }

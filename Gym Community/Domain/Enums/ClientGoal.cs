@@ -1,4 +1,4 @@
-﻿namespace Gym_Community.Domain.Data.Enums
+﻿namespace Gym_Community.Domain.Enums
 {
     public enum ClientGoal
     {

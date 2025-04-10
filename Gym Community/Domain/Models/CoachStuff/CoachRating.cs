@@ -1,7 +1,8 @@
 ﻿using Gym_Community.Data;
+using Gym_Community.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Gym_Community.Domain.Data.Models.CoachStuff
+namespace Gym_Community.Domain.Models.CoachStuff
 {
     public class CoachRating
     {

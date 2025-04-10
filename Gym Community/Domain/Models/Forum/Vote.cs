@@ -1,7 +1,8 @@
 ﻿using Gym_Community.Data;
+using Gym_Community.Domain.Models;
 using System.Threading;
 
-namespace Gym_Community.Domain.Data.Models.Forum
+namespace Gym_Community.Domain.Models.Forum
 {
     public class Vote
     {

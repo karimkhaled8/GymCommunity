@@ -1,4 +1,4 @@
-﻿namespace Gym_Community.Domain.Data.Models.CoachStuff
+﻿namespace Gym_Community.Domain.Models.CoachStuff
 {
     public class CoachCertificate
     {

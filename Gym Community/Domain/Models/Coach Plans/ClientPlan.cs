@@ -1,4 +1,5 @@
 ﻿using Gym_Community.Data;
+using Gym_Community.Domain.Models;
 
 namespace Gym_Community.Domain.Data.Models.Meals_and_Exercise
 {
