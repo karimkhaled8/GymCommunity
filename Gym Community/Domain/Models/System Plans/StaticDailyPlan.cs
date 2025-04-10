@@ -4,7 +4,7 @@ namespace Gym_Community.Domain.Data.Models.System_Plans
 {
     public class StaticDailyPlan
     {
-        public List<StaticDailyExercise> Exercises { get; set; }
-        public List<StaticDailyMeal> Meals { get; set; }
+        public ICollection<StaticDailyExercise> Exercises { get; set; } = new List<StaticDailyExercise>();  
+        public ICollection<StaticDailyMeal> Meals { get; set; } = new List<StaticDailyMeal>();
     }
 }

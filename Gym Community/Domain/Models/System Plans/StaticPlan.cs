@@ -1,9 +1,11 @@
 ﻿using Gym_Community.Domain.Data.Models.Meals_and_Exercise;
+using System.ComponentModel.DataAnnotations;
 
 namespace Gym_Community.Domain.Data.Models.System_Plans
 {
     public class StaticPlan
     {
+        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -16,6 +18,6 @@ namespace Gym_Community.Domain.Data.Models.System_Plans
         public int CarbsPercentage { get; set; }
         public int FatsPercentage { get; set; }
 
-        public ICollection<WorkoutDay> WorkoutDays { get; set; }
+        public ICollection<WorkoutDay> WorkoutDays { get; set; } = new List<WorkoutDay>();
     }
 }

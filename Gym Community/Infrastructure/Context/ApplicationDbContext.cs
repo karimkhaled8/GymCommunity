@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Globalization;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Gym_Community.Infrastructure.Context
@@ -23,7 +24,7 @@ namespace Gym_Community.Infrastructure.Context
         public DbSet<ClientPlan> ClientPlans { get; set; }
         public DbSet<DailyExercise> DailyExercises { get; set; }
         public DbSet<DailyMeal> DailyMeals { get; set; }
-        public DbSet<DailyPlan> DailyPlans { get; set; }
+        //public DbSet<DailyPlan> DailyPlans { get; set; }
         public DbSet<WorkoutDay> WorkoutDays { get; set; }
         //Coach Stuff
         public DbSet<CoachCertificate> CoachCertificates { get; set; }
@@ -67,14 +68,14 @@ namespace Gym_Community.Infrastructure.Context
         {
             base.OnModelCreating(builder);
 
+            builder.Ignore<CultureInfo>(); // Ignore CultureInfo globally
 
             builder.Entity<IdentityRole>().HasData(
-            new IdentityRole { ConcurrencyStamp = "1", Name = "Admin", NormalizedName ="ADMIN" },
-            new IdentityRole { ConcurrencyStamp = "2", Name = "Coach", NormalizedName = "COACH" },
-            new IdentityRole { ConcurrencyStamp = "3", Name = "Client", NormalizedName = "CLIENT" },
-            new IdentityRole { ConcurrencyStamp = "4", Name = "GymOwner", NormalizedName = "GYMOWNER" }
-                );
-      
+                new IdentityRole { ConcurrencyStamp = "1", Name = "Admin", NormalizedName = "ADMIN" },
+                new IdentityRole { ConcurrencyStamp = "2", Name = "Coach", NormalizedName = "COACH" },
+                new IdentityRole { ConcurrencyStamp = "3", Name = "Client", NormalizedName = "CLIENT" },
+                new IdentityRole { ConcurrencyStamp = "4", Name = "GymOwner", NormalizedName = "GYMOWNER" }
+            );
         }
     }
 }   

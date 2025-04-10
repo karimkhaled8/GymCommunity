@@ -7,7 +7,7 @@ namespace Gym_Community.Domain.Data.Models.Payment_and_Shipping
     public class Payment
     {
         [Key]
-        public int PaymentID { get; set; }
+        public int Id { get; set; }
 
         public DateTime PaymentDate { get; set; } = DateTime.UtcNow;
 

@@ -1,4 +1,5 @@
 ﻿using Gym_Community.Domain.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Threading;
 
 namespace Gym_Community.Domain.Models.Forum
@@ -6,14 +7,23 @@ namespace Gym_Community.Domain.Models.Forum
     public class Vote
     {
         public int Id { get; set; }
+        
+        
+        [ForeignKey("AppUser")]
         public string UserId { get; set; }
         public AppUser AppUser { get; set; }
+        
+        
+        [ForeignKey("Thread")]
         public int? ThreadId { get; set; } // Nullable if voting on replies too
         public Thread Thread { get; set; }
+
+
+
+        [ForeignKey("Comment")]
         public int? CommentId { get; set; }  // Nullable if voting on threads too
         public Comment Comment { get; set; }
         public bool IsUpvote { get; set; }
-
 
     }
 

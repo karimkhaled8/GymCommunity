@@ -5,7 +5,9 @@ using Gym_Community.Domain.Data.Models.E_comms;
 namespace Gym_Community.Domain.Data.Models.E_comm
 {
     public class OrderItem
-    {    
+    {
+        [Key]
+        public int Id { get; set; }
 
         [ForeignKey("Order")]
         public int OrderID { get; set; }

@@ -8,9 +8,9 @@ namespace Gym_Community.Domain.Data.Models.E_comm
     public class Wishlist
     {
         [Key]
-        public int WishlistID { get; set; }
+        public int Id { get; set; }
 
-        [ForeignKey("ApplicationUser")]
+        [ForeignKey("AppUser")]
         public string? UserID { get; set; }
         public AppUser AppUser { get; set; }
 

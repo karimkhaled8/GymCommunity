@@ -7,10 +7,10 @@ namespace Gym_Community.Domain.Data.Models.E_comms
     public class Product
     {
         [Key]
-        public int ProductID { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(50)]
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -24,9 +24,7 @@ namespace Gym_Community.Domain.Data.Models.E_comms
 
         // Replaced ImageData and ImageMimeType with ImageUrl
         public string? ImageUrl { get; set; }
-
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
         public float? AverageRating { get; set; }
 
         [ForeignKey("Category")]

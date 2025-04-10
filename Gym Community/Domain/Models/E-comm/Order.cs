@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Gym_Community.Domain.Data.Models.Payment_and_Shipping;
 using Gym_Community.Domain.Models;
+using Gym_Community.Domain.Enums;
 
 namespace Gym_Community.Domain.Data.Models.E_comm
 {
@@ -10,10 +11,17 @@ namespace Gym_Community.Domain.Data.Models.E_comm
         [Key]
         public int OrderID { get; set; }
 
-        [ForeignKey("ApplicationUser")]
+        [ForeignKey("AppUser")]
         public string? UserID { get; set; }
- 
         public AppUser AppUser { get; set; }
+
+        [ForeignKey("Payment")]
+        public int PaymentId { get; set; }
+        public Payment Payment { get; set; }
+
+        [ForeignKey("Shipping")]
+        public int ShipingId { get; set; }
+        public Shipping Shipping { get; set; }
 
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
@@ -22,10 +30,7 @@ namespace Gym_Community.Domain.Data.Models.E_comm
         public decimal TotalAmount { get; set; }
 
         [MaxLength(50)]
-        public string PaymentStatus { get; set; } = "Unpaid";
-
-        public ICollection<OrderItem> OrderItems { get; set; }
-        public Payment Payment { get; set; }
-        public Shipping Shipping { get; set; }
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unknown;
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

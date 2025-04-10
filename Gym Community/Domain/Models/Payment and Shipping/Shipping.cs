@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Gym_Community.Domain.Data.Models.E_comm;
+using Gym_Community.Domain.Enums;
 
 namespace Gym_Community.Domain.Data.Models.Payment_and_Shipping
 {
     public class Shipping
     {
         [Key]
-        public int ShippingID { get; set; }
+        public int Id { get; set; }
 
         [ForeignKey("Order")]
         public int OrderID { get; set; }
@@ -23,10 +24,10 @@ namespace Gym_Community.Domain.Data.Models.Payment_and_Shipping
         public DateTime? EstimatedDeliveryDate { get; set; }
 
         [MaxLength(50)]
-        public string ShippingStatus { get; set; } = "In Transit";
+        public ShippingStatus ShippingStatus { get; set; } = ShippingStatus.Pending;
 
         [Required]
         [MaxLength(255)]
-        public string ShippingAddress { get; set; } = "street 123";
+        public string ShippingAddress { get; set; } = string.Empty;
     }
 }

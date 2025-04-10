@@ -9,14 +9,12 @@ namespace Gym_Community.Domain.Data.Models.E_comm
     {
 
         [Key]
-        public int ShoppingCartID { get; set; }
+        public int Id { get; set; }
 
-        [ForeignKey("ApplicationUser")]
+        [ForeignKey("AppUser")]
         public string UserId { get; set; }
-
-   
         public AppUser AppUser { get; set; }
 
-        public ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
+        public ICollection<ShoppingCartItem> ShoppingCartItems { get; set; } = new List<ShoppingCartItem>();
     }
 }

@@ -2,8 +2,8 @@
 {
     public class DailyPlan
     {
-        public List<DailyExercise> Exercises { get; set; }
-        public List<DailyMeal> Meals { get; set; }
+        public ICollection<DailyExercise> Exercises { get; set; } = new List<DailyExercise>();
+        public ICollection<DailyMeal> Meals { get; set; } = new List<DailyMeal>();
     }
 
 }
