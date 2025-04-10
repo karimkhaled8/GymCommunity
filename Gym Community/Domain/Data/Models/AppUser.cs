@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Gym_Community.Data
+namespace Gym_Community.Domain.Data.Models
 {
     public class AppUser :IdentityUser
     {

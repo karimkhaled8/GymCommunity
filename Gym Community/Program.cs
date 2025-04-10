@@ -1,6 +1,7 @@
 
 using System.Text;
-using Gym_Community.Data;
+using Gym_Community.Domain.Data.Context;
+using Gym_Community.Domain.Data.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
