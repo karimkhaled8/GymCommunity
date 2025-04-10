@@ -14,9 +14,9 @@ namespace Gym_Community.Domain.Models.Forum
         public AppUser AppUser { get; set; }
         
         
-        [ForeignKey("Thread")]
-        public int? ThreadId { get; set; } // Nullable if voting on replies too
-        public Thread Thread { get; set; }
+        [ForeignKey("Post")]
+        public int? PostId { get; set; } // Nullable if voting on replies too
+        public Post Post { get; set; }
 
 
 

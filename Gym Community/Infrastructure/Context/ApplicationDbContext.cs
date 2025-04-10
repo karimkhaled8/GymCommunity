@@ -56,7 +56,7 @@ namespace Gym_Community.Infrastructure.Context
         //System Plans
         public DbSet<StaticDailyExercise> StaticDailyExercises { get; set; }
         public DbSet<StaticDailyMeal> StaticDailyMeals { get; set; }
-        public DbSet<StaticDailyPlan> StaticDailyPlans { get; set; }
+        //public DbSet<StaticDailyPlan> StaticDailyPlans { get; set; }
         public DbSet<StaticPlan> StaticPlans { get; set; }
         public DbSet<StaticWorkoutDay> StaticWorkoutDays { get; set; }
 
@@ -71,10 +71,10 @@ namespace Gym_Community.Infrastructure.Context
             builder.Ignore<CultureInfo>(); // Ignore CultureInfo globally
 
             builder.Entity<IdentityRole>().HasData(
-                new IdentityRole { ConcurrencyStamp = "1", Name = "Admin", NormalizedName = "ADMIN" },
-                new IdentityRole { ConcurrencyStamp = "2", Name = "Coach", NormalizedName = "COACH" },
-                new IdentityRole { ConcurrencyStamp = "3", Name = "Client", NormalizedName = "CLIENT" },
-                new IdentityRole { ConcurrencyStamp = "4", Name = "GymOwner", NormalizedName = "GYMOWNER" }
+                new IdentityRole { Id = "1", ConcurrencyStamp = "1", Name = "Admin", NormalizedName = "ADMIN" },
+                new IdentityRole { Id = "2", ConcurrencyStamp = "2", Name = "Coach", NormalizedName = "COACH" },
+                new IdentityRole { Id = "3", ConcurrencyStamp = "3", Name = "Client", NormalizedName = "CLIENT" },
+                new IdentityRole { Id = "4", ConcurrencyStamp = "4", Name = "GymOwner", NormalizedName = "GYMOWNER" }
             );
         }
     }
