@@ -18,6 +18,6 @@ namespace Gym_Community.Domain.Data.Models.System_Plans
         public int CarbsPercentage { get; set; }
         public int FatsPercentage { get; set; }
 
-        public ICollection<WorkoutDay> WorkoutDays { get; set; } = new List<WorkoutDay>();
+        public ICollection<StaticWorkoutDay> StaticWorkoutDays { get; set; } = new List<StaticWorkoutDay>();
     }
 }
