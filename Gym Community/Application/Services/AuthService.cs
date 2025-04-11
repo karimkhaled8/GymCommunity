@@ -13,11 +13,13 @@ namespace Gym_Community.Application.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AuthService(IConfiguration configuration, UserManager<AppUser> userManager)
+        public AuthService(IConfiguration configuration, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager )
         {
             _configuration = configuration;
             _userManager = userManager;
+            _roleManager = roleManager;
 
         }
 
@@ -102,10 +104,16 @@ namespace Gym_Community.Application.Services
             {
                 return "failed"; 
             }
-            if (!string.IsNullOrEmpty(registerDTO.Role))
+            var roleExist = await _roleManager.RoleExistsAsync(registerDTO.Role);
+            if (!roleExist)
             {
-                await _userManager.AddToRoleAsync(User, registerDTO.Role);
+                await _userManager.DeleteAsync(User);
+                return "falseRole";
             }
+                await _userManager.AddToRoleAsync(User, registerDTO.Role);
+            
+           
+
             return await GenerateJwtTokenAsync(User);
           
         }

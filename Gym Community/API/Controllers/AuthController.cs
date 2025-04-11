@@ -32,7 +32,11 @@ namespace Gym_Community.API.Controllers
             {
                 return BadRequest(new { message = "User creation failed" });
             }
-         
+            else if (result == "falseRole")
+            {
+                return BadRequest(new { message = "Role dont exist" });
+            }
+
             return Ok(new { message = "Account Created", token=result });
         }
     }
