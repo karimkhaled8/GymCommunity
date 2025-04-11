@@ -39,5 +39,18 @@ namespace Gym_Community.API.Controllers
 
             return Ok(new { message = "Account Created", token=result });
         }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO) 
+        {
+            var result = await _authService.login(loginDTO);
+            if(result == "error")
+            {
+                return BadRequest(new { message = "Wrong Email or Password" });
+            }
+
+            return Ok(new {message="login successfully",token = result});
+
+        }
     }
 }

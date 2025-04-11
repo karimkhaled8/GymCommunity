@@ -70,9 +70,19 @@ namespace Gym_Community.Application.Services
             return true;
         }
 
-        public Task<string> login(LoginDTO loginDto)
+        public async Task<string> login(LoginDTO loginDto)
         {
-            throw new NotImplementedException();
+            
+            if(await IsAuthenticated(loginDto.Email))
+            {
+                var user = await _userManager.FindByEmailAsync(loginDto.Email);
+                if (await _userManager.CheckPasswordAsync(user, loginDto.Password)) 
+                {
+                    return await GenerateJwtTokenAsync(user);
+                }
+                return "error";
+            }
+            return "error";
         }
 
         public async Task<string> register(RegisterDTO registerDTO)
@@ -111,7 +121,6 @@ namespace Gym_Community.Application.Services
                 return "falseRole";
             }
                 await _userManager.AddToRoleAsync(User, registerDTO.Role);
-            
            
 
             return await GenerateJwtTokenAsync(User);
