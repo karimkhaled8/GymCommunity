@@ -1,5 +1,7 @@
 
 using System.Text;
+using Gym_Community.Application.Interfaces;
+using Gym_Community.Application.Services;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -44,6 +46,12 @@ namespace Gym_Community
             });
 
             // Add services to the container.
+
+
+
+
+            //Services  
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
