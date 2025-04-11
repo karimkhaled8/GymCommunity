@@ -1,5 +1,6 @@
 
 using System.Text;
+using EmailServices;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Services;
 using Gym_Community.Domain.Models;
@@ -52,6 +53,11 @@ namespace Gym_Community
 
             //Services  
             builder.Services.AddScoped<IAuthService, AuthService>();
+
+
+            //Email service
+            builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

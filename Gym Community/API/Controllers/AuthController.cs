@@ -1,4 +1,5 @@
-﻿using Gym_Community.API.DTOs.Auth;
+﻿using EmailServices;
+using Gym_Community.API.DTOs.Auth;
 using Gym_Community.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,11 @@ namespace Gym_Community.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly IEmailService _emailService;
+        public AuthController(IAuthService authService , IEmailService emailService)
         {
             _authService = authService;
+            _emailService = emailService;
 
         }
 
@@ -48,6 +51,8 @@ namespace Gym_Community.API.Controllers
             {
                 return BadRequest(new { message = "Wrong Email or Password" });
             }
+
+            await _emailService.SendEmailAsync("mostafasamir112002@gmail.com", "testmail", "hello form gym");
 
             return Ok(new {message="login successfully",token = result});
 
