@@ -12,5 +12,7 @@ namespace Gym_Community.Application.Interfaces
         public Task<string> register(RegisterDTO registerDTO);
 
         public Task<bool> IsAuthenticated(string email);
+
+        public Task<bool> ConfirmEmail(string email, string token);
     }
 }

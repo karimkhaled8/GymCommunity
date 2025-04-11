@@ -1,7 +1,9 @@
-﻿using Gym_Community.API.DTOs.Auth;
+﻿using EmailServices;
+using Gym_Community.API.DTOs.Auth;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -14,13 +16,29 @@ namespace Gym_Community.Application.Services
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailService _emailService;
 
-        public AuthService(IConfiguration configuration, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager )
+        public AuthService(IConfiguration configuration, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IEmailService emailService)
         {
             _configuration = configuration;
             _userManager = userManager;
             _roleManager = roleManager;
+            _emailService = emailService;
+        }
 
+        public async Task<bool> ConfirmEmail(string email, string token)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return false;
+            }
+            var confirmed = await _userManager.ConfirmEmailAsync(user, token);
+            if (confirmed.Succeeded)
+            {
+                return true;
+            }
+            return false;
         }
 
         public async Task<string?> GenerateJwtTokenAsync(AppUser user)
@@ -51,7 +69,7 @@ namespace Gym_Community.Application.Services
                     expires: DateTime.UtcNow.AddDays(3),
                     signingCredentials: credentials
                 );
-
+                
                 return new JwtSecurityTokenHandler().WriteToken(token);
             }
             else
@@ -76,6 +94,12 @@ namespace Gym_Community.Application.Services
             if(await IsAuthenticated(loginDto.Email))
             {
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+                // check for email validation 
+                //if(!await _userManager.IsEmailConfirmedAsync(user)) { 
+                //    return "notConfirmed";
+                //}
+
                 if (await _userManager.CheckPasswordAsync(user, loginDto.Password)) 
                 {
                     return await GenerateJwtTokenAsync(user);
@@ -106,6 +130,7 @@ namespace Gym_Community.Application.Services
                 PhoneNumber = registerDTO.Phone,
                 BirthDate = registerDTO.BirthDate,
                 UserName = registerDTO.Email,
+                
 
 
             };
@@ -121,10 +146,24 @@ namespace Gym_Community.Application.Services
                 return "falseRole";
             }
                 await _userManager.AddToRoleAsync(User, registerDTO.Role);
-           
 
-            return await GenerateJwtTokenAsync(User);
-          
+            #region Email confirmation pls dont delete
+            //var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(User);
+            //var param = new Dictionary<string, string?>
+            //    {
+            //        { "token", confirmationToken },
+            //        { "email", User.Email }
+            //    };
+
+            //var callback =QueryHelpers.AddQueryString(registerDTO.ClientUri!, param);
+
+            //await _emailService.SendEmailAsync(registerDTO.Email, "Confirm your email", $"<h1>Confirm your email</h1><p>Please confirm your email by clicking <a href='{callback}'>here</a></p>");
+            //await _emailService.SendEmailAsync(registerDTO.Email, "Confirm your email", callback);
+            #endregion
+
+            //return await GenerateJwtTokenAsync(User);
+            return StatusCodes.Status201Created.ToString();
+
         }
     }
 }

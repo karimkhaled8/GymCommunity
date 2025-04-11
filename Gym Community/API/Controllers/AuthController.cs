@@ -40,7 +40,8 @@ namespace Gym_Community.API.Controllers
                 return BadRequest(new { message = "Role dont exist" });
             }
 
-            return Ok(new { message = "Account Created", token=result });
+
+            return Ok(new { message = "Account Created", status=result });
         }
 
         [HttpPost("Login")]
@@ -50,12 +51,27 @@ namespace Gym_Community.API.Controllers
             if(result == "error")
             {
                 return BadRequest(new { message = "Wrong Email or Password" });
+            }else if ( result== "notConfirmed") 
+            {
+                return BadRequest(new { message = "Email not confirmed please check your email" });
             }
 
-            await _emailService.SendEmailAsync("mostafasamir112002@gmail.com", "testmail", "hello form gym");
+           
 
             return Ok(new {message="login successfully",token = result});
 
+        }
+
+
+        [HttpPost("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery] string email,[FromQuery] string token )
+        {
+            var result = await _authService.ConfirmEmail(email, token);
+            if (result)
+            {
+                return Ok(new { message = "Email confirmed" });
+            }
+            return BadRequest(new { message = "Error in email confirmation" });
         }
     }
 }

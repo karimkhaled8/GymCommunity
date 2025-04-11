@@ -15,5 +15,7 @@ namespace Gym_Community.API.DTOs.Auth
         public string Phone { get; set; }
         public string? Role { get; set; }
 
+        public string? ClientUri { get; set; } = "https://www.ourWebsite.com/api/auth/ConfirmEmail"; // For email confirmation
+
     }
 }
