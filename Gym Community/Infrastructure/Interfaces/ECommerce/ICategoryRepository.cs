@@ -8,6 +8,6 @@ namespace Gym_Community.Infrastructure.Interfaces.ECommerce
         public Task<IEnumerable<Category>> ListAsync();
         public Task<Category?> GetById(int id);
         public Task<Category?> UpdateAsync(Category category);
-        public Task<bool> RemoveAsync(Category category)
+        public Task<bool> RemoveAsync(Category category);
     }
 }

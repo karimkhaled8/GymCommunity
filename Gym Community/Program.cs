@@ -4,9 +4,13 @@ using Amazon.Runtime;
 using Amazon.S3;
 using EmailServices;
 using Gym_Community.Application.Interfaces;
+using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Application.Services;
+using Gym_Community.Application.Services.Forum;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
+using Gym_Community.Infrastructure.Interfaces.Forum;
+using Gym_Community.Infrastructure.Repositories.Forum;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -70,12 +74,17 @@ namespace Gym_Community
             //Services  
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IAwsService, AwsService>();
+            builder.Services.AddScoped<ISubService, SubService>();
+            builder.Services.AddScoped<IPostService, PostService>();
 
 
             //Email service
             builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
             builder.Services.AddScoped<IEmailService, EmailService>();
 
+            //Repo
+            builder.Services.AddScoped<ISubRepository, SubRepository>();
+            builder.Services.AddScoped<IPostRepository, PostRepository>();
 
             //life time for all tokens (email confirmation , pass reset, etc..)
             builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>

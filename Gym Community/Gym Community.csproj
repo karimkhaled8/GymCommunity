@@ -29,11 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\Interfaces\" />
-    <Folder Include="Infrastructure\Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EmailService\EmailServices.csproj" />
   </ItemGroup>
 
