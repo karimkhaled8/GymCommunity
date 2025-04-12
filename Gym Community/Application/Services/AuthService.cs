@@ -165,5 +165,45 @@ namespace Gym_Community.Application.Services
             return StatusCodes.Status201Created.ToString();
 
         }
+
+        public async Task<bool> ForgotPassword(ForgetPasswordDTO forgetPasswordDTO)
+        {
+            var user = await _userManager.FindByEmailAsync(forgetPasswordDTO.Email);
+            if (user == null)
+            {
+                return false;
+            }
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var param = new Dictionary<string, string?>
+            {
+                { "token", token },
+                { "email", user.Email }
+            };
+
+            var callback = QueryHelpers.AddQueryString(forgetPasswordDTO.ClientUri!, param);
+            //await _emailService.SendEmailAsync(forgetPasswordDTO.Email, "Reset your password", $"<h1>Reset your password</h1><p>Please reset your password by clicking <a href='{callback}'>here</a></p>");
+            await _emailService.SendEmailAsync(forgetPasswordDTO.Email, "Reset your password", callback);
+
+            return true;
+        }
+
+        public async Task<string> ResetPassword(ResetPasswordDTO resetPasswordDTO, string email, string token)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if(user is null)
+            {
+                return "notfound";
+            }
+            var result = await _userManager.ResetPasswordAsync(user, token, resetPasswordDTO.Password);
+            if (result.Succeeded)
+            {
+                return "success";
+            }
+            else
+            {
+                return "error";
+            }
+        }
     }
 }

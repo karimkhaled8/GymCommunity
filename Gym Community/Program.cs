@@ -59,6 +59,13 @@ namespace Gym_Community
             builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
             builder.Services.AddScoped<IEmailService, EmailService>();
 
+
+            //life time for all tokens (email confirmation , pass reset, etc..)
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+            {
+                options.TokenLifespan = TimeSpan.FromHours(2);
+            });
+
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();

@@ -73,5 +73,27 @@ namespace Gym_Community.API.Controllers
             }
             return BadRequest(new { message = "Error in email confirmation" });
         }
+
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgetPasswordDTO forgetPasswordDTO)
+        {
+            var result = await _authService.ForgotPassword(forgetPasswordDTO);
+            if (result)
+            {
+                return Ok(new { message = "Please check your email" });
+            }
+            return BadRequest(new { message = "Error in sending email" });
+        }
+
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO resetPasswordDTO, [FromQuery]string email, [FromQuery] string token)
+        {
+            var result = await _authService.ResetPassword(resetPasswordDTO, email, token);
+            if (result =="success")
+            {
+                return Ok(new { message = "Password reset successfully" });
+            }
+            return BadRequest(new { message = "Error in resetting password" });
+        }
     }
 }

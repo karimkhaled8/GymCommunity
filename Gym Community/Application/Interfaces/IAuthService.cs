@@ -14,5 +14,8 @@ namespace Gym_Community.Application.Interfaces
         public Task<bool> IsAuthenticated(string email);
 
         public Task<bool> ConfirmEmail(string email, string token);
+
+        public Task<bool> ForgotPassword(ForgetPasswordDTO forgetPasswordDTO);
+        public Task<string> ResetPassword(ResetPasswordDTO resetPasswordDTO,string email,string token);
     }
 }
