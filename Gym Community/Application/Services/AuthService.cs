@@ -109,7 +109,7 @@ namespace Gym_Community.Application.Services
             return "error";
         }
 
-        public async Task<string> register(RegisterDTO registerDTO)
+        public async Task<string> register(RegisterDTO registerDTO, string profileImg)
         {
             if (registerDTO == null)
             {
@@ -125,7 +125,7 @@ namespace Gym_Community.Application.Services
                 FirstName = registerDTO.FirstName,
                 LastName = registerDTO.LastName,
                 Address = registerDTO.Address,
-                ProfileImg = registerDTO.ProfileImg,
+                ProfileImg = profileImg,
                 Gender = registerDTO.Gender,
                 PhoneNumber = registerDTO.Phone,
                 BirthDate = registerDTO.BirthDate,

@@ -1,6 +1,7 @@
 ﻿using EmailServices;
 using Gym_Community.API.DTOs.Auth;
 using Gym_Community.Application.Interfaces;
+using Gym_Community.Application.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,21 +13,27 @@ namespace Gym_Community.API.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IEmailService _emailService;
-        public AuthController(IAuthService authService , IEmailService emailService)
+        private readonly IAwsService _awsService;
+        public AuthController(IAuthService authService , IEmailService emailService, IAwsService awsService)
         {
             _authService = authService;
             _emailService = emailService;
-
+            _awsService = awsService;
         }
 
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDTO registerDTO)
+        public async Task<IActionResult> Register([FromForm] RegisterDTO registerDTO, [FromForm] IFormFile profileImg)
         {
-            // prpfile image logic
+            var imageUrl = "";
+            if (profileImg != null)
+            {
+                 imageUrl = await _awsService.UploadFileAsync(profileImg, "ProfileImages");
+      
+            }
 
-            
-            var result = await _authService.register(registerDTO);
+
+            var result = await _authService.register(registerDTO, imageUrl);
             if (result == "exists")
             {
                 return BadRequest( new { message = "Email already exists" });

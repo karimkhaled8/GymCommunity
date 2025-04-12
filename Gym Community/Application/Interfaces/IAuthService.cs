@@ -9,7 +9,7 @@ namespace Gym_Community.Application.Interfaces
         public Task<string?> GenerateJwtTokenAsync(AppUser user);
         public Task<string> login(LoginDTO loginDto);
 
-        public Task<string> register(RegisterDTO registerDTO);
+        public Task<string> register(RegisterDTO registerDTO, string profileImg);
 
         public Task<bool> IsAuthenticated(string email);
 

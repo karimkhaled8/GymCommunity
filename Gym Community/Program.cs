@@ -1,5 +1,7 @@
 
 using System.Text;
+using Amazon.Runtime;
+using Amazon.S3;
 using EmailServices;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Services;
@@ -47,13 +49,27 @@ namespace Gym_Community
                 };
             });
 
+
+            // Aws s3
+            builder.Services.AddSingleton<AWSCredentials>(sp =>
+            new BasicAWSCredentials(
+            builder.Configuration["AWS:AccessKey"],
+            builder.Configuration["AWS:SecretKey"]
+            ));
+
+            builder.Services.AddSingleton<IAmazonS3>(sp =>
+                new AmazonS3Client(
+                    sp.GetRequiredService<AWSCredentials>(),
+                    Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"])
+                )
+            );
+
             // Add services to the container.
-
-
 
 
             //Services  
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAwsService, AwsService>();
 
 
             //Email service
