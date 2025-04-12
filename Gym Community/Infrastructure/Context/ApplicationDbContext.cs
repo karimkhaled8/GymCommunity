@@ -23,10 +23,7 @@ namespace Gym_Community.Infrastructure.Context
         public DbSet<ClientInfo> ClientInfo { get; set; }
         //Coach Plans
         public DbSet<ClientPlan> ClientPlans { get; set; }
-        public DbSet<DailyExercise> DailyExercises { get; set; }
-        public DbSet<DailyMeal> DailyMeals { get; set; }
-        //public DbSet<DailyPlan> DailyPlans { get; set; }
-        public DbSet<WorkoutDay> WorkoutDays { get; set; }
+      
         //Coach Stuff
         public DbSet<CoachCertificate> CoachCertificates { get; set; }
         public DbSet<CoachPortfolio> CoachPortfolios { get; set; }

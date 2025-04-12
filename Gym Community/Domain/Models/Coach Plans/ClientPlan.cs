@@ -1,4 +1,5 @@
 ﻿using Gym_Community.Domain.Models;
+using Gym_Community.Domain.Models.Coach_Plans;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -32,6 +33,6 @@ namespace Gym_Community.Domain.Data.Models.Meals_and_Exercise
         public int CarbsPercentage { get; set; }
         public int FatsPercentage { get; set; }
 
-        public ICollection<WorkoutDay> WorkoutDays { get; set; } = new List<WorkoutDay>();
+        public ICollection<WeekPlan> WeekPlans { get; set; } = new List<WeekPlan>();
     }
 }

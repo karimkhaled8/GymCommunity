@@ -14,4 +14,5 @@ namespace Gym_Community.Domain.Data.Models.Meals_and_Exercise
         public int Fats { get; set; }     // in grams
         public bool IsSupplement { get; set; }
     }
+
 }
