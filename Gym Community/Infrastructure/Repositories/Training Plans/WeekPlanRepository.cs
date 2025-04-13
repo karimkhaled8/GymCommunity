@@ -1,4 +1,5 @@
 ﻿using Gym_Community.Domain.Models.Coach_Plans;
+using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,10 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
 {
     public class WeekPlanRepository : IWeekPlanRepository
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly DbSet<WeekPlan> _dbSet;
 
-        public WeekPlanRepository(DbContext context)
+        public WeekPlanRepository(ApplicationDbContext context)
         {
             _context = context;
             _dbSet = context.Set<WeekPlan>();

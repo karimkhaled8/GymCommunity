@@ -1,4 +1,5 @@
 ﻿using Gym_Community.Domain.Data.Models.Meals_and_Exercise;
+using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,9 +7,9 @@ namespace Gym_Community.Infrastructure.Repositories.Meals_and_Exercise
 {
     public class MealRepository : IMealRepository
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public MealRepository(DbContext context)
+        public MealRepository(ApplicationDbContext context)
         {
             _context = context;
         }

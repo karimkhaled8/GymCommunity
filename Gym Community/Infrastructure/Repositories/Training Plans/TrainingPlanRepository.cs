@@ -1,4 +1,5 @@
 ﻿using Gym_Community.Domain.Data.Models.Meals_and_Exercise;
+using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,10 +7,10 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
 {
     public class TrainingPlanRepository : ITrainingPlanRepository
     {
-        private readonly DbContext _context;
+        private readonly ApplicationDbContext _context;
         private readonly DbSet<TrainingPlan> _dbSet;
 
-        public TrainingPlanRepository(DbContext context)
+        public TrainingPlanRepository(ApplicationDbContext context)
         {
             _context = context;
             _dbSet = context.Set<TrainingPlan>();
