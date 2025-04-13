@@ -12,10 +12,12 @@ using Gym_Community.Application.Services.E_comm;
 using Gym_Community.Application.Services.Forum;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
+using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Gym_Community.Infrastructure.Interfaces.Forum;
 using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
 using Gym_Community.Infrastructure.Repositories;
+using Gym_Community.Infrastructure.Repositories.ECommerce;
 using Gym_Community.Infrastructure.Repositories.Forum;
 using Gym_Community.Infrastructure.Repositories.Meals_and_Exercise;
 using Gym_Community.Infrastructure.Repositories.Training_Plans;
@@ -96,6 +98,12 @@ namespace Gym_Community
             //Ecommerce service 
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderItemRepository, OrderItemsRepository>();
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+            builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
+            builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();  
 
             //Repo
             builder.Services.AddScoped<ISubRepository, SubRepository>();
