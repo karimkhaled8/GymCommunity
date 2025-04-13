@@ -95,7 +95,10 @@ namespace Gym_Community
             builder.Services.AddScoped<IEmailService, EmailService>();
 
 
-            //Ecommerce service 
+            builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
+            // Also make sure your services are registered if not already:
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
@@ -104,6 +107,7 @@ namespace Gym_Community
             builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
             builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();  
+
 
             //Repo
             builder.Services.AddScoped<ISubRepository, SubRepository>();
