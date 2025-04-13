@@ -2,7 +2,6 @@
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1;
 
 namespace Gym_Community.Infrastructure.Repositories.Meals_and_Exercise
 {
@@ -63,4 +62,4 @@ namespace Gym_Community.Infrastructure.Repositories.Meals_and_Exercise
     }
 
 }
-}
+
