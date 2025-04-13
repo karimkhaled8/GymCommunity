@@ -10,8 +10,8 @@ namespace Gym_Community.Domain.Models.Coach_Plans
         [Key]
         public int Id { get; set; }
         [ForeignKey("ClientPlan")]
-        public int ClientPlanId { get; set; }
-        public ClientPlan ClientPlan { get; set; }
+        public int TrainingPlanId { get; set; }
+        public TrainingPlan TrainingPlan { get; set; }
 
         public string WeekName { get; set; }
 

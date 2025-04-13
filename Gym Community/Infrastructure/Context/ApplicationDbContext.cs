@@ -2,7 +2,6 @@
 using Gym_Community.Domain.Data.Models.E_comms;
 using Gym_Community.Domain.Data.Models.Meals_and_Exercise;
 using Gym_Community.Domain.Data.Models.Payment_and_Shipping;
-using Gym_Community.Domain.Data.Models.System_Plans;
 using Gym_Community.Domain.Models;
 using Gym_Community.Domain.Models.ClientStuff;
 using Gym_Community.Domain.Models.CoachStuff;
@@ -22,7 +21,7 @@ namespace Gym_Community.Infrastructure.Context
         //Client Stuff
         public DbSet<ClientInfo> ClientInfo { get; set; }
         //Coach Plans
-        public DbSet<ClientPlan> ClientPlans { get; set; }
+        public DbSet<TrainingPlan> TrainingPlans { get; set; }
       
         //Coach Stuff
         public DbSet<CoachCertificate> CoachCertificates { get; set; }
@@ -51,12 +50,7 @@ namespace Gym_Community.Infrastructure.Context
         //Payment and shipping
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Shipping> Shippings { get; set; }
-        //System Plans
-        public DbSet<StaticDailyExercise> StaticDailyExercises { get; set; }
-        public DbSet<StaticDailyMeal> StaticDailyMeals { get; set; }
-        //public DbSet<StaticDailyPlan> StaticDailyPlans { get; set; }
-        public DbSet<StaticPlan> StaticPlans { get; set; }
-        public DbSet<StaticWorkoutDay> StaticWorkoutDays { get; set; }
+        
         //Gym
         public DbSet<Gym> Gym { get; set; }
         public DbSet<GymPlan> GymPlans { get; set; }
