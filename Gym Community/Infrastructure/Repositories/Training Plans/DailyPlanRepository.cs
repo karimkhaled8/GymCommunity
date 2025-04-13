@@ -33,19 +33,27 @@ namespace Gym_Community.Infrastructure.Interfaces.Training_Plans
         public async Task AddAsync(DailyPlan dailyPlan)
         {
             await _dbSet.AddAsync(dailyPlan);
-            await _context.SaveChangesAsync(); // ✅ auto save
+            await _context.SaveChangesAsync(); 
         }
 
         public async Task UpdateAsync(DailyPlan dailyPlan)
         {
             _dbSet.Update(dailyPlan);
-            await _context.SaveChangesAsync(); // ✅ auto save
+            await _context.SaveChangesAsync(); 
         }
 
         public async Task DeleteAsync(DailyPlan dailyPlan)
         {
             _dbSet.Remove(dailyPlan);
-            await _context.SaveChangesAsync(); // ✅ auto save
+            await _context.SaveChangesAsync(); 
         }
+        public async Task<IEnumerable<DailyPlan>> GetByWeekIdAsync(int weekPlanId)
+        {
+            return await _dbSet
+                .Where(dp => dp.WeekPlanId == weekPlanId)
+                .Include(dp => dp.WeekPlan)
+                .ToListAsync();
+        }
+
     }
 }

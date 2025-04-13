@@ -32,4 +32,8 @@
     <ProjectReference Include="..\EmailService\EmailServices.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="API\Controllers\TrainingPlans\" />
+  </ItemGroup>
+
 </Project>

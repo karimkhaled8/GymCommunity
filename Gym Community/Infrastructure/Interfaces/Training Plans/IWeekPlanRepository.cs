@@ -9,5 +9,7 @@ namespace Gym_Community.Infrastructure.Interfaces.Training_Plans
         Task AddAsync(WeekPlan weekPlan);
         Task UpdateAsync(WeekPlan weekPlan);
         Task DeleteAsync(WeekPlan weekPlan);
+        Task<IEnumerable<WeekPlan>> GetByTrainingPlanIdAsync(int trainingPlanId); // 👈 Added this
+
     }
 }

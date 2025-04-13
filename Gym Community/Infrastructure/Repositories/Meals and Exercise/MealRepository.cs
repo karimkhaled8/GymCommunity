@@ -2,6 +2,7 @@
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1;
 
 namespace Gym_Community.Infrastructure.Repositories.Meals_and_Exercise
 {
@@ -45,5 +46,21 @@ namespace Gym_Community.Infrastructure.Repositories.Meals_and_Exercise
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<IEnumerable<Meal>> GetByNameAsync(string name, bool? isSupplement = null)
+        {
+            var query = _context.Set<Meal>().AsQueryable(); 
+
+            query = query.Where(m => m.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+
+         
+            if (isSupplement.HasValue)
+            {
+                query = query.Where(m => m.IsSupplement == isSupplement.Value);
+            }
+
+            return await query.ToListAsync();
+        }
     }
+
+}
 }

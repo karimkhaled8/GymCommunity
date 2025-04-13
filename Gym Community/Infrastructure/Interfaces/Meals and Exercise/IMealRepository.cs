@@ -9,5 +9,7 @@ namespace Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise
         Task AddAsync(Meal meal);
         Task UpdateAsync(Meal meal);
         Task DeleteAsync(int id);
+        Task<IEnumerable<Meal>> GetByNameAsync(string name, bool? isSupplement = null); 
+
     }
 }
