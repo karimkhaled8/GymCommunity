@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Gym_Community.Domain.Models.Coach_Plans;
 
 namespace Gym_Community.API.DTOs.TrainingPlanDtos
 {
@@ -6,6 +7,8 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
     {
         [Required]
         public int WeekPlanId { get; set; }
+        
+        public WeekPlan WeekPlan { get; set; }
         
         public string ExtraTips { get; set; }
         
@@ -24,6 +27,8 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         [Required]
         public int Id { get; set; }
         
+        public WeekPlan WeekPlan { get; set; }
+        
         public string ExtraTips { get; set; }
         
         public DateTime DayDate { get; set; }
@@ -37,6 +42,7 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
     {
         public int Id { get; set; }
         public int WeekPlanId { get; set; }
+        public WeekPlan WeekPlan { get; set; }
         public string ExtraTips { get; set; }
         public DateTime DayDate { get; set; }
         public int DayNumber { get; set; }

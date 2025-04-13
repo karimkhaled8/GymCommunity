@@ -38,35 +38,27 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             return userId;
         }
 
+        private bool IsCoach()
+        {
+            return User.IsInRole("Coach");
+        }
+
+        private bool IsCoachAuthorized(string coachId)
+        {
+            return IsCoach() && GetUserId() == coachId;
+        }
+
         // ===================== DAILY PLAN =====================
 
         [HttpGet("daily-plans")]
-        public async Task<IActionResult> GetDailyPlans([FromQuery] int? id = null, [FromQuery] int? weekPlanId = null)
+        public async Task<IActionResult> GetDailyPlansByWeekPlan([FromQuery] int weekPlanId)
         {
             try
             {
                 var userId = GetUserId();
-
-                if (id.HasValue)
-                {
-                    var plan = await _dailyPlanRepository.GetByIdAsync(id.Value, userId);
-                    if (plan == null) 
-                        return NotFound(new { message = "Daily plan not found or you don't have access to it" });
-                    
-                    var planDto = _mapper.Map<DailyPlanDto>(plan);
-                    return Ok(planDto);
-                }
-
-                if (weekPlanId.HasValue)
-                {
-                    var plans = await _dailyPlanRepository.GetByWeekIdAsync(weekPlanId.Value, userId);
-                    var planDtos = _mapper.Map<IEnumerable<DailyPlanDto>>(plans);
-                    return Ok(planDtos);
-                }
-
-                var allPlans = await _dailyPlanRepository.GetAllAsync(userId);
-                var allPlanDtos = _mapper.Map<IEnumerable<DailyPlanDto>>(allPlans);
-                return Ok(allPlanDtos);
+                var plans = await _dailyPlanRepository.GetByWeekIdAsync(weekPlanId, userId);
+                var planDtos = _mapper.Map<IEnumerable<DailyPlanDto>>(plans);
+                return Ok(planDtos);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -78,17 +70,43 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
+        [HttpGet("daily-plans/{id}")]
+        public async Task<IActionResult> GetDailyPlanById(int id)
+        {
+            try
+            {
+                var userId = GetUserId();
+                var plan = await _dailyPlanRepository.GetByIdAsync(id, userId);
+                if (plan == null) 
+                    return NotFound(new { message = "Daily plan not found or you don't have access to it" });
+                
+                var planDto = _mapper.Map<DailyPlanDto>(plan);
+                return Ok(planDto);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving the daily plan", error = ex.Message });
+            }
+        }
+
         [HttpPost("daily-plans")]
         public async Task<IActionResult> CreateDailyPlan([FromBody] CreateDailyPlanDto planDto)
         {
             try
             {
                 var userId = GetUserId();
+                if (!IsCoachAuthorized(planDto.WeekPlan.TrainingPlan.CoachId))
+                    return StatusCode(403, new { message = "Only the assigned coach can create daily plans" });
+
                 var plan = _mapper.Map<DailyPlan>(planDto);
                 await _dailyPlanRepository.AddAsync(plan);
                 
                 var createdPlanDto = _mapper.Map<DailyPlanDto>(plan);
-                return CreatedAtAction(nameof(GetDailyPlans), new { id = plan.Id }, createdPlanDto);
+                return CreatedAtAction(nameof(GetDailyPlanById), new { id = plan.Id }, createdPlanDto);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -100,23 +118,22 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
-        [HttpPut("daily-plans")]
-        public async Task<IActionResult> UpdateDailyPlan([FromQuery] int id, [FromBody] UpdateDailyPlanDto planDto)
+        [HttpPut("daily-plans/{id}")]
+        public async Task<IActionResult> UpdateDailyPlan(int id, [FromBody] UpdateDailyPlanDto planDto)
         {
             try
             {
                 var userId = GetUserId();
                 
                 if (id != planDto.Id) 
-                    return BadRequest(new { message = "ID in query parameter does not match ID in request body" });
-                
-                var isAuthorized = await _dailyPlanRepository.IsUserAuthorizedAsync(id, userId);
-                if (!isAuthorized) 
-                    return StatusCode(403, new { message = "You don't have permission to update this daily plan" });
+                    return BadRequest(new { message = "ID in URL does not match ID in request body" });
                 
                 var existingPlan = await _dailyPlanRepository.GetByIdAsync(id, userId);
                 if (existingPlan == null) 
                     return NotFound(new { message = "Daily plan not found" });
+
+                if (!IsCoachAuthorized(existingPlan.WeekPlan.TrainingPlan.CoachId))
+                    return StatusCode(403, new { message = "Only the assigned coach can update this daily plan" });
                 
                 _mapper.Map(planDto, existingPlan);
                 await _dailyPlanRepository.UpdateAsync(existingPlan);
@@ -133,20 +150,19 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
-        [HttpDelete("daily-plans")]
-        public async Task<IActionResult> DeleteDailyPlan([FromQuery] int id)
+        [HttpDelete("daily-plans/{id}")]
+        public async Task<IActionResult> DeleteDailyPlan(int id)
         {
             try
             {
                 var userId = GetUserId();
                 
-                var isAuthorized = await _dailyPlanRepository.IsUserAuthorizedAsync(id, userId);
-                if (!isAuthorized) 
-                    return StatusCode(403, new { message = "You don't have permission to delete this daily plan" });
-                
                 var plan = await _dailyPlanRepository.GetByIdAsync(id, userId);
                 if (plan == null) 
                     return NotFound(new { message = "Daily plan not found" });
+
+                if (!IsCoachAuthorized(plan.WeekPlan.TrainingPlan.CoachId))
+                    return StatusCode(403, new { message = "Only the assigned coach can delete this daily plan" });
 
                 await _dailyPlanRepository.DeleteAsync(plan);
                 return NoContent();
@@ -164,32 +180,14 @@ namespace Gym_Community.API.Controllers.TrainingPlans
         // ===================== WEEK PLAN =====================
 
         [HttpGet("week-plans")]
-        public async Task<IActionResult> GetWeekPlans([FromQuery] int? id = null, [FromQuery] int? trainingPlanId = null)
+        public async Task<IActionResult> GetWeekPlansByTrainingPlan([FromQuery] int trainingPlanId)
         {
             try
             {
                 var userId = GetUserId();
-
-                if (id.HasValue)
-                {
-                    var plan = await _weekPlanRepository.GetByIdAsync(id.Value, userId);
-                    if (plan == null) 
-                        return NotFound(new { message = "Week plan not found or you don't have access to it" });
-                    
-                    var planDto = _mapper.Map<WeekPlanDto>(plan);
-                    return Ok(planDto);
-                }
-
-                if (trainingPlanId.HasValue)
-                {
-                    var plans = await _weekPlanRepository.GetByTrainingPlanIdAsync(trainingPlanId.Value, userId);
-                    var planDtos = _mapper.Map<IEnumerable<WeekPlanDto>>(plans);
-                    return Ok(planDtos);
-                }
-
-                var allPlans = await _weekPlanRepository.GetAllAsync(userId);
-                var allPlanDtos = _mapper.Map<IEnumerable<WeekPlanDto>>(allPlans);
-                return Ok(allPlanDtos);
+                var plans = await _weekPlanRepository.GetByTrainingPlanIdAsync(trainingPlanId, userId);
+                var planDtos = _mapper.Map<IEnumerable<WeekPlanDto>>(plans);
+                return Ok(planDtos);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -201,17 +199,43 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
+        [HttpGet("week-plans/{id}")]
+        public async Task<IActionResult> GetWeekPlanById(int id)
+        {
+            try
+            {
+                var userId = GetUserId();
+                var plan = await _weekPlanRepository.GetByIdAsync(id, userId);
+                if (plan == null) 
+                    return NotFound(new { message = "Week plan not found or you don't have access to it" });
+                
+                var planDto = _mapper.Map<WeekPlanDto>(plan);
+                return Ok(planDto);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving the week plan", error = ex.Message });
+            }
+        }
+
         [HttpPost("week-plans")]
         public async Task<IActionResult> CreateWeekPlan([FromBody] CreateWeekPlanDto planDto)
         {
             try
             {
                 var userId = GetUserId();
+                if (!IsCoachAuthorized(planDto.TrainingPlan.CoachId))
+                    return StatusCode(403, new { message = "Only the assigned coach can create week plans" });
+
                 var plan = _mapper.Map<WeekPlan>(planDto);
                 await _weekPlanRepository.AddAsync(plan);
                 
                 var createdPlanDto = _mapper.Map<WeekPlanDto>(plan);
-                return CreatedAtAction(nameof(GetWeekPlans), new { id = plan.Id }, createdPlanDto);
+                return CreatedAtAction(nameof(GetWeekPlanById), new { id = plan.Id }, createdPlanDto);
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -223,23 +247,22 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
-        [HttpPut("week-plans")]
-        public async Task<IActionResult> UpdateWeekPlan([FromQuery] int id, [FromBody] UpdateWeekPlanDto planDto)
+        [HttpPut("week-plans/{id}")]
+        public async Task<IActionResult> UpdateWeekPlan(int id, [FromBody] UpdateWeekPlanDto planDto)
         {
             try
             {
                 var userId = GetUserId();
                 
                 if (id != planDto.Id) 
-                    return BadRequest(new { message = "ID in query parameter does not match ID in request body" });
-                
-                var isAuthorized = await _weekPlanRepository.IsUserAuthorizedAsync(id, userId);
-                if (!isAuthorized) 
-                    return StatusCode(403, new { message = "You don't have permission to update this week plan" });
+                    return BadRequest(new { message = "ID in URL does not match ID in request body" });
                 
                 var existingPlan = await _weekPlanRepository.GetByIdAsync(id, userId);
                 if (existingPlan == null) 
                     return NotFound(new { message = "Week plan not found" });
+
+                if (!IsCoachAuthorized(existingPlan.TrainingPlan.CoachId))
+                    return StatusCode(403, new { message = "Only the assigned coach can update this week plan" });
                 
                 _mapper.Map(planDto, existingPlan);
                 await _weekPlanRepository.UpdateAsync(existingPlan);
@@ -256,20 +279,19 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
-        [HttpDelete("week-plans")]
-        public async Task<IActionResult> DeleteWeekPlan([FromQuery] int id)
+        [HttpDelete("week-plans/{id}")]
+        public async Task<IActionResult> DeleteWeekPlan(int id)
         {
             try
             {
                 var userId = GetUserId();
                 
-                var isAuthorized = await _weekPlanRepository.IsUserAuthorizedAsync(id, userId);
-                if (!isAuthorized) 
-                    return StatusCode(403, new { message = "You don't have permission to delete this week plan" });
-                
                 var plan = await _weekPlanRepository.GetByIdAsync(id, userId);
                 if (plan == null) 
                     return NotFound(new { message = "Week plan not found" });
+
+                if (!IsCoachAuthorized(plan.TrainingPlan.CoachId))
+                    return StatusCode(403, new { message = "Only the assigned coach can delete this week plan" });
 
                 await _weekPlanRepository.DeleteAsync(plan);
                 return NoContent();

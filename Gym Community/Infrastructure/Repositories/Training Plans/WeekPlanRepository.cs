@@ -21,7 +21,7 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
             return await _dbSet
                 .Include(wp => wp.TrainingPlan)
                 .Include(wp => wp.WorkoutDays)
-                .Where(wp => wp.TrainingPlan.ClientId == userId)
+                .Where(wp => wp.TrainingPlan.ClientId == userId || wp.TrainingPlan.CoachId == userId)
                 .FirstOrDefaultAsync(wp => wp.Id == id);
         }
 
@@ -30,14 +30,15 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
             return await _dbSet
                 .Include(wp => wp.TrainingPlan)
                 .Include(wp => wp.WorkoutDays)
-                .Where(wp => wp.TrainingPlan.ClientId == userId)
+                .Where(wp => wp.TrainingPlan.ClientId == userId || wp.TrainingPlan.CoachId == userId)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<WeekPlan>> GetByTrainingPlanIdAsync(int trainingPlanId, string userId)
         {
             return await _dbSet
-                .Where(wp => wp.TrainingPlanId == trainingPlanId && wp.TrainingPlan.ClientId == userId)
+                .Where(wp => wp.TrainingPlanId == trainingPlanId && 
+                    (wp.TrainingPlan.ClientId == userId || wp.TrainingPlan.CoachId == userId))
                 .Include(wp => wp.TrainingPlan)
                 .Include(wp => wp.WorkoutDays)
                 .ToListAsync();
@@ -46,7 +47,8 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
         public async Task<bool> IsUserAuthorizedAsync(int id, string userId)
         {
             return await _dbSet
-                .AnyAsync(wp => wp.Id == id && wp.TrainingPlan.ClientId == userId);
+                .AnyAsync(wp => wp.Id == id && 
+                    (wp.TrainingPlan.ClientId == userId || wp.TrainingPlan.CoachId == userId));
         }
 
         public async Task AddAsync(WeekPlan weekPlan)
