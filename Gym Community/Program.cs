@@ -10,7 +10,12 @@ using Gym_Community.Application.Services.Forum;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Forum;
+using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
+using Gym_Community.Infrastructure.Interfaces.Training_Plans;
+using Gym_Community.Infrastructure.Repositories;
 using Gym_Community.Infrastructure.Repositories.Forum;
+using Gym_Community.Infrastructure.Repositories.Meals_and_Exercise;
+using Gym_Community.Infrastructure.Repositories.Training_Plans;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -89,6 +94,14 @@ namespace Gym_Community
             builder.Services.AddScoped<IPostRepository, PostRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped<IVoteRepository, VoteRepository>();
+            builder.Services.AddScoped<IDailyPlanRepository, DailyPlanRepository>();
+            builder.Services.AddScoped<IWeekPlanRepository, WeekPlanRepository>();
+            builder.Services.AddScoped<ITrainingPlanRepository, TrainingPlanRepository>();
+
+            builder.Services.AddScoped<IMealRepository, MealRepository>();
+            builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+            builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
+
 
             //life time for all tokens (email confirmation , pass reset, etc..)
             builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
