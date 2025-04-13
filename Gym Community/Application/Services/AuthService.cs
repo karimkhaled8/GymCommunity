@@ -51,9 +51,10 @@ namespace Gym_Community.Application.Services
                 var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                        new Claim(ClaimTypes.Name,$"{user.FirstName} {user.LastName}"),
+                        new Claim("Name",$"{user.FirstName} {user.LastName}"),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim("ProfileImg", user.ProfileImg),
+                        new Claim("IsPremium", user.IsPremium.ToString()),
                     };
 
                 var roles = await _userManager.GetRolesAsync(user);

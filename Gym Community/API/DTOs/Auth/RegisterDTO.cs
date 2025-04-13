@@ -4,6 +4,7 @@ namespace Gym_Community.API.DTOs.Auth
 {
     public class RegisterDTO
     {
+        [Required(ErrorMessage = "First Name is required")]
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Address { get; set; }
