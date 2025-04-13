@@ -77,6 +77,7 @@ namespace Gym_Community
             builder.Services.AddScoped<ISubService, SubService>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<IVoteService, VoteService>();
 
 
             //Email service
@@ -87,6 +88,7 @@ namespace Gym_Community
             builder.Services.AddScoped<ISubRepository, SubRepository>();
             builder.Services.AddScoped<IPostRepository, PostRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<IVoteRepository, VoteRepository>();
 
             //life time for all tokens (email confirmation , pass reset, etc..)
             builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
