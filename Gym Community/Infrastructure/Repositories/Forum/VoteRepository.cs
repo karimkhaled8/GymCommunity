@@ -29,7 +29,12 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
         {
             return await _context.Votes.FindAsync(id);
         }
-
+        public async Task<Vote?> UpdateAsync(Vote vote)
+        {
+            _context.Votes.Update(vote);
+            await _context.SaveChangesAsync();
+            return vote;
+        }
         public async Task<bool> DeleteAsync(Vote vote)
         {
             _context.Votes.Remove(vote);
@@ -45,6 +50,9 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
         {
             return await _context.Votes.Where(v => v.CommentId == commentId).ToListAsync();
         }
-
+        public async Task<IEnumerable<Vote>> GetVotesByUserIdAsync(string userId)
+        {
+            return await _context.Votes.Where(v => v.UserId == userId).ToListAsync();
+        }
     }
 }

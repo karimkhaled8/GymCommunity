@@ -9,5 +9,7 @@ namespace Gym_Community.Infrastructure.Interfaces.Forum
         Task<Comment?> GetByIdAsync(int id);
         Task<Comment?> UpdateAsync(Comment comment);
         Task<bool> DeleteAsync(Comment comment);
+        Task<IEnumerable<Comment>> GetByUserIdAsync(string userId);
+        Task<IEnumerable<Comment>> GetByPostIdAsync(int postId);
     }
 }

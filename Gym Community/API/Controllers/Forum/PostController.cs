@@ -50,5 +50,20 @@ namespace Gym_Community.API.Controllers.Forum
         {
             return await _service.DeleteAsync(id) ? Ok() : NotFound();
         }
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetByUser(string userId)
+        {
+            var result = await _service.GetByUserIdAsync(userId);
+            return Ok(result);
+        }
+
+        [HttpGet("sub/{subId}")]
+        public async Task<IActionResult> GetBySub(int subId)
+        {
+            var result = await _service.GetBySubIdAsync(subId);
+            return Ok(result);
+        }
+
     }
 }

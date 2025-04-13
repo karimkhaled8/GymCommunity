@@ -36,11 +36,35 @@ namespace Gym_Community.API.Controllers.Forum
             var result = await _service.GetByIdAsync(id);
             return result != null ? Ok(result) : NotFound();
         }
+        [HttpPut("{id}")]
+        public async Task<ActionResult<VoteReadDTO>> Update(int id, VoteCreateDTO voteUpdateDTO)
+        {
+            var updatedVote = await _service.UpdateAsync(id, voteUpdateDTO);
+            return updatedVote == null ? NotFound() : Ok(updatedVote);
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             return await _service.DeleteAsync(id) ? Ok() : NotFound();
+        }
+        [HttpGet("post/{postId}")]
+        public async Task<ActionResult<IEnumerable<VoteReadDTO>>> GetVotesByPostId(int postId)
+        {
+            var votes = await _service.GetVotesByPostIdAsync(postId);
+            return Ok(votes);
+        }
+        [HttpGet("comment/{commentId}")]
+        public async Task<ActionResult<IEnumerable<VoteReadDTO>>> GetVotesByCommentId(int commentId)
+        {
+            var votes = await _service.GetVotesByCommentIdAsync(commentId);
+            return Ok(votes);
+        }
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<VoteReadDTO>>> GetVotesByUserId(string userId)
+        {
+            var votes = await _service.GetVotesByUserIdAsync(userId);
+            return Ok(votes);
         }
 
     }

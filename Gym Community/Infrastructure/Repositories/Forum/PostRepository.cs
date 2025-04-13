@@ -51,6 +51,27 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
             _context.Posts.Remove(post);
             return await _context.SaveChangesAsync() > 0;
         }
+        public async Task<IEnumerable<Post>> GetPostsByUserIdAsync(string userId)
+        {
+            return await _context.Posts
+                .Include(p => p.Comments)
+                .Include(p => p.Votes)
+                .Include(p => p.AppUser)
+                .Include(p => p.Sub)
+                .Where(p => p.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Post>> GetPostsBySubIdAsync(int subId)
+        {
+            return await _context.Posts
+                .Include(p => p.Comments)
+                .Include(p => p.Votes)
+                .Include(p => p.AppUser)
+                .Include(p => p.Sub)
+                .Where(p => p.SubId == subId)
+                .ToListAsync();
+        }
     }
 }
 

@@ -9,5 +9,8 @@ namespace Gym_Community.Infrastructure.Interfaces.Forum
         Task<IEnumerable<Post>> ListAsync();
         Task<Post?> UpdateAsync(Post post);
         Task<bool> DeleteAsync(Post post);
+        Task<IEnumerable<Post>> GetPostsByUserIdAsync(string userId);
+        Task<IEnumerable<Post>> GetPostsBySubIdAsync(int subId);
+
     }
 }

@@ -73,6 +73,43 @@ namespace Gym_Community.Application.Services.Forum
             var post = await _repo.GetByIdAsync(id);
             return post != null && await _repo.DeleteAsync(post);
         }
+        public async Task<IEnumerable<PostReadDTO>> GetByUserIdAsync(string userId)
+        {
+            var posts = await _repo.GetPostsByUserIdAsync(userId);
+            return posts.Select(p => new PostReadDTO
+            {
+                Id = p.Id,
+                Title = p.Title,
+                Content = p.Content,
+                ImgUrl = p.imgUrl,
+                CreatedAt = p.CreatedAt,
+                UserId = p.UserId,
+                UserName = p.AppUser.UserName ?? "",
+                SubId = p.SubId,
+                SubName = p.Sub.Name,
+                CommentCount = p.Comments?.Count ?? 0,
+                VoteCount = p.Votes.Count
+            });
+        }
+
+        public async Task<IEnumerable<PostReadDTO>> GetBySubIdAsync(int subId)
+        {
+            var posts = await _repo.GetPostsBySubIdAsync(subId);
+            return posts.Select(p => new PostReadDTO
+            {
+                Id = p.Id,
+                Title = p.Title,
+                Content = p.Content,
+                ImgUrl = p.imgUrl,
+                CreatedAt = p.CreatedAt,
+                UserId = p.UserId,
+                UserName = p.AppUser.UserName ?? "",
+                SubId = p.SubId,
+                SubName = p.Sub.Name,
+                CommentCount = p.Comments?.Count ?? 0,
+                VoteCount = p.Votes.Count
+            });
+        }
 
         private async Task<PostReadDTO?> ToReadDTOAsync(int id)
         {

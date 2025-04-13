@@ -58,6 +58,17 @@ namespace Gym_Community.Application.Services.Forum
             var comment = await _repo.GetByIdAsync(id);
             return comment != null && await _repo.DeleteAsync(comment);
         }
+        public async Task<IEnumerable<CommentReadDTO>> GetByUserIdAsync(string userId)
+        {
+            var comments = await _repo.GetByUserIdAsync(userId);
+            return comments.Select(ToReadDTO);
+        }
+
+        public async Task<IEnumerable<CommentReadDTO>> GetByPostIdAsync(int postId)
+        {
+            var comments = await _repo.GetByPostIdAsync(postId);
+            return comments.Select(ToReadDTO);
+        }
 
         private CommentReadDTO ToReadDTO(Comment comment)
         {

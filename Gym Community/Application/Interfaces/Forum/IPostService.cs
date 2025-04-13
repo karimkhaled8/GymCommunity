@@ -10,5 +10,7 @@ namespace Gym_Community.Application.Interfaces.Forum
         Task<PostReadDTO?> GetByIdAsync(int id);
         Task<PostReadDTO?> UpdateAsync(int id, PostCreateDTO dto);
         Task<bool> DeleteAsync(int id);
+        Task<IEnumerable<PostReadDTO>> GetByUserIdAsync(string userId);
+        Task<IEnumerable<PostReadDTO>> GetBySubIdAsync(int subId);
     }
 }

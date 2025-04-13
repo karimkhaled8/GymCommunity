@@ -39,13 +39,36 @@ namespace Gym_Community.Application.Services.Forum
             var vote = await _repo.GetByIdAsync(id);
             return vote != null ? ToReadDTO(vote) : null;
         }
+        public async Task<VoteReadDTO?> UpdateAsync(int id, VoteCreateDTO voteUpdateDTO)
+        {
+            var vote = await _repo.GetByIdAsync(id);
+            if (vote == null) return null;
 
+            vote.IsUpvote = voteUpdateDTO.IsUpvote;
+            var updatedVote = await _repo.UpdateAsync(vote);
+            return updatedVote == null ? null : ToReadDTO(updatedVote);
+        }
         public async Task<bool> DeleteAsync(int id)
         {
             var vote = await _repo.GetByIdAsync(id);
             return vote != null && await _repo.DeleteAsync(vote);
         }
+        public async Task<IEnumerable<VoteReadDTO>> GetVotesByPostIdAsync(int postId)
+        {
+            var votes = await _repo.GetVotesByPostIdAsync(postId);
+            return votes.Select(ToReadDTO);
+        }
 
+        public async Task<IEnumerable<VoteReadDTO>> GetVotesByCommentIdAsync(int commentId)
+        {
+            var votes = await _repo.GetVotesByCommentIdAsync(commentId);
+            return votes.Select(ToReadDTO);
+        }
+        public async Task<IEnumerable<VoteReadDTO>> GetVotesByUserIdAsync(string userId)
+        {
+            var votes = await _repo.GetVotesByUserIdAsync(userId);
+            return votes.Select(ToReadDTO);
+        }
         private VoteReadDTO ToReadDTO(Vote vote)
         {
             return new VoteReadDTO
