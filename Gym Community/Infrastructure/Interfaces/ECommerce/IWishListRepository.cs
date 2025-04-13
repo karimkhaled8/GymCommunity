@@ -2,12 +2,14 @@
 
 namespace Gym_Community.Infrastructure.Interfaces.ECommerce
 {
-    public interface IWishListRepository
+    public interface IWishlistRepository
     {
-        public Task<Wishlist?> AddAsync(Wishlist wishlist);
-        public Task<IEnumerable<Wishlist>> ListAsync();
-        public Task<Wishlist?> GetById(int id);
-        public Task<Wishlist?> UpdateAsync(Wishlist wishlist);
-        public Task<bool> RemoveAsync(Wishlist wishlist);
+        Task<Wishlist?> AddAsync(Wishlist wishlist);
+        Task<IEnumerable<Wishlist>> ListAsync();
+        Task<Wishlist?> GetByIdAsync(int id);
+        Task<IEnumerable<Wishlist>> GetByUserIdAsync(string userId);
+        Task<Wishlist?> UpdateAsync(Wishlist wishlist);
+        Task<bool> RemoveAsync(Wishlist wishlist);
+        Task<bool> ProductExistsInWishlistAsync(string userId, int productId);
     }
 }
