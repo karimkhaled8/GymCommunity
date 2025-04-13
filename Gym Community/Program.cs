@@ -6,7 +6,9 @@ using EmailServices;
 using Gym_Community.API.Mapping;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.Forum;
+using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Application.Services;
+using Gym_Community.Application.Services.E_comm;
 using Gym_Community.Application.Services.Forum;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
@@ -89,6 +91,11 @@ namespace Gym_Community
             //Email service
             builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
             builder.Services.AddScoped<IEmailService, EmailService>();
+
+
+            //Ecommerce service 
+            builder.Services.AddScoped<IBrandService, BrandService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             //Repo
             builder.Services.AddScoped<ISubRepository, SubRepository>();
