@@ -1,8 +1,9 @@
-
 using System.Text;
 using Amazon.Runtime;
 using Amazon.S3;
+using AutoMapper;
 using EmailServices;
+using Gym_Community.API.Mapping;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Application.Services;
@@ -58,6 +59,8 @@ namespace Gym_Community
                 };
             });
 
+            // Add AutoMapper
+            builder.Services.AddAutoMapper(typeof(TrainingPlanProfile)); // Option 2: scan where TrainingPlanProfile lives
 
             // Aws s3
             builder.Services.AddSingleton<AWSCredentials>(sp =>
@@ -75,7 +78,6 @@ namespace Gym_Community
 
             // Add services to the container.
 
-
             //Services  
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IAwsService, AwsService>();
@@ -83,7 +85,6 @@ namespace Gym_Community
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IVoteService, VoteService>();
-
 
             //Email service
             builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
@@ -102,7 +103,6 @@ namespace Gym_Community
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
 
-
             //life time for all tokens (email confirmation , pass reset, etc..)
             builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
             {
@@ -115,7 +115,6 @@ namespace Gym_Community
             builder.Services.AddEndpointsApiExplorer();
 
             var app = builder.Build();
-
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

@@ -59,6 +59,13 @@ namespace Gym_Community.Infrastructure.Repositories.Meals_and_Exercise
 
             return await query.ToListAsync();
         }
+
+        public async Task<IEnumerable<Meal>> GetBySupplementStatusAsync(bool isSupplement)
+        {
+            return await _context.Set<Meal>()
+                .Where(m => m.IsSupplement == isSupplement)
+                .ToListAsync();
+        }
     }
 
 }

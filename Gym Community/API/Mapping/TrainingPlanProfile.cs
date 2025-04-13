@@ -23,6 +23,13 @@ namespace Gym_Community.API.Mapping
             CreateMap<TrainingPlan, TrainingPlanDto>();
             CreateMap<CreateTrainingPlanDto, TrainingPlan>();
             CreateMap<UpdateTrainingPlanDto, TrainingPlan>();
+
+            // Exercise mappings
+            CreateMap<Exercise, ExerciseDto>()
+                .ForMember(dest => dest.MuscleGroupName, opt => opt.MapFrom(src => src.MuscleGroup.Name));
+
+            // Meal mappings
+            CreateMap<Meal, MealDto>();
         }
     }
 } 
