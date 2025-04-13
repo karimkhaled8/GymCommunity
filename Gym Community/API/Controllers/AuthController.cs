@@ -25,7 +25,8 @@ namespace Gym_Community.API.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromForm] RegisterDTO registerDTO, [FromForm] IFormFile profileImg)
         {
-            var imageUrl = "";
+            if(ModelState.IsValid) return BadRequest(ModelState);
+            string imageUrl = string.Empty;
             if (profileImg != null)
             {
                  imageUrl = await _awsService.UploadFileAsync(profileImg, "ProfileImages");

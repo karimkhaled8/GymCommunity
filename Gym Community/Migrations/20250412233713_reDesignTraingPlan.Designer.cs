@@ -4,6 +4,7 @@ using Gym_Community.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym_Community.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250412233713_reDesignTraingPlan")]
+    partial class reDesignTraingPlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -283,6 +286,63 @@ namespace Gym_Community.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.ClientPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CaloricTarget")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CarbsPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CoachId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("DurationMonths")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FatsPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FrequencyPerWeek")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProteinPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CoachId");
+
+                    b.ToTable("ClientPlans");
+                });
+
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.DailyPlan", b =>
                 {
                     b.Property<int>("Id")
@@ -402,63 +462,6 @@ namespace Gym_Community.Migrations
                     b.ToTable("MuscleGroups");
                 });
 
-            modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.TrainingPlan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CaloricTarget")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CarbsPercentage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ClientId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CoachId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("DurationMonths")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FatsPercentage")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FrequencyPerWeek")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsStaticPlan")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProteinPercentage")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CoachId");
-
-                    b.ToTable("TrainingPlans");
-                });
-
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Payment_and_Shipping.Payment", b =>
                 {
                     b.Property<int>("Id")
@@ -547,6 +550,140 @@ namespace Gym_Community.Migrations
                     b.HasIndex("OrderID");
 
                     b.ToTable("Shippings");
+                });
+
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.System_Plans.StaticDailyExercise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("DurationMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Reps")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sets")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("StaticDailyExercises");
+                });
+
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.System_Plans.StaticDailyMeal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MealId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("SuggestedTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MealId");
+
+                    b.ToTable("StaticDailyMeals");
+                });
+
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.System_Plans.StaticPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CaloricTarget")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CarbsPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FatsPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FrequencyPerWeek")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProteinPercentage")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StaticPlans");
+                });
+
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.System_Plans.StaticWorkoutDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DailyPlanJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DayDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DayNumber")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StaticPlanId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StaticPlanId");
+
+                    b.ToTable("StaticWorkoutDays");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.AppUser", b =>
@@ -819,11 +956,11 @@ namespace Gym_Community.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ClientPlanId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("TrainingPlanId")
-                        .HasColumnType("int");
 
                     b.Property<string>("WeekName")
                         .IsRequired()
@@ -831,7 +968,7 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TrainingPlanId");
+                    b.HasIndex("ClientPlanId");
 
                     b.ToTable("WeekPlan");
                 });
@@ -1425,6 +1562,25 @@ namespace Gym_Community.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.ClientPlan", b =>
+                {
+                    b.HasOne("Gym_Community.Domain.Models.AppUser", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Gym_Community.Domain.Models.AppUser", "Coach")
+                        .WithMany()
+                        .HasForeignKey("CoachId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Coach");
+                });
+
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.DailyPlan", b =>
                 {
                     b.HasOne("Gym_Community.Domain.Models.Coach_Plans.WeekPlan", "WeekPlan")
@@ -1447,17 +1603,6 @@ namespace Gym_Community.Migrations
                     b.Navigation("MuscleGroup");
                 });
 
-            modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.TrainingPlan", b =>
-                {
-                    b.HasOne("Gym_Community.Domain.Models.AppUser", "Coach")
-                        .WithMany()
-                        .HasForeignKey("CoachId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Coach");
-                });
-
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Payment_and_Shipping.Shipping", b =>
                 {
                     b.HasOne("Gym_Community.Domain.Data.Models.E_comm.Order", "Order")
@@ -1467,6 +1612,39 @@ namespace Gym_Community.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.System_Plans.StaticDailyExercise", b =>
+                {
+                    b.HasOne("Gym_Community.Domain.Data.Models.Meals_and_Exercise.Exercise", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+                });
+
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.System_Plans.StaticDailyMeal", b =>
+                {
+                    b.HasOne("Gym_Community.Domain.Data.Models.Meals_and_Exercise.Meal", "Meal")
+                        .WithMany()
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meal");
+                });
+
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.System_Plans.StaticWorkoutDay", b =>
+                {
+                    b.HasOne("Gym_Community.Domain.Data.Models.System_Plans.StaticPlan", "StaticPlan")
+                        .WithMany("StaticWorkoutDays")
+                        .HasForeignKey("StaticPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StaticPlan");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.ClientStuff.ClientInfo", b =>
@@ -1534,13 +1712,13 @@ namespace Gym_Community.Migrations
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Coach_Plans.WeekPlan", b =>
                 {
-                    b.HasOne("Gym_Community.Domain.Data.Models.Meals_and_Exercise.TrainingPlan", "TrainingPlan")
+                    b.HasOne("Gym_Community.Domain.Data.Models.Meals_and_Exercise.ClientPlan", "ClientPlan")
                         .WithMany("WeekPlans")
-                        .HasForeignKey("TrainingPlanId")
+                        .HasForeignKey("ClientPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TrainingPlan");
+                    b.Navigation("ClientPlan");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Forum.Comment", b =>
@@ -1754,14 +1932,19 @@ namespace Gym_Community.Migrations
                     b.Navigation("ShoppingCartItems");
                 });
 
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.ClientPlan", b =>
+                {
+                    b.Navigation("WeekPlans");
+                });
+
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.MuscleGroup", b =>
                 {
                     b.Navigation("Exercises");
                 });
 
-            modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.TrainingPlan", b =>
+            modelBuilder.Entity("Gym_Community.Domain.Data.Models.System_Plans.StaticPlan", b =>
                 {
-                    b.Navigation("WeekPlans");
+                    b.Navigation("StaticWorkoutDays");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Coach_Plans.WeekPlan", b =>
