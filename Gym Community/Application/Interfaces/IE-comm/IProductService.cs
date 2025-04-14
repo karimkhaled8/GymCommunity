@@ -6,8 +6,8 @@ namespace Gym_Community.Application.Interfaces.IE_comm
     {
         Task<IEnumerable<ProductDTO>> GetProducts();
         Task<ProductDTO?> GetProductById(int productId);
-        Task<int> CreateProduct(ProductDTO productDto);
-        Task<bool> UpdateProduct(int productId, ProductDTO productDto);
+        Task<ProductDTO?> CreateProduct(ProductDTO productDto);
+        Task<ProductDTO?> UpdateProduct(int productId, ProductDTO productDto);
         Task<bool> DeleteProduct(int productId);
     }
 }

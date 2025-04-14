@@ -56,7 +56,7 @@ namespace Gym_Community.Application.Services.E_comm
             return productDto;
         }
 
-        public async Task<int> CreateProduct(ProductDTO productDto)
+        public async Task<ProductDTO?> CreateProduct(ProductDTO productDto , string imgUrl)
         {
             var product = new Product
             {
@@ -64,20 +64,33 @@ namespace Gym_Community.Application.Services.E_comm
                 Description = productDto.Description,
                 Price = productDto.Price,
                 Stock = productDto.Stock,
-                ImageUrl = productDto.ImageUrl,
+                ImageUrl = imgUrl,
                 CreatedAt = DateTime.Now,
                 AverageRating = productDto.AverageRating,
                 CategoryID = productDto.CategoryID
             };
 
             var addedProduct = await _productRepository.AddAsync(product);
-            return addedProduct?.Id ?? 0;
+
+            return addedProduct == null ? null : new ProductDTO
+            {
+                Id = addedProduct.Id,
+                Name = addedProduct.Name,
+                Description = addedProduct.Description,
+                Price = addedProduct.Price,
+                Stock = addedProduct.Stock,
+                ImageUrl = addedProduct.ImageUrl,
+                CreatedAt = addedProduct.CreatedAt,
+                AverageRating = addedProduct.AverageRating,
+                CategoryID = addedProduct.CategoryID,
+                CategoryName = addedProduct.Category?.Name ?? string.Empty
+            }; 
         }
 
-        public async Task<bool> UpdateProduct(int productId, ProductDTO productDto)
+        public async Task<ProductDTO?> UpdateProduct(int productId, ProductDTO productDto)
         {
             var existingProduct = await _productRepository.GetById(productId);
-            if (existingProduct == null) return false;
+            if (existingProduct == null) return null;
 
             existingProduct.Name = productDto.Name;
             existingProduct.Description = productDto.Description;
@@ -87,8 +100,20 @@ namespace Gym_Community.Application.Services.E_comm
             existingProduct.AverageRating = productDto.AverageRating;
             existingProduct.CategoryID = productDto.CategoryID;
 
-            await _productRepository.UpdateAsync(existingProduct);
-            return true;
+            var updatedProduct = await _productRepository.UpdateAsync(existingProduct);
+            return updatedProduct==null ? null : new ProductDTO {
+                Id = updatedProduct.Id,
+                Name = updatedProduct.Name,
+                Description = updatedProduct.Description,
+                Price = updatedProduct.Price,
+                Stock = updatedProduct.Stock,
+                ImageUrl = updatedProduct.ImageUrl,
+                CreatedAt = updatedProduct.CreatedAt,
+                AverageRating = updatedProduct.AverageRating,
+                CategoryID = updatedProduct.CategoryID,
+                CategoryName = updatedProduct.Category?.Name ?? string.Empty
+            };
+
         }
 
         public async Task<bool> DeleteProduct(int productId)
