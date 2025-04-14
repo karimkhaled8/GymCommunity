@@ -32,6 +32,14 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
                 .Include(p => p.Category)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Product>> ListAsync(string name)
+        {
+            return await _context.Products
+                .Where(p=>p.Name.Contains(name))
+                //.Include(p => p.Brand)
+                .Include(p => p.Category)
+                .ToListAsync();
+        }
 
         public async Task<Product?> GetById(int id)
         {

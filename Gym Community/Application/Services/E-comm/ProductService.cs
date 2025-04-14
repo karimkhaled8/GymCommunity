@@ -33,6 +33,25 @@ namespace Gym_Community.Application.Services.E_comm
 
             return productDtos;
         }
+        public async Task<IEnumerable<ProductDTO>> SearchProducts(string name)
+        {
+            var products = await _productRepository.ListAsync(name);
+            var productDtos = products.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                ImageUrl = p.ImageUrl,
+                CreatedAt = p.CreatedAt,
+                AverageRating = p.AverageRating,
+                CategoryID = p.CategoryID,
+                CategoryName = p.Category?.Name ?? string.Empty
+            });
+
+            return productDtos;
+        }
 
         public async Task<ProductDTO?> GetProductById(int productId)
         {
@@ -56,7 +75,7 @@ namespace Gym_Community.Application.Services.E_comm
             return productDto;
         }
 
-        public async Task<ProductDTO?> CreateProduct(ProductDTO productDto , string imgUrl)
+        public async Task<ProductDTO?> CreateProduct(ProductDTO productDto)
         {
             var product = new Product
             {
@@ -64,7 +83,7 @@ namespace Gym_Community.Application.Services.E_comm
                 Description = productDto.Description,
                 Price = productDto.Price,
                 Stock = productDto.Stock,
-                ImageUrl = imgUrl,
+                ImageUrl = productDto.ImageUrl,
                 CreatedAt = DateTime.Now,
                 AverageRating = productDto.AverageRating,
                 CategoryID = productDto.CategoryID

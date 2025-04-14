@@ -19,25 +19,32 @@ namespace Gym_Community.API.Controllers.Ecommerce
             _productService = ps;
             _awsService = aws; 
         }
-        //[HttpGet]
-        //public Task<IActionResult> Get()
-        //{
-        //    var products = _p
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET api/<ProductController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            return "value";
+            var products = await _productService.GetProducts();
+            return products.Any() ? Ok(products) : Ok(new {success = true ,message = "No products Found" });
         }
 
-        // POST api/<ProductController>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            if (id < 0) return BadRequest(); 
+            var product = await _productService.GetProductById(id); 
+            if(product==null) return NotFound();    
+            return Ok(product);
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> Search([FromQuery] string name)
+        {
+            var products = await _productService.SearchProducts(name);
+            return products.Any() ? Ok(products) : Ok(new { success = false, message = "No matching products found." });
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] ProductDTO productDto, [FromForm] IFormFile productImg)
         {
-            // Validate the product image
             if (productImg == null || productImg.Length == 0)
             {
                 return BadRequest(new {success=false , message = "Product Image is required"});
@@ -55,12 +62,16 @@ namespace Gym_Community.API.Controllers.Ecommerce
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromForm] ProductDTO productDTO , [FromForm] IFormFile productImg)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             if (productImg != null && productImg.Length > 0)
             {
+                if(!string.IsNullOrEmpty(productDTO.ImageUrl)) 
+                    await _awsService.DeleteFileAsync(productDTO.ImageUrl);
+
                 var imageUrl = await _awsService.UploadFileAsync(productImg, "products");
                 if (string.IsNullOrEmpty(imageUrl))
                 {
-                    BadRequest(new { success = false, message = "Failed to upload image" });
+                   return BadRequest(new { success = false, message = "Failed to upload image" });
                 }
                 productDTO.ImageUrl = imageUrl;
             }
@@ -74,7 +85,7 @@ namespace Gym_Community.API.Controllers.Ecommerce
         {
             var deletedProduct = await _productService.DeleteProduct(id);
             if (!deletedProduct) return NotFound();
-            return Ok(new { sucess = true, message = "Product deleted successfully" }); 
+            return Ok(new { success = true, message = "Product deleted successfully" }); 
         }
     }
 }
