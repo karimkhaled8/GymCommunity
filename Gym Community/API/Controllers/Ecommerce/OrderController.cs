@@ -2,6 +2,7 @@
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,11 +20,15 @@ namespace Gym_Community.API.Controllers.Ecommerce
             _orderService = orderService;
         }
 
-        [HttpGet("Admin/{ID}")]
-        public async Task<IActionResult> Get(string UserId)
+        [HttpGet("admin")]
+        public async Task<IActionResult> Get()
         {
-            var role = await _authService.GetRole(UserId);
-            if (role == null) return BadRequest(new { sucess = false, message = "Not Authantictated" });
+            var userId = getUserID();
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+            
+            var role = await _authService.GetRole(userId);
+            if (role == null) return Unauthorized();
+            
             if (role == "Admin")
             {
                 var orders = await _orderService.GetOrdersAsync();
@@ -35,12 +40,14 @@ namespace Gym_Community.API.Controllers.Ecommerce
             }
         }
 
-        [HttpGet("user/{ID}")]
-        public async Task<IActionResult> GetUserOrder(string UserId)
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUserOrder()
         {
-            var role = await _authService.GetRole(UserId);
+            var userId = getUserID();
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+            var role = await _authService.GetRole(userId);
             if (role == null) return BadRequest(new { sucess = false, message = "Not Authantictated" });
-            var orders = await _orderService.GetUserOrderAsync(UserId);    
+            var orders = await _orderService.GetUserOrderAsync(userId);    
             return Ok(orders);
         }
 
@@ -80,6 +87,10 @@ namespace Gym_Community.API.Controllers.Ecommerce
             var order = await _orderService.RemoveOrderAsync(id);
             if (!order) NotFound();
             return Ok(new { sucess = true, message = "Deleted Successfully" });
+        }
+        private string getUserID()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
     }
 }
