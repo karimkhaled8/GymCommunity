@@ -33,6 +33,16 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
                 .Include(o => o.Shipping)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Order>> ListUserOrdersAsync(string userId)
+        {
+            return await _context.Orders
+                .Where(o => o.UserID == userId)
+                .Include(o=>o.Shipping)
+                .Include(o => o.Payment)
+                .Include(o=>o.OrderItems)
+                .ThenInclude(oi => oi.Product)  
+                .ToListAsync(); 
+        }
 
         public async Task<Order?> GetById(int id)
         {

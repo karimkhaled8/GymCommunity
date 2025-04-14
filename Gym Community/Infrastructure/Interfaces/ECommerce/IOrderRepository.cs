@@ -6,6 +6,7 @@ namespace Gym_Community.Infrastructure.Interfaces.ECommerce
     {
         public Task<Order?> AddAsync(Order order);
         public Task<IEnumerable<Order>> ListAsync();
+        public Task<IEnumerable<Order>> ListUserOrdersAsync(string userId);
         public Task<Order?> GetById(int id);
         public Task<Order?> UpdateAsync(Order order);
         public Task<bool> RemoveAsync(Order order);

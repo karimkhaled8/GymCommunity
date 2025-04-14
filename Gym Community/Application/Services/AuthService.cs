@@ -4,6 +4,7 @@ using Gym_Community.Application.Interfaces;
 using Gym_Community.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -79,6 +80,14 @@ namespace Gym_Community.Application.Services
             }
         }
 
+        public async Task<string?> GetRole(string userID)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userID);
+            if (user == null) return null;
+            var userRole = await _userManager.GetRolesAsync(user);
+            if (userRole == null) return null;
+            return userRole.FirstOrDefault();
+        }
         public async Task<bool> IsAuthenticated(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);

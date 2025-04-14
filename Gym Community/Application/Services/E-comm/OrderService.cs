@@ -81,6 +81,29 @@ namespace Gym_Community.Application.Services.E_comm
             }).ToList();
         }
 
+        public async Task<IEnumerable<OrderDto>> GetUserOrderAsync(string userId)
+        {
+            var orders = await _orderRepository.ListUserOrdersAsync(userId);
+            
+            return orders.Select(order => new OrderDto
+            {
+                Id = order.OrderID,
+                OrderDate = order.OrderDate,
+                TotalAmount = order.TotalAmount,
+                CustomerId = order.UserID,
+                PaymentStatus = order.PaymentStatus,
+                OrderItems = order.OrderItems.Select(oi => new OrderItemDto
+                {
+                    ProductId = oi.ProductID,
+                    Quantity = oi.Quantity,
+                    Price = oi.Price,
+                    ProductName = oi.Product?.Name ?? string.Empty 
+                }).ToList(),
+                ShippingStatus = order.Shipping.ShippingStatus,  
+                DelivaryDate = order.Shipping.EstimatedDeliveryDate
+            }).ToList();
+        }
+
         public async Task<OrderDto?> GetOrderByIdAsync(int id)
         {
             var order = await _orderRepository.GetById(id);

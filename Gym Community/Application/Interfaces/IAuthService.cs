@@ -11,6 +11,7 @@ namespace Gym_Community.Application.Interfaces
 
         public Task<string> register(RegisterDTO registerDTO, string profileImg);
 
+        public Task<string?> GetRole(string userID); 
         public Task<bool> IsAuthenticated(string email);
 
         public Task<bool> ConfirmEmail(string email, string token);
