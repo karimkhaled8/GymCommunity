@@ -7,7 +7,7 @@ namespace Gym_Community.Application.Interfaces.IE_comm
         Task<CategoryDTO?> CreateCategory(CategoryDTO categoryDto);
         Task<IEnumerable<CategoryDTO>> GetAllCategories();
         Task<CategoryDTO?> GetCategoryById(int categoryId);
-        Task<bool> UpdateCategory(int categoryId, CategoryDTO categoryDto);
+        Task<CategoryDTO?> UpdateCategory(int categoryId, CategoryDTO categoryDto);
         Task<bool> DeleteCategory(int categoryId);
     }
 }

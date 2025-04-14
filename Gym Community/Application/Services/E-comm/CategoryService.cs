@@ -54,16 +54,20 @@ namespace Gym_Community.Application.Services.E_comm
             };
         }
 
-        public async Task<bool> UpdateCategory(int categoryId, CategoryDTO categoryDto)
+        public async Task<CategoryDTO?> UpdateCategory(int categoryId, CategoryDTO categoryDto)
         {
             var existing = await _categoryRepository.GetById(categoryId);
-            if (existing == null) return false;
+            if (existing == null) return null;
 
             existing.Name = categoryDto.Name;
             existing.IsDeleted = categoryDto.IsDeleted;
 
             var updated = await _categoryRepository.UpdateAsync(existing);
-            return updated != null;
+
+            return (updated == null) ? null : new CategoryDTO {
+                CategoryID = updated.CategoryID,
+                Name = updated.Name,
+            };
         }
 
         public async Task<bool> DeleteCategory(int categoryId)
