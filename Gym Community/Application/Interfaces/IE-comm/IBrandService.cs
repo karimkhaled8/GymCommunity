@@ -6,8 +6,8 @@ namespace Gym_Community.Application.Interfaces.IE_comm
     {
         Task<BrandDTO> CreateBrand(BrandDTO brandDto);
         Task<IEnumerable<BrandDTO>> GetAllBrands();
-        Task<BrandDTO> GetBrandById(int brandId);
-        Task<bool> UpdateBrand(int brandId, BrandDTO brandDto);
+        Task<BrandDTO?> GetBrandById(int brandId);
+        Task<BrandDTO?> UpdateBrand(int brandId, BrandDTO brandDto);
         Task<bool> DeleteBrand(int brandId);
     }
 }

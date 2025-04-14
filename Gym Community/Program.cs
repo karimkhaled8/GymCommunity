@@ -102,6 +102,7 @@ namespace Gym_Community
             builder.Services.AddScoped<IOrderItemRepository, OrderItemsRepository>();
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+            builder.Services.AddScoped<IShoppingCartItemRepository, ShoppingCartItemRepository>();
             builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
 

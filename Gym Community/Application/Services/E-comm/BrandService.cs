@@ -46,6 +46,7 @@ namespace Gym_Community.Application.Services.E_comm
         public async Task<BrandDTO?> GetBrandById(int brandId)
         {
             var brand = await _brandRepository.GetById(brandId);
+
             return brand == null ? null : new BrandDTO
             {
                 BrandID = brand.BrandID,
@@ -54,16 +55,23 @@ namespace Gym_Community.Application.Services.E_comm
             };
         }
 
-        public async Task<bool> UpdateBrand(int brandId, BrandDTO brandDto)
+        public async Task<BrandDTO?> UpdateBrand(int brandId, BrandDTO brandDto)
         {
             var existing = await _brandRepository.GetById(brandId);
-            if (existing == null) return false;
+            
+            if (existing == null) return null;
 
             existing.Name = brandDto.Name;
             existing.Description = brandDto.Description;
 
             var updated = await _brandRepository.UpdateAsync(existing);
-            return updated != null;
+
+            return updated == null ? null : new BrandDTO
+            {
+                BrandID = updated.BrandID,
+                Name = updated.Name,
+                Description = updated.Description
+            };  
         }
 
         public async Task<bool> DeleteBrand(int brandId)
