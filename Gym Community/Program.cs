@@ -6,24 +6,19 @@ using EmailServices;
 using Gym_Community.API.Mapping;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.Forum;
-using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Application.Services;
 using Gym_Community.Application.Services.E_comm;
 using Gym_Community.Application.Services.Forum;
-using Gym_Community.Application.Services.Gym;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
-using Gym_Community.Infrastructure.Interfaces;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Gym_Community.Infrastructure.Interfaces.Forum;
-using Gym_Community.Infrastructure.Interfaces.Gym;
 using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
 using Gym_Community.Infrastructure.Repositories;
 using Gym_Community.Infrastructure.Repositories.ECommerce;
 using Gym_Community.Infrastructure.Repositories.Forum;
-using Gym_Community.Infrastructure.Repositories.Gym;
 using Gym_Community.Infrastructure.Repositories.Meals_and_Exercise;
 using Gym_Community.Infrastructure.Repositories.Training_Plans;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -90,19 +85,10 @@ namespace Gym_Community
             //Services  
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IAwsService, AwsService>();
-
-            //Fourm Service
             builder.Services.AddScoped<ISubService, SubService>();
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<IVoteService, VoteService>();
-
-            //Gym service
-            builder.Services.AddScoped<IGymService, GymService>();
-            builder.Services.AddScoped<IGymCoachService, GymCoachService>();
-            builder.Services.AddScoped<IGymImgService, GymImgService>();
-            builder.Services.AddScoped<IGymPlanService, GymPlanService>();
-
 
             //Email service
             builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
@@ -118,17 +104,25 @@ namespace Gym_Community
             builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
             builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
-            // Also make sure your services are registered if not already:
+
+
+            // Ecommerce Service
+
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
-            
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
+            builder.Services.AddScoped<IWishlistService, WishlistService>();
+            builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+            builder.Services.AddScoped<IShoppingCartItemService, ShoppingCartItemService>();
+            builder.Services.AddScoped<IOrderItemService, OrderItemService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
 
-            //Forum Repository
+            //Repo
             builder.Services.AddScoped<ISubRepository, SubRepository>();
             builder.Services.AddScoped<IPostRepository, PostRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped<IVoteRepository, VoteRepository>();
-
             builder.Services.AddScoped<IDailyPlanRepository, DailyPlanRepository>();
             builder.Services.AddScoped<IWeekPlanRepository, WeekPlanRepository>();
             builder.Services.AddScoped<ITrainingPlanRepository, TrainingPlanRepository>();
@@ -136,12 +130,6 @@ namespace Gym_Community
             builder.Services.AddScoped<IMealRepository, MealRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
-
-            //Gym Repository
-            builder.Services.AddScoped<IGymRepository, GymRepository>();
-            builder.Services.AddScoped<IGymCoachRepository, GymCoachRepository>();
-            builder.Services.AddScoped<IGymImgRepository, GymImgRepository>();
-            builder.Services.AddScoped<IGymPlanRepository, GymPlanRepository>();
 
             //life time for all tokens (email confirmation , pass reset, etc..)
             builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>

@@ -24,7 +24,7 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         public async Task<IEnumerable<ShoppingCart>> ListAsync()
         {
             return await _context.ShoppingCarts
-                .Include(s => s.UserId)
+                .Include(s => s.AppUser)
                 .Include(s => s.ShoppingCartItems)
                 .ToListAsync(); 
         }
@@ -32,7 +32,7 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         public async Task<ShoppingCart?> GetById(int id)
         {
             return await _context.ShoppingCarts
-                .Include(s=>s.UserId)
+                .Include(s => s.AppUser)
                 .Include(s=>s.ShoppingCartItems)
                 .FirstOrDefaultAsync(s => s.Id == id); 
         }
