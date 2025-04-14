@@ -17,6 +17,7 @@ namespace Gym_Community.Domain.Models.Gym
         public DateTime StartDate {  get; set; } 
         public DateTime ExpiresAt { get; set; }
         public string QrCodeData { get; set; } = null!; // store raw string or image URL
+        public string rawData { get; set; } = null!; // store raw string or image URL
 
         public bool IsExpired { get; set; } = false;
 
