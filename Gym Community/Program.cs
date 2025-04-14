@@ -17,6 +17,7 @@ using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Gym_Community.Infrastructure.Interfaces.Forum;
+using Gym_Community.Infrastructure.Interfaces.Gym;
 using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
 using Gym_Community.Infrastructure.Repositories;
@@ -98,6 +99,7 @@ namespace Gym_Community
 
             //Gym service
             builder.Services.AddScoped<IGymService, GymService>();
+            builder.Services.AddScoped<IGymCoachService, GymCoachService>();
 
 
             //Email service
@@ -135,6 +137,7 @@ namespace Gym_Community
 
             //Gym Repository
             builder.Services.AddScoped<IGymRepository, GymRepository>();
+            builder.Services.AddScoped<IGymCoachRepository, GymCoachRepository>();
 
             //life time for all tokens (email confirmation , pass reset, etc..)
             builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>

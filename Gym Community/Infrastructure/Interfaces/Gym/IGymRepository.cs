@@ -4,11 +4,11 @@ namespace Gym_Community.Infrastructure.Interfaces
 {
     public interface IGymRepository
     {
-        Task<Gym?> AddAsync(Gym gym);
-        Task<IEnumerable<Gym>> ListAsync();
-        Task<Gym?> GetByIdAsync(int id);
-        Task<IEnumerable<Gym>> GetNearbyGymsAsync(double lat, double lng, double radiusInKm);
-        Task<Gym?> UpdateAsync(Gym gym);
-        Task<bool> DeleteAsync(Gym gym);
+       public Task<Gym_Community.Domain.Models.Gym.Gym?> AddAsync(Gym_Community.Domain.Models.Gym.Gym gym);
+       public Task<IEnumerable<Gym_Community.Domain.Models.Gym.Gym>> ListAsync();
+       public Task<Gym_Community.Domain.Models.Gym.Gym?> GetByIdAsync(int id);
+       public Task<IEnumerable<Gym_Community.Domain.Models.Gym.Gym>> GetNearbyGymsAsync(double lat, double lng, double radiusInKm);
+       public Task<Gym_Community.Domain.Models.Gym.Gym?> UpdateAsync(Gym_Community.Domain.Models.Gym.Gym gym);
+       public Task<bool> DeleteAsync(Gym_Community.Domain.Models.Gym.Gym gym);
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gym_Community.Infrastructure.Repositories.Gym
 {
-    public class GymRepository:IGymRepository
+    public class GymRepository : IGymRepository
     {
         private readonly ApplicationDbContext _context;
         public GymRepository(ApplicationDbContext context)
