@@ -100,6 +100,7 @@ namespace Gym_Community
             //Gym service
             builder.Services.AddScoped<IGymService, GymService>();
             builder.Services.AddScoped<IGymCoachService, GymCoachService>();
+            builder.Services.AddScoped<IGymImgService, GymImgService>();
 
 
             //Email service
@@ -138,6 +139,7 @@ namespace Gym_Community
             //Gym Repository
             builder.Services.AddScoped<IGymRepository, GymRepository>();
             builder.Services.AddScoped<IGymCoachRepository, GymCoachRepository>();
+            builder.Services.AddScoped<IGymImgRepository, GymImgRepository>();
 
             //life time for all tokens (email confirmation , pass reset, etc..)
             builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
