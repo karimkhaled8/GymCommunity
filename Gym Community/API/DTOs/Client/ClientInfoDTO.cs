@@ -1,20 +1,21 @@
 ﻿using Gym_Community.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
+using Gym_Community.Domain.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
-namespace Gym_Community.Domain.Models.ClientStuff
+namespace Gym_Community.API.DTOs.Client
 {
-    public class ClientInfo
+    public class ClientInfoDTO
     {
-        [Key]
-        public int Id { get; set; }
+        
+        public int Id { get; set; } 
         public double? Height { get; set; }
         public double? Weight { get; set; }
         public int? WorkoutAvailability { get; set; } // 3 days a week, 5 days a week, etc.
 
-        [ForeignKey("ClientUser")]
-        public string Client { get; set; }
-        public AppUser ClientUser { get; set; }
+       
+        public string ClientId { get; set; }
+        
 
         public ClientGoal? clientGoal { get; set; } // Enum for client goals
         public string? OtherGoal { get; set; } // if he/she has a different goal

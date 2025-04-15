@@ -5,22 +5,26 @@ using AutoMapper;
 using EmailServices;
 using Gym_Community.API.Mapping;
 using Gym_Community.Application.Interfaces;
+using Gym_Community.Application.Interfaces.Client;
 using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Application.Services;
+using Gym_Community.Application.Services.Client;
 using Gym_Community.Application.Services.E_comm;
 using Gym_Community.Application.Services.Forum;
 using Gym_Community.Application.Services.Gym;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces;
+using Gym_Community.Infrastructure.Interfaces.Client;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Gym_Community.Infrastructure.Interfaces.Forum;
 using Gym_Community.Infrastructure.Interfaces.Gym;
 using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
 using Gym_Community.Infrastructure.Repositories;
+using Gym_Community.Infrastructure.Repositories.Client;
 using Gym_Community.Infrastructure.Repositories.ECommerce;
 using Gym_Community.Infrastructure.Repositories.Forum;
 using Gym_Community.Infrastructure.Repositories.Gym;
@@ -102,6 +106,9 @@ namespace Gym_Community
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IAwsService, AwsService>();
 
+            //client service
+            builder.Services.AddScoped<IClientInfoService, ClientInfoService>();
+
             //Email service
             builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
             builder.Services.AddScoped<IEmailService, EmailService>();
@@ -131,8 +138,10 @@ namespace Gym_Community
             builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
 
 
-            // Ecommerce Service
+            //Client repository
+            builder.Services.AddScoped<IClientInfoRepository, ClientInfoRepository>();
 
+            // Ecommerce Service
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
             builder.Services.AddScoped<IProductService, ProductService>();
