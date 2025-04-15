@@ -25,7 +25,7 @@ namespace Gym_Community.API.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromForm] RegisterDTO registerDTO, [FromForm] IFormFile profileImg)
         {
-            if(ModelState.IsValid) return BadRequest(ModelState);
+            if(!ModelState.IsValid) return BadRequest(ModelState);
             string imageUrl = string.Empty;
             if (profileImg != null)
             {
