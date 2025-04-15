@@ -1,4 +1,6 @@
-﻿using Gym_Community.API.DTOs.Forum;
+﻿using Gym_Community.API.DTOs.E_comm;
+using Gym_Community.API.DTOs.Forum;
+using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Domain.Models.Forum;
 using Microsoft.AspNetCore.Http;
@@ -11,15 +13,27 @@ namespace Gym_Community.API.Controllers.Forum
     public class PostController : ControllerBase
     {
         private readonly IPostService _service;
-
-        public PostController(IPostService service)
+        private readonly IAwsService _awsService;
+        public PostController(IPostService service, IAwsService awsService)
         {
             _service = service;
+            _awsService = awsService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PostCreateDTO dto)
+        public async Task<IActionResult> Create([FromForm]PostCreateDTO dto,[FromForm] IFormFile? image)
         {
+            if(image != null)
+            {
+                var imageUrl = await _awsService.UploadFileAsync(image, "products");
+                if (string.IsNullOrEmpty(imageUrl))
+                {
+                    return BadRequest(new { success = false, message = "Failed to upload image" });
+                }
+                dto.ImgUrl = imageUrl;
+
+            }
+
             var result = await _service.CreateAsync(dto);
             return result != null ? Ok(result) : BadRequest("Failed to create post.");
         }

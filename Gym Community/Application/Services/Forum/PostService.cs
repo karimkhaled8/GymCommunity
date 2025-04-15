@@ -1,17 +1,22 @@
 ﻿using Gym_Community.API.DTOs.Forum;
+using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Domain.Models.Forum;
 using Gym_Community.Infrastructure.Interfaces.Forum;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Gym_Community.Application.Services.Forum
 {
     public class PostService: IPostService
     {
         private readonly IPostRepository _repo;
+        private readonly IAwsService _awsService;
 
-        public PostService(IPostRepository repo)
+
+        public PostService(IPostRepository repo, IAwsService awsService)
         {
             _repo = repo;
+            _awsService = awsService;
         }
 
         public async Task<PostReadDTO?> CreateAsync(PostCreateDTO dto)
@@ -20,7 +25,7 @@ namespace Gym_Community.Application.Services.Forum
             {
                 Title = dto.Title,
                 Content = dto.Content,
-                imgUrl = dto.ImgUrl,
+                imgUrl = dto.ImgUrl ?? string.Empty,
                 CreatedAt = DateTime.UtcNow,
                 UserId = dto.UserId,
                 SubId = dto.SubId
