@@ -46,7 +46,7 @@ namespace Gym_Community.Application.Services.Forum
                 ImgUrl = p.imgUrl,
                 CreatedAt = p.CreatedAt,
                 UserId = p.UserId,
-                UserName = p.AppUser.UserName ?? "",
+                UserName = p.AppUser.FirstName + " " + p.AppUser.LastName ?? "",
                 SubId = p.SubId,
                 SubName = p.Sub.Name,
                 CommentCount = p.Comments?.Count ?? 0,

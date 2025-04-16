@@ -54,6 +54,7 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
             return await _context.Comments
                 .Include(c => c.AppUser)
                 .Include(c => c.Post)
+                .Include(c => c.Votes)
                 .Where(c => c.UserId == userId)
                 .ToListAsync();
         }
@@ -62,6 +63,7 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
             return await _context.Comments
                 .Include(c => c.AppUser)
                 .Include(c => c.Post)
+                .Include(c => c.Votes)
                 .Where(c => c.PostId == postId)
                 .ToListAsync();
         }
