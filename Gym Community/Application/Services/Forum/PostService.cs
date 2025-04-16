@@ -66,7 +66,7 @@ namespace Gym_Community.Application.Services.Forum
 
             post.Title = dto.Title;
             post.Content = dto.Content;
-            post.imgUrl = dto.ImgUrl;
+            post.imgUrl = dto.ImgUrl ?? string.Empty;
             post.SubId = dto.SubId;
 
             var updated = await _repo.UpdateAsync(post);
