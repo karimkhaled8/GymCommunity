@@ -6,11 +6,13 @@ using EmailServices;
 using Gym_Community.API.Mapping;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.Client;
+using Gym_Community.Application.Interfaces.CoachStuff;
 using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Application.Services;
 using Gym_Community.Application.Services.Client;
+using Gym_Community.Application.Services.CoachStuff;
 using Gym_Community.Application.Services.E_comm;
 using Gym_Community.Application.Services.Forum;
 using Gym_Community.Application.Services.Gym;
@@ -18,6 +20,7 @@ using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces;
 using Gym_Community.Infrastructure.Interfaces.Client;
+using Gym_Community.Infrastructure.Interfaces.CoachStuff;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Gym_Community.Infrastructure.Interfaces.Forum;
 using Gym_Community.Infrastructure.Interfaces.Gym;
@@ -25,6 +28,7 @@ using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
 using Gym_Community.Infrastructure.Repositories;
 using Gym_Community.Infrastructure.Repositories.Client;
+using Gym_Community.Infrastructure.Repositories.CoachStuff;
 using Gym_Community.Infrastructure.Repositories.ECommerce;
 using Gym_Community.Infrastructure.Repositories.Forum;
 using Gym_Community.Infrastructure.Repositories.Gym;
@@ -172,6 +176,23 @@ namespace Gym_Community
             builder.Services.AddScoped<IMealRepository, MealRepository>();
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
+
+
+
+
+            // CoachstuffRepo
+            builder.Services.AddScoped<IWorkSampleRepository, WorkSampleRepository>();
+            builder.Services.AddScoped<ICoachRatingRepository, CoachRatingRepository>();
+            builder.Services.AddScoped<ICoachCertificateRepository, CoachCertificateRepository>();
+            builder.Services.AddScoped<ICoachPortfolioRepository, CoachPortfolioRepository>();
+
+            // CoachStuffServices
+            builder.Services.AddScoped<IWorkSampleService, WorkSampleService>();
+            builder.Services.AddScoped<ICoachRatingService, CoachRatingService>();
+            builder.Services.AddScoped<ICoachCertificateService, CoachCertificateService>();
+            builder.Services.AddScoped<ICoachPortfolioService, CoachPortfolioService>();
+
+
 
             //life time for all tokens (email confirmation , pass reset, etc..)
             builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
