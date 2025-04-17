@@ -43,9 +43,14 @@ namespace Gym_Community.API.Controllers.Forum
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetAllAsync();
-            return Ok(result);
+            return result != null ? Ok(result) : NotFound();
         }
-
+        [HttpGet("topRated")]
+        public async Task<IActionResult> GetTopRated()
+        {
+            var result = await _service.GetTopRated();
+            return result != null ? Ok(result) : NotFound();
+        }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -92,14 +97,14 @@ namespace Gym_Community.API.Controllers.Forum
         public async Task<IActionResult> GetByUser(string userId)
         {
             var result = await _service.GetByUserIdAsync(userId);
-            return Ok(result);
+            return result != null ? Ok(result) : NotFound();
         }
 
         [HttpGet("sub/{subId}")]
         public async Task<IActionResult> GetBySub(int subId)
         {
             var result = await _service.GetBySubIdAsync(subId);
-            return Ok(result);
+            return result != null ? Ok(result) : NotFound();
         }
 
     }

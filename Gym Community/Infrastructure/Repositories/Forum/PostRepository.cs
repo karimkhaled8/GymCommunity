@@ -1,4 +1,5 @@
-﻿using Gym_Community.Domain.Models.Forum;
+﻿using Gym_Community.API.DTOs.Forum;
+using Gym_Community.Domain.Models.Forum;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Forum;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,7 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
                 .Include(p => p.AppUser)
                 .Include(p => p.Sub)
                 .Include(p => p.Comments)
-                .Include(p => p.Votes)
+                .Include(p => p.Votes).OrderByDescending(p => p.CreatedAt)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -36,7 +37,7 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
                 .Include(p => p.AppUser)
                 .Include(p => p.Sub)
                 .Include(p => p.Comments)
-                .Include(p => p.Votes)
+                .Include(p => p.Votes).OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
         }
 
@@ -57,7 +58,7 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
                 .Include(p => p.Comments)
                 .Include(p => p.Votes)
                 .Include(p => p.AppUser)
-                .Include(p => p.Sub)
+                .Include(p => p.Sub).OrderByDescending(p => p.CreatedAt)
                 .Where(p => p.UserId == userId)
                 .ToListAsync();
         }
@@ -68,10 +69,21 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
                 .Include(p => p.Comments)
                 .Include(p => p.Votes)
                 .Include(p => p.AppUser)
-                .Include(p => p.Sub)
+                .Include(p => p.Sub).OrderByDescending(p => p.CreatedAt)
                 .Where(p => p.SubId == subId)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Post>> GetTopRated()
+        {
+            return await _context.Posts
+                .Include(p => p.Comments)
+                .Include(p => p.Votes)
+                .Include(p => p.AppUser)
+                .Include(p => p.Sub)
+                .OrderByDescending(p => p.Votes.Count(v => v.IsUpvote))
+                .ToListAsync();
+        }
+
     }
 }
 

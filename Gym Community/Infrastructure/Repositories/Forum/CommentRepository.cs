@@ -25,7 +25,7 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
             return await _context.Comments
                 .Include(c => c.AppUser)
                 .Include(c => c.Post)
-                .Include(c => c.Votes)
+                .Include(c => c.Votes).OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
         }
 
@@ -34,7 +34,7 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
             return await _context.Comments
                 .Include(c => c.AppUser)
                 .Include(c => c.Post)
-                .Include(c => c.Votes)
+                .Include(c => c.Votes).OrderByDescending(p => p.CreatedAt)
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
@@ -54,7 +54,7 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
             return await _context.Comments
                 .Include(c => c.AppUser)
                 .Include(c => c.Post)
-                .Include(c => c.Votes)
+                .Include(c => c.Votes).OrderByDescending(p => p.CreatedAt)
                 .Where(c => c.UserId == userId)
                 .ToListAsync();
         }
@@ -63,7 +63,7 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
             return await _context.Comments
                 .Include(c => c.AppUser)
                 .Include(c => c.Post)
-                .Include(c => c.Votes)
+                .Include(c => c.Votes).OrderByDescending(p => p.CreatedAt)
                 .Where(c => c.PostId == postId)
                 .ToListAsync();
         }
