@@ -18,5 +18,9 @@ namespace Gym_Community.Domain.Models.ClientStuff
 
         public ClientGoal? clientGoal { get; set; } // Enum for client goals
         public string? OtherGoal { get; set; } // if he/she has a different goal
+
+
+        //public string? Bio { get; set; }
+        //public string? Nationality { get; set; } // Profile image URL
     }
 }

@@ -89,6 +89,9 @@ namespace Gym_Community
 
             // Add AutoMapper
             builder.Services.AddAutoMapper(typeof(TrainingPlanProfile)); // Option 2: scan where TrainingPlanProfile lives
+            builder.Services.AddAutoMapper(typeof(ClientProfileMapper)); 
+   
+
 
             // Aws s3
             builder.Services.AddSingleton<AWSCredentials>(sp =>
@@ -112,6 +115,7 @@ namespace Gym_Community
 
             //client service
             builder.Services.AddScoped<IClientInfoService, ClientInfoService>();
+            builder.Services.AddScoped<IClientProfileService, ClientProfileService>();
 
             //Email service
             builder.Services.Configure<EmailConfiguration>(builder.Configuration.GetSection("EmailConfiguration"));
