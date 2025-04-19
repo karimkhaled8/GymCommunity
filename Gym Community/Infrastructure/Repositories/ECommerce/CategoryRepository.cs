@@ -48,13 +48,13 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         }
         public async Task<bool> RemoveAsync(Category category)
         {
-            _context.Categories.Remove(category);
-            if(await _context.SaveChangesAsync() > 0)
-            {
-                return true;
-
+            var categoryy = await _context.Categories
+                .Where(c => c.CategoryID == category.CategoryID).FirstOrDefaultAsync();
+            if (categoryy != null) { 
+              categoryy.IsDeleted = true;
             }
-            return false;
+            return await _context.SaveChangesAsync() > 0;
+            
         }
     }
 }
