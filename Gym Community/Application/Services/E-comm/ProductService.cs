@@ -28,7 +28,9 @@ namespace Gym_Community.Application.Services.E_comm
                 CreatedAt = p.CreatedAt,
                 AverageRating = p.AverageRating,
                 CategoryID = p.CategoryID,
-                CategoryName = p.Category?.Name ?? string.Empty
+                CategoryName = p.Category?.Name ?? string.Empty,
+                BrandId = p.BrandId,
+                BrandName = p.Category?.Name ?? string.Empty
             });
 
             return productDtos;
@@ -47,7 +49,9 @@ namespace Gym_Community.Application.Services.E_comm
                 CreatedAt = p.CreatedAt,
                 AverageRating = p.AverageRating,
                 CategoryID = p.CategoryID,
-                CategoryName = p.Category?.Name ?? string.Empty
+                CategoryName = p.Category?.Name ?? string.Empty,
+                BrandId = p.BrandId,
+                BrandName = p.Category?.Name ?? string.Empty
             });
 
             return productDtos;
@@ -69,7 +73,9 @@ namespace Gym_Community.Application.Services.E_comm
                 CreatedAt = product.CreatedAt,
                 AverageRating = product.AverageRating,
                 CategoryID = product.CategoryID,
-                CategoryName = product.Category?.Name ?? string.Empty
+                CategoryName = product.Category?.Name ?? string.Empty,
+                BrandId = product.BrandId,
+                BrandName = product.Category?.Name ?? string.Empty
             };
 
             return productDto;
@@ -86,7 +92,8 @@ namespace Gym_Community.Application.Services.E_comm
                 ImageUrl = productDto.ImageUrl,
                 CreatedAt = DateTime.Now,
                 AverageRating = productDto.AverageRating,
-                CategoryID = productDto.CategoryID
+                CategoryID = productDto.CategoryID,
+                BrandId = productDto.BrandId
             };
 
             var addedProduct = await _productRepository.AddAsync(product);
@@ -102,7 +109,9 @@ namespace Gym_Community.Application.Services.E_comm
                 CreatedAt = addedProduct.CreatedAt,
                 AverageRating = addedProduct.AverageRating,
                 CategoryID = addedProduct.CategoryID,
-                CategoryName = addedProduct.Category?.Name ?? string.Empty
+                CategoryName = addedProduct.Category?.Name ?? string.Empty,
+                BrandId = addedProduct.BrandId,
+                BrandName = addedProduct.Category?.Name ?? string.Empty
             }; 
         }
 
@@ -118,6 +127,8 @@ namespace Gym_Community.Application.Services.E_comm
             existingProduct.ImageUrl = productDto.ImageUrl;
             existingProduct.AverageRating = productDto.AverageRating;
             existingProduct.CategoryID = productDto.CategoryID;
+            existingProduct.BrandId = productDto.BrandId;   
+
 
             var updatedProduct = await _productRepository.UpdateAsync(existingProduct);
             return updatedProduct==null ? null : new ProductDTO {
@@ -130,7 +141,9 @@ namespace Gym_Community.Application.Services.E_comm
                 CreatedAt = updatedProduct.CreatedAt,
                 AverageRating = updatedProduct.AverageRating,
                 CategoryID = updatedProduct.CategoryID,
-                CategoryName = updatedProduct.Category?.Name ?? string.Empty
+                CategoryName = updatedProduct.Category?.Name ?? string.Empty,
+                BrandId = updatedProduct.BrandId,
+                BrandName = updatedProduct.Category?.Name ?? string.Empty
             };
 
         }
@@ -142,6 +155,27 @@ namespace Gym_Community.Application.Services.E_comm
 
             await _productRepository.RemoveAsync(product);
             return true;
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetUserProducts(string userId)
+        {
+            var proudcts = await _productRepository.ListUserAsync(userId);
+            var productDtos = proudcts.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                ImageUrl = p.ImageUrl,
+                CreatedAt = p.CreatedAt,
+                AverageRating = p.AverageRating,
+                CategoryID = p.CategoryID,
+                CategoryName = p.Category?.Name ?? string.Empty,
+                BrandId = p.BrandId,
+                BrandName = p.Category?.Name ?? string.Empty
+            });
+            return productDtos;
         }
     }
 }

@@ -21,5 +21,9 @@
         public int? CategoryID { get; set; }
 
         public string CategoryName { get; set; } = string.Empty;
+
+        public int? BrandId { get; set; }
+
+        public string BrandName { get; set; } = string.Empty;
     }
 }

@@ -2,6 +2,7 @@
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,6 +25,12 @@ namespace Gym_Community.API.Controllers.Ecommerce
         {
             var products = await _productService.GetProducts();
             return products.Any() ? Ok(products) : Ok(new {success = true ,message = "No products Found" });
+        }
+        [HttpGet("user")]
+        public async Task<IActionResult> GetUser()
+        {
+            var products = await _productService.GetUserProducts(getUserId());
+            return products.Any() ? Ok(products) : Ok(new { success = true, message = "No products Found" });
         }
 
         [HttpGet("{id}")]
@@ -86,6 +93,11 @@ namespace Gym_Community.API.Controllers.Ecommerce
             var deletedProduct = await _productService.DeleteProduct(id);
             if (!deletedProduct) return NotFound();
             return Ok(new { success = true, message = "Product deleted successfully" }); 
+        }
+
+        private string getUserId()
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
     }
 }

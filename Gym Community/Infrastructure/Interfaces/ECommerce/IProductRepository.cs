@@ -8,6 +8,7 @@ namespace Gym_Community.Infrastructure.Interfaces.ECommerce
         public Task<Product?> AddAsync(Product product);
         public Task<IEnumerable<Product>> ListAsync();
         public Task<IEnumerable<Product>> ListAsync(string name);
+        public Task<IEnumerable<Product>> ListUserAsync(string userId);
         public Task<Product?> GetById(int id);
         public Task<Product?> UpdateAsync(Product product);
         public Task<bool> RemoveAsync(Product product);

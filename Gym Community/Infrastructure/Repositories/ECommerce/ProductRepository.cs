@@ -28,7 +28,7 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         public async Task<IEnumerable<Product>> ListAsync()
         {
             return await _context.Products
-                //.Include(p => p.Brand)
+                .Include(p => p.Brand)
                 .Include(p => p.Category)
                 .ToListAsync();
         }
@@ -36,7 +36,7 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         {
             return await _context.Products
                 .Where(p=>p.Name.Contains(name))
-                //.Include(p => p.Brand)
+                .Include(p => p.Brand)
                 .Include(p => p.Category)
                 .ToListAsync();
         }
@@ -44,7 +44,7 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         public async Task<Product?> GetById(int id)
         {
             return await _context.Products
-                //.Include(p => p.Brand)
+                .Include(p => p.Brand)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
@@ -77,6 +77,14 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
             }
         }
 
-
+        public async  Task<IEnumerable<Product>> ListUserAsync(string userId)
+        {
+            var products = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.User)
+                .Include(p => p.Brand)
+                .Where(p => p.OwnerId == userId).ToListAsync();
+            return products;
+        }
     }
 }
