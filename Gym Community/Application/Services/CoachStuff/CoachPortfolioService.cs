@@ -1,4 +1,5 @@
-﻿using Gym_Community.API.DTOs.CoachStuff;
+﻿using System.Security.Claims;
+using Gym_Community.API.DTOs.CoachStuff;
 using Gym_Community.Application.Interfaces.CoachStuff;
 using Gym_Community.Domain.Models.CoachStuff;
 using Gym_Community.Infrastructure.Interfaces.CoachStuff;
@@ -8,9 +9,11 @@ namespace Gym_Community.Application.Services.CoachStuff
     public class CoachPortfolioService :ICoachPortfolioService
     { 
         private readonly ICoachPortfolioRepository _repo;
-        public CoachPortfolioService(ICoachPortfolioRepository repository)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public CoachPortfolioService(ICoachPortfolioRepository repository , IHttpContextAccessor httpContextAccessor)
         {
             _repo = repository;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<IEnumerable<CoachPortfolioDto>> GetAllAsync()
         {
@@ -66,6 +69,8 @@ namespace Gym_Community.Application.Services.CoachStuff
 
         public async Task<bool> CreateAsync(CoachPortfolioDto dto)
         {
+           
+
             var entity = new CoachPortfolio
             {
                 CoachId = dto.CoachId,

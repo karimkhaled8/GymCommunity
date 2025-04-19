@@ -1,7 +1,9 @@
 ﻿using Gym_Community.API.DTOs.CoachStuff;
+using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.CoachStuff;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Gym_Community.API.Controllers.CoachStuff
 {
@@ -10,10 +12,11 @@ namespace Gym_Community.API.Controllers.CoachStuff
     public class CoachPortfolioController : ControllerBase
     {
         private readonly ICoachPortfolioService _service;
-
-        public CoachPortfolioController(ICoachPortfolioService service)
+        private readonly IAwsService _awsService;
+        public CoachPortfolioController(ICoachPortfolioService service , IAwsService awsService)
         {
             _service = service;
+            _awsService = awsService;
         }
 
         [HttpGet]
@@ -38,8 +41,13 @@ namespace Gym_Community.API.Controllers.CoachStuff
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CoachPortfolioDto dto)
+        public async Task<IActionResult> Create([FromForm] CoachPortfolioDto dto)
         {
+            var CoachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (CoachId == null) return Unauthorized();
+
+            dto.CoachId = CoachId;
+
             var success = await _service.CreateAsync(dto);
             return success ? Ok() : BadRequest();
         }
