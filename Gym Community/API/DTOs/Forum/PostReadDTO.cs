@@ -13,5 +13,7 @@
         public string SubName { get; set; } = string.Empty;
         public int CommentCount { get; set; }
         public int VoteCount { get; set; }
+        public int UpvoteCount { get; set; }
+        public int DownvoteCount { get; set; }
     }
 }

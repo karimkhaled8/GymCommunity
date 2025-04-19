@@ -11,6 +11,7 @@ namespace Gym_Community.Infrastructure.Interfaces.Forum
         Task<bool> DeleteAsync(Post post);
         Task<IEnumerable<Post>> GetPostsByUserIdAsync(string userId);
         Task<IEnumerable<Post>> GetPostsBySubIdAsync(int subId);
+        Task<IEnumerable<Post>> GetTopRated();
 
     }
 }

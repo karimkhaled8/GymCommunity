@@ -2,6 +2,7 @@
 using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Domain.Models.Forum;
 using Gym_Community.Infrastructure.Interfaces.Forum;
+using Microsoft.Extensions.Hosting;
 
 namespace Gym_Community.Application.Services.Forum
 {
@@ -26,7 +27,7 @@ namespace Gym_Community.Application.Services.Forum
             };
 
             var created = await _repo.AddAsync(comment);
-            return created != null ? ToReadDTO(created) : null;
+            return created != null ? await GetByIdAsync(comment.Id) : null;
         }
 
         public async Task<IEnumerable<CommentReadDTO>> GetAllAsync()
@@ -79,8 +80,11 @@ namespace Gym_Community.Application.Services.Forum
                 CreatedAt = comment.CreatedAt,
                 UpdatedAt = comment.UpdatedAt,
                 UserId = comment.UserId,
+                UserName = comment.AppUser.FirstName + " " + comment.AppUser.LastName ?? "",
                 PostId = comment.PostId,
-                VoteCount = comment.Votes.Count
+                VoteCount = comment.Votes.Count,
+                UpvoteCount = comment.Votes?.Count(v => v.IsUpvote) ?? 0,
+                DownvoteCount = comment.Votes?.Count(v => !v.IsUpvote) ?? 0
 
             };
         }

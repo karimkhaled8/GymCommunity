@@ -4,6 +4,7 @@ using Gym_Community.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym_Community.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250415210550_clientInfo")]
+    partial class clientInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,7 +250,7 @@ namespace Gym_Community.Migrations
                     b.Property<float?>("AverageRating")
                         .HasColumnType("real");
 
-                    b.Property<int?>("BrandId")
+                    b.Property<int?>("BrandID")
                         .HasColumnType("int");
 
                     b.Property<int?>("CategoryID")
@@ -268,9 +271,6 @@ namespace Gym_Community.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 
@@ -279,11 +279,9 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BrandId");
+                    b.HasIndex("BrandID");
 
                     b.HasIndex("CategoryID");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Products");
                 });
@@ -1423,23 +1421,15 @@ namespace Gym_Community.Migrations
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.E_comms.Product", b =>
                 {
-                    b.HasOne("Gym_Community.Domain.Data.Models.E_comm.Brand", "Brand")
+                    b.HasOne("Gym_Community.Domain.Data.Models.E_comm.Brand", null)
                         .WithMany("Products")
-                        .HasForeignKey("BrandId");
+                        .HasForeignKey("BrandID");
 
                     b.HasOne("Gym_Community.Domain.Data.Models.E_comm.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryID");
 
-                    b.HasOne("Gym_Community.Domain.Models.AppUser", "User")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Brand");
-
                     b.Navigation("Category");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.DailyPlan", b =>

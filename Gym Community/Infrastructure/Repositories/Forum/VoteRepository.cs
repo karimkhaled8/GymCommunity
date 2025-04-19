@@ -22,12 +22,13 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
 
         public async Task<IEnumerable<Vote>> ListAsync()
         {
-            return await _context.Votes.ToListAsync();
+            return await _context.Votes.Include(v => v.AppUser).ToListAsync();
         }
 
         public async Task<Vote?> GetByIdAsync(int id)
         {
-            return await _context.Votes.FindAsync(id);
+            return await _context.Votes.Include(v => v.AppUser)
+                .Where(v => v.Id == id).FirstOrDefaultAsync();
         }
         public async Task<Vote?> UpdateAsync(Vote vote)
         {
@@ -43,16 +44,16 @@ namespace Gym_Community.Infrastructure.Repositories.Forum
 
         public async Task<IEnumerable<Vote>> GetVotesByPostIdAsync(int postId)
         {
-            return await _context.Votes.Where(v => v.PostId == postId).ToListAsync();
+            return await _context.Votes.Include(v => v.AppUser).Where(v => v.PostId == postId).ToListAsync();
         }
 
         public async Task<IEnumerable<Vote>> GetVotesByCommentIdAsync(int commentId)
         {
-            return await _context.Votes.Where(v => v.CommentId == commentId).ToListAsync();
+            return await _context.Votes.Include(v => v.AppUser).Where(v => v.CommentId == commentId).ToListAsync();
         }
         public async Task<IEnumerable<Vote>> GetVotesByUserIdAsync(string userId)
         {
-            return await _context.Votes.Where(v => v.UserId == userId).ToListAsync();
+            return await _context.Votes.Include(v => v.AppUser).Where(v => v.UserId == userId).ToListAsync();
         }
     }
 }
