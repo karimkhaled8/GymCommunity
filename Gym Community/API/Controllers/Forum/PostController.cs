@@ -1,4 +1,5 @@
-﻿using Gym_Community.API.DTOs.E_comm;
+﻿using System.Security.Claims;
+using Gym_Community.API.DTOs.E_comm;
 using Gym_Community.API.DTOs.Forum;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.Forum;
@@ -24,7 +25,13 @@ namespace Gym_Community.API.Controllers.Forum
         [HttpPost]
         public async Task<IActionResult> Create([FromForm]PostCreateDTO dto,[FromForm] IFormFile? image)
         {
-            if(image != null)
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedAccessException("Please login first");
+            }
+            dto.UserId = userId;
+            if (image != null)
             {
                 var imageUrl = await _awsService.UploadFileAsync(image, "products");
                 if (string.IsNullOrEmpty(imageUrl))
@@ -107,5 +114,39 @@ namespace Gym_Community.API.Controllers.Forum
             return result != null ? Ok(result) : NotFound();
         }
 
+        [HttpGet("currentUserId")]
+        public IActionResult GetUserId()
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized(new
+                    {
+                        success = false,
+                        message = "Please login first",
+                        isAuthenticated = false
+                    });
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    userId = userId,
+                    isAuthenticated = true
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "An error occurred while fetching user ID",
+                    error = ex.Message
+                });
+            }
+        }
     }
 }

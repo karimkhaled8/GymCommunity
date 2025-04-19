@@ -1,4 +1,5 @@
-﻿using Gym_Community.API.DTOs.Forum;
+﻿using System.Security.Claims;
+using Gym_Community.API.DTOs.Forum;
 using Gym_Community.Application.Interfaces.Forum;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,12 @@ namespace Gym_Community.API.Controllers.Forum
         [HttpPost]
         public async Task<IActionResult> Create(CommentCreateDTO dto)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedAccessException("Please login first");
+            }
+            dto.UserId = userId;
             var result = await _service.CreateAsync(dto);
             return result != null ? Ok(result) : BadRequest("Failed to create comment.");
         }
@@ -61,6 +68,15 @@ namespace Gym_Community.API.Controllers.Forum
         {
             var comments = await _service.GetByPostIdAsync(postId);
             return Ok(comments);
+        }
+        public string GetUserId()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedAccessException("Please login first");
+            }
+            return userId;
         }
     }
 }
