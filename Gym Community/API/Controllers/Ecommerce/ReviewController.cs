@@ -16,7 +16,7 @@ namespace Gym_Community.API.Controllers.Ecommerce
             _reviewService = reviewService; 
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int productId)
         {
             var reviews = await _reviewService.GetProductReviews(productId);
