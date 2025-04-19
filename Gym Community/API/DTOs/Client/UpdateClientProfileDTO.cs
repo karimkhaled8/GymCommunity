@@ -24,7 +24,9 @@ namespace Gym_Community.API.DTOs.Client
         public DateTime? BirthDate { get; set; }
 
 
-
+        public int? bodyFat { get; set; }
+        public string? Bio { get; set; }
+        
 
         public string? Gender { get; set; }
     }

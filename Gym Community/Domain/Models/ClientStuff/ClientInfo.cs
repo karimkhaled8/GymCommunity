@@ -20,7 +20,10 @@ namespace Gym_Community.Domain.Models.ClientStuff
         public string? OtherGoal { get; set; } // if he/she has a different goal
 
 
-        //public string? Bio { get; set; }
-        //public string? Nationality { get; set; } // Profile image URL
+        public int? bodyFat { get; set; }
+        public string? Bio { get; set; }
+        public string? CoverImg { get; set; }
+
+        //public string? Nationality { get; set; } 
     }
 }

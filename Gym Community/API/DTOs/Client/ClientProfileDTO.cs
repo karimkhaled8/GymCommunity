@@ -35,5 +35,9 @@ namespace Gym_Community.API.DTOs.Client
 
         public string Gender { get; set; }
 
+        public int? bodyFat { get; set; }
+        public string? Bio { get; set; }
+        public string? CoverImg { get; set; }
+
     }
 }
