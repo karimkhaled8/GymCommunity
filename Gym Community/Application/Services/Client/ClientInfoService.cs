@@ -23,9 +23,24 @@ namespace Gym_Community.Application.Services.Client
                     WorkoutAvailability = clientInfo.WorkoutAvailability,
                     clientGoal = clientInfo.clientGoal,
                     OtherGoal = clientInfo.OtherGoal,
-                    Client = clientInfo.ClientId
+                    Client = clientInfo.ClientId,
+                    Bio = clientInfo.Bio,
+                    bodyFat = clientInfo.bodyFat
+
                 };
                 await _clientInfoRepository.AddClientInfoAsync(newClientInfo);
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> ChangeCoverImg(string img, string userId)
+        {
+            var clientInfo = await _clientInfoRepository.GetClientInfoByUserIdAsync(userId);
+            if (clientInfo != null)
+            {
+                clientInfo.CoverImg = img;
+                await _clientInfoRepository.UpdateClientInfoAsync(clientInfo);
                 return true;
             }
             return false;
@@ -56,7 +71,11 @@ namespace Gym_Community.Application.Services.Client
                         WorkoutAvailability = info.WorkoutAvailability,
                         clientGoal = info.clientGoal,
                         OtherGoal = info.OtherGoal,
-                        ClientId = info.Client
+                        ClientId = info.Client,
+                        Bio = info.Bio,
+                        bodyFat = info.bodyFat,
+
+
                     };
                 }
                 return null;
@@ -74,6 +93,8 @@ namespace Gym_Community.Application.Services.Client
                 updateInfo.WorkoutAvailability = clientInfo.WorkoutAvailability;
                 updateInfo.clientGoal = clientInfo.clientGoal;
                 updateInfo.OtherGoal = clientInfo.OtherGoal;
+                updateInfo.Bio = clientInfo.Bio;
+                updateInfo.bodyFat = clientInfo.bodyFat;
                 await _clientInfoRepository.UpdateClientInfoAsync(updateInfo);
                 return true;
             }

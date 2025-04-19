@@ -47,6 +47,9 @@ namespace Gym_Community.Application.Services.Client
                     IsActive = clientInfoFromDb.ClientUser.IsActive,
                     IsPremium= clientInfoFromDb.ClientUser.IsPremium,
                     Gender = clientInfoFromDb.ClientUser.Gender,
+                    bodyFat = clientInfoFromDb.bodyFat,
+                    Bio = clientInfoFromDb.Bio,
+                    CoverImg = clientInfoFromDb.CoverImg
 
 
                 };
