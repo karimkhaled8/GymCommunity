@@ -8,5 +8,7 @@ namespace Gym_Community.Application.Interfaces.Client
         Task<ClientInfoDTO?> GetClientInfoByUserIdAsync(string userId);
         Task<bool> UpdateClientInfoAsync(string id, ClientInfoDTO clientInfo);
         Task<bool> DeleteClientInfoAsync(string userId);
+
+        Task<bool> ChangeCoverImg(string img, string userId);
     }
 }

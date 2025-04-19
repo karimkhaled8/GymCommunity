@@ -8,5 +8,6 @@ namespace Gym_Community.Application.Interfaces.Client
         
         Task<bool> UpdateClientProfileAsync(UpdateClientProfileDTO clientInfoDTO, string userId);
 
+
     }
 }

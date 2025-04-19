@@ -1,4 +1,5 @@
-﻿using Gym_Community.Application.Interfaces.Client;
+﻿using Gym_Community.Application.Interfaces;
+using Gym_Community.Application.Interfaces.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -11,10 +12,12 @@ namespace Gym_Community.API.Controllers.Client
     public class ClientInfo : ControllerBase
     {
         private readonly IClientInfoService _clientInfoService;
+        private readonly IAwsService _awsService;
 
-        public ClientInfo(IClientInfoService clientInfoService)
+        public ClientInfo(IClientInfoService clientInfoService, IAwsService awsService)
         {
             _clientInfoService = clientInfoService;
+            _awsService = awsService;
         }
 
      
@@ -78,6 +81,24 @@ namespace Gym_Community.API.Controllers.Client
                 return NotFound(new { success = false, message = "Client info not found" });
 
             return Ok(new { success = true, message = "Client info deleted successfully" });
+        }
+
+        [HttpPost("ChangeCoverImg")]
+        public async Task<IActionResult> ChangeCoverImg([FromForm] IFormFile img)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId == null) return Unauthorized();
+
+            string imageUrl = string.Empty;
+            if (img != null)
+            {
+                imageUrl = await _awsService.UploadFileAsync(img, "ClientCoverImgs");
+            }
+
+            var result = await _clientInfoService.ChangeCoverImg(imageUrl, userId);
+            if (!result)
+                return NotFound(new { success = false, message = "Client info not found" });
+            return Ok(new { success = true, message = "Cover image changed successfully" });
         }
     }
 }

@@ -34,6 +34,18 @@ namespace Gym_Community.Application.Services.Client
             return false;
         }
 
+        public async Task<bool> ChangeCoverImg(string img, string userId)
+        {
+            var clientInfo = await _clientInfoRepository.GetClientInfoByUserIdAsync(userId);
+            if (clientInfo != null)
+            {
+                clientInfo.CoverImg = img;
+                await _clientInfoRepository.UpdateClientInfoAsync(clientInfo);
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> DeleteClientInfoAsync(string userId)
         {
             if (!string.IsNullOrEmpty(userId))
