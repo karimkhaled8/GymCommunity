@@ -14,12 +14,11 @@ namespace Gym_Community.Application.Services.E_comm
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<CategoryDTO?> CreateCategory(CategoryDTO categoryDto)
+        public async Task<CategoryDTO?> CreateCategory(string categoryName)
         {
             var category = new Category
             {
-                Name = categoryDto.Name,
-                IsDeleted = categoryDto.IsDeleted
+                Name = categoryName,
             };
 
             var result = await _categoryRepository.AddAsync(category);
@@ -28,7 +27,6 @@ namespace Gym_Community.Application.Services.E_comm
             {
                 CategoryID = result.CategoryID,
                 Name = result.Name,
-                IsDeleted = result.IsDeleted
             };
         }
 
@@ -39,7 +37,6 @@ namespace Gym_Community.Application.Services.E_comm
             {
                 CategoryID = c.CategoryID,
                 Name = c.Name,
-                IsDeleted = c.IsDeleted
             }).ToList();
         }
 
@@ -50,7 +47,6 @@ namespace Gym_Community.Application.Services.E_comm
             {
                 CategoryID = category.CategoryID,
                 Name = category.Name,
-                IsDeleted = category.IsDeleted
             };
         }
 
@@ -60,7 +56,6 @@ namespace Gym_Community.Application.Services.E_comm
             if (existing == null) return null;
 
             existing.Name = categoryDto.Name;
-            existing.IsDeleted = categoryDto.IsDeleted;
 
             var updated = await _categoryRepository.UpdateAsync(existing);
 

@@ -7,6 +7,5 @@ namespace Gym_Community.API.DTOs.E_comm
         public int? CategoryID { get; set; }
         [Required]
         public string Name { get; set; }
-        public bool IsDeleted { get; set; }
     }
 }

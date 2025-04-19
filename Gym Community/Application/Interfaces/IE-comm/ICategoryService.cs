@@ -4,7 +4,7 @@ namespace Gym_Community.Application.Interfaces.IE_comm
 {
     public interface ICategoryService
     {
-        Task<CategoryDTO?> CreateCategory(CategoryDTO categoryDto);
+        Task<CategoryDTO?> CreateCategory(string CategoryName);
         Task<IEnumerable<CategoryDTO>> GetAllCategories();
         Task<CategoryDTO?> GetCategoryById(int categoryId);
         Task<CategoryDTO?> UpdateCategory(int categoryId, CategoryDTO categoryDto);
