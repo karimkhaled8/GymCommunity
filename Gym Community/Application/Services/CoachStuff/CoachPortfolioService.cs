@@ -20,7 +20,7 @@ namespace Gym_Community.Application.Services.CoachStuff
             var items = await _repo.GetAllAsync();
             return items.Select(p => new CoachPortfolioDto
             {
-                Id = p.Id,
+                //Id = p.Id,
                 CoachId = p.CoachId,
                 AboutMeImageUrl = p.AboutMeImageUrl,
                 AboutMeDescription = p.AboutMeDescription,
@@ -38,7 +38,7 @@ namespace Gym_Community.Application.Services.CoachStuff
 
             return new CoachPortfolioDto
             {
-                Id = p.Id,
+                //Id = p.Id,
                 CoachId = p.CoachId,
                 AboutMeImageUrl = p.AboutMeImageUrl,
                 AboutMeDescription = p.AboutMeDescription,
@@ -56,7 +56,7 @@ namespace Gym_Community.Application.Services.CoachStuff
 
             return new CoachPortfolioDto
             {
-                Id = p.Id,
+                //Id = p.Id,
                 CoachId = p.CoachId,
                 AboutMeImageUrl = p.AboutMeImageUrl,
                 AboutMeDescription = p.AboutMeDescription,

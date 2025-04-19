@@ -1,6 +1,7 @@
 ﻿using Gym_Community.API.DTOs.CoachStuff;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.CoachStuff;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -40,16 +41,27 @@ namespace Gym_Community.API.Controllers.CoachStuff
             return item == null ? NotFound() : Ok(item);
         }
 
+       
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CoachPortfolioDto dto)
+        //added AboutMeImageUrl to send the image
+        public async Task<IActionResult> Create([FromForm] CoachPortfolioDto dto,[FromForm] IFormFile AboutMeImageUrl)
         {
-            var CoachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            string imageUrl = string.Empty;
+            if (AboutMeImageUrl != null)
+            {
+                //folder location "ProfileImages" must be changed later
+                imageUrl = await _awsService.UploadFileAsync(AboutMeImageUrl, "ProfileImages"); // save in aws and return url as strig 
+
+            }
+              var CoachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (CoachId == null) return Unauthorized();
 
             dto.CoachId = CoachId;
+            dto.AboutMeImageUrl = imageUrl; // set the image url to the dto
 
             var success = await _service.CreateAsync(dto);
-            return success ? Ok() : BadRequest();
+            return success ? Ok("CoachPortofolio added") : BadRequest();
         }
 
         [HttpPut("{id}")]

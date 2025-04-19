@@ -4,7 +4,6 @@ namespace Gym_Community.API.DTOs.CoachStuff
 {
     public class CoachPortfolioDto
     {
-        public int Id { get; set; }
      
         public string ? CoachId { get; set; }
 
