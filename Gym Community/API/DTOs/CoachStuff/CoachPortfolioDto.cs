@@ -4,8 +4,8 @@ namespace Gym_Community.API.DTOs.CoachStuff
 {
     public class CoachPortfolioDto
     {
-     
-        public string ? CoachId { get; set; }
+        public  int Id { get; set; }
+        public string  CoachId { get; set; }
 
         public string? AboutMeImageUrl { get; set; }
         public string AboutMeDescription { get; set; }
