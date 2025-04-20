@@ -33,7 +33,7 @@ namespace Gym_Community.Application.Services.E_comm
         public async Task<IEnumerable<CategoryDTO>> GetAllCategories()
         {
             var categories = await _categoryRepository.ListAsync();
-            return categories.Select(c => new CategoryDTO
+            return categories.Where(c=>c.IsDeleted==false).Select(c => new CategoryDTO
             {
                 CategoryID = c.CategoryID,
                 Name = c.Name,

@@ -32,9 +32,9 @@ namespace Gym_Community.API.Controllers.Ecommerce
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] string CategoryName)
+        public async Task<IActionResult> Post([FromBody] CategoryDTO categoryDTO)
         {
-            var CreatedCategory = await _categoryService.CreateCategory(CategoryName); 
+            var CreatedCategory = await _categoryService.CreateCategory(categoryDTO.Name); 
             if (CreatedCategory == null) return BadRequest(new {success = false, message = "Category not created" });
             return CreatedAtAction(nameof(Get), new { id = CreatedCategory.CategoryID }, CreatedCategory);
         }
