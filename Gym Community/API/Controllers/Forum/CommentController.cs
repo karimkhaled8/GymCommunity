@@ -69,7 +69,7 @@ namespace Gym_Community.API.Controllers.Forum
             var comments = await _service.GetByPostIdAsync(postId);
             return Ok(comments);
         }
-        public string GetUserId()
+        private string GetUserId()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
