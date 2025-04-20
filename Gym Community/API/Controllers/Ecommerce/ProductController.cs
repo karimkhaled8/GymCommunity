@@ -61,6 +61,7 @@ namespace Gym_Community.API.Controllers.Ecommerce
             {
                 return BadRequest(new { success = false, message = "Failed to upload image" });
             }
+            if(!ModelState.IsValid) return BadRequest(ModelState);
             productDto.ImageUrl = imageUrl;
             var createdProduct = await _productService.CreateProduct(productDto);
             return createdProduct==null ? NotFound() : Ok(createdProduct);
