@@ -5,7 +5,7 @@ namespace Gym_Community.Infrastructure.Interfaces.CoachStuff
     public interface ICoachPortfolioRepository
     {
         Task<IEnumerable<CoachPortfolio>> GetAllAsync();
-        Task<int> getporotofolioidasync(string coachId);
+        Task<int> GetPortfolioIdByCoachIdAsync(string coachId);
         Task<CoachPortfolio?> GetByIdAsync(int id);
         Task<CoachPortfolio?> GetByCoachIdAsync(string coachId);
         Task AddAsync(CoachPortfolio portfolio);

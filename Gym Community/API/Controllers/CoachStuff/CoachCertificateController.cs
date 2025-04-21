@@ -2,6 +2,7 @@
 using Gym_Community.API.DTOs.CoachStuff;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.CoachStuff;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +10,7 @@ namespace Gym_Community.API.Controllers.CoachStuff
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CoachCertificateController : ControllerBase
     {
         private readonly ICoachCertificateService _service;
@@ -23,6 +25,7 @@ namespace Gym_Community.API.Controllers.CoachStuff
         }
 
         [HttpGet("byPortfolio/{portfolioId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetByPortfolioId(int portfolioId)
         {
 
@@ -42,7 +45,9 @@ namespace Gym_Community.API.Controllers.CoachStuff
             var CoachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (CoachId == null) return Unauthorized();
 
-            dto.ProtofolioId = await _portfolioService.GetIdByportfolioIdAsync(CoachId); 
+            dto.ProtofolioId = await _portfolioService.GetPortfolioIdByCoachIdAsync(CoachId);
+            if (dto.ProtofolioId == 0) return BadRequest("No portfolio found for coach");
+
             dto.ImageUrl = imageUrl;
 
             var success = await _service.CreateAsync(dto);

@@ -111,9 +111,9 @@ namespace Gym_Community.Application.Services.CoachStuff
             return await _repo.SaveChangesAsync();
         }
 
-        public async Task<int> GetIdByportfolioIdAsync(string coachId)
+        public async Task<int> GetPortfolioIdByCoachIdAsync(string coachId)
         {
-            return await _repo.getporotofolioidasync(coachId);
+            return await _repo.GetPortfolioIdByCoachIdAsync(coachId);
 
         }
     }

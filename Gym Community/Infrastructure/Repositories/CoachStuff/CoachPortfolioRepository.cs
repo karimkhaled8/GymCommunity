@@ -47,7 +47,7 @@ namespace Gym_Community.Infrastructure.Repositories.CoachStuff
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<int> getporotofolioidasync(string coachId)
+        public async Task<int> GetPortfolioIdByCoachIdAsync(string coachId)
         {
            return await _context.CoachPortfolios
                 .Where(p => p.CoachId == coachId)
