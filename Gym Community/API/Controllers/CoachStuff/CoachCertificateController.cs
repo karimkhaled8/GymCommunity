@@ -10,7 +10,7 @@ namespace Gym_Community.API.Controllers.CoachStuff
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class CoachCertificateController : ControllerBase
     {
         private readonly ICoachCertificateService _service;
@@ -25,15 +25,31 @@ namespace Gym_Community.API.Controllers.CoachStuff
         }
 
         [HttpGet("byPortfolio/{portfolioId}")]
-        [AllowAnonymous]
+        
         public async Task<IActionResult> GetByPortfolioId(int portfolioId)
         {
+            //var CoachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //if (CoachId == null) return Unauthorized();
 
+            //portfolioId = await _portfolioService.GetPortfolioIdByCoachIdAsync(CoachId);
+            //if (portfolioId == 0) return BadRequest("No portfolio found for coach");
             var result = await _service.GetByPortfolioIdAsync(portfolioId);
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpGet("GetPortfolioIdByCoachId/{coachId}")]
+        public async Task<IActionResult> GetPortfolioIdByCoachId(string coachId)
+        {
+            var portfolioId = await _portfolioService.GetPortfolioIdByCoachIdAsync(coachId);
+            if (portfolioId == 0)
+                return NotFound("No portfolio  found for this coach");
+
+            return Ok(portfolioId);
+        }
+
+        
+        [HttpPost("Create")]
+       
         public async Task<IActionResult> Create([FromForm] CoachCertificateDto dto, [FromForm] IFormFile CertificateImage)
         {
             string imageUrl = string.Empty;
@@ -51,7 +67,10 @@ namespace Gym_Community.API.Controllers.CoachStuff
             dto.ImageUrl = imageUrl;
 
             var success = await _service.CreateAsync(dto);
-            return success ? Ok("Certificate added") : BadRequest("Could not add certificate");
+            return success
+     ? Ok(new { message = "Certificate added" })
+     : BadRequest(new { error = "Could not add certificate" });
+
         }
 
         [HttpDelete("{id}")]

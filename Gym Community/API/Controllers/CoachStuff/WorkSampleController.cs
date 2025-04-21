@@ -10,7 +10,7 @@ namespace Gym_Community.API.Controllers.CoachStuff
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    
     public class WorkSampleController : ControllerBase
     {
         private readonly IWorkSampleService _service;
@@ -25,7 +25,7 @@ namespace Gym_Community.API.Controllers.CoachStuff
         }
 
         [HttpGet("byPortfolio/{portfolioId}")]
-        [AllowAnonymous]
+       
         public async Task<IActionResult> GetByPortfolioId(int portfolioId)
         {
             var result = await _service.GetByPortfolioIdAsync(portfolioId);
@@ -50,7 +50,9 @@ namespace Gym_Community.API.Controllers.CoachStuff
             dto.ImageUrl = imageUrl;
 
             var success = await _service.CreateAsync(dto);
-            return success ? Ok("Work Sample Added") : BadRequest();
+            return success
+     ? Ok(new { message = "Work Sample added" })
+     : BadRequest(new { error = "Could not add certificate" });
         }
 
         [HttpDelete("{id}")]
