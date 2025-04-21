@@ -25,12 +25,19 @@ namespace Gym_Community.Application.Services.E_comm
 
                 return wishlistItems.Select(w => new WishlistDTO
                 {
-                    Id = w.Id,
-                    UserID = w.UserID,
-                    UserName = w.AppUser?.UserName,
-                    ProductID = w.ProductID,
-                    ProductName = w.Product?.Name,
-                    CreatedAt = w.CreatedAt
+                    wishListId = w.Id,
+                    Id = w.ProductID,
+                    Name = w.Product.Name,
+                    Description = w.Product.Description,
+                    Price = w.Product.Price,
+                    Stock = w.Product.Stock,
+                    ImageUrl = w.Product.ImageUrl,
+                    CreatedAt = w.CreatedAt,
+                    AverageRating = w.Product.AverageRating,
+                    CategoryID = w.Product.CategoryID,
+                    CategoryName = w.Product.Category?.Name,
+                    BrandId = w.Product.BrandId,
+                    BrandName = w.Product.Brand?.Name
                 }).ToList();
             }
 
