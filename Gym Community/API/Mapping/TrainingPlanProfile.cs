@@ -30,6 +30,11 @@ namespace Gym_Community.API.Mapping
 
             // Meal mappings
             CreateMap<Meal, MealDto>();
+
+
+            // Muscle Group mappings
+            CreateMap<MuscleGroup, MucleGroupDto>();
+
         }
     }
 } 

@@ -11,12 +11,25 @@ namespace Gym_Community.API.Controllers.TrainingPlans
     public class ExerciseController : ControllerBase
     {
         private readonly IExerciseRepository _exerciseRepository;
+        private readonly IMuscleGroupRepository muscleGroupRepository;
         private readonly IMapper _mapper;
 
-        public ExerciseController(IExerciseRepository exerciseRepository, IMapper mapper)
+        public ExerciseController(IExerciseRepository exerciseRepository , IMapper mapper, IMuscleGroupRepository muscleGroupRepository)
         {
             _exerciseRepository = exerciseRepository;
             _mapper = mapper;
+            this.muscleGroupRepository = muscleGroupRepository;
+        }
+
+        [HttpGet( "MuscleGroup")]
+        public async Task<IActionResult> GetAllMuscleGroupsAasync()
+        {
+            IEnumerable<MuscleGroup> muscleGroups;
+            muscleGroups = await muscleGroupRepository.GetAllAsync();
+
+            var exerciseDtos = _mapper.Map<IEnumerable<MucleGroupDto>>(muscleGroups);
+            return Ok(exerciseDtos);
+
         }
 
         [HttpGet]

@@ -17,7 +17,7 @@ namespace Gym_Community.Infrastructure.Repositories
         public async Task<IEnumerable<MuscleGroup>> GetAllAsync()
         {
             return await _context.Set<MuscleGroup>()
-                .Include(mg => mg.Exercises)
+            
                 .ToListAsync();
         }
 
