@@ -24,4 +24,11 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         public int Fats { get; set; }
         public bool IsSupplement { get; set; }
     }
-} 
+
+    public class MucleGroupDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        
+    }
+}

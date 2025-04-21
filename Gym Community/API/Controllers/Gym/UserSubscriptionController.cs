@@ -51,9 +51,9 @@ namespace Gym_Community.API.Controllers.Gym
         }
 
         [HttpPut]
-        public async Task<ActionResult<UserSubscriptionReadDTO>> Update(UserSubscriptionUpdateDTO dto)
+        public async Task<ActionResult<UserSubscriptionReadDTO>> Update(int id, UserSubscriptionUpdateDTO dto)
         {
-            var updated = await _service.UpdateAsync(dto);
+            var updated = await _service.UpdateAsync(id, dto);
             return updated == null ? NotFound() : Ok(updated);
         }
 

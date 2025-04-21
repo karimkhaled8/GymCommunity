@@ -1,4 +1,5 @@
 ﻿using Gym_Community.Domain.Data.Models.Meals_and_Exercise;
+using Gym_Community.Domain.Models;
 using Gym_Community.Domain.Models.Coach_Plans;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
@@ -78,6 +79,11 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
 
             _dbSet.Remove(trainingPlan);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<AppUser> GetClientById(string userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
         }
     }
 }

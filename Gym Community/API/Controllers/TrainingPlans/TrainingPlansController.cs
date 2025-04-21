@@ -16,15 +16,18 @@ namespace Gym_Community.API.Controllers.TrainingPlans
     {
         private readonly IDailyPlanRepository _dailyPlanRepository;
         private readonly IWeekPlanRepository _weekPlanRepository;
+        private readonly ITrainingPlanRepository _trainingPlanRepository;
         private readonly IMapper _mapper;
 
         public TrainingPlansController(
             IDailyPlanRepository dailyPlanRepository,
             IWeekPlanRepository weekPlanRepository,
+            ITrainingPlanRepository trainingPlanRepository,
             IMapper mapper)
         {
             _dailyPlanRepository = dailyPlanRepository;
             _weekPlanRepository = weekPlanRepository;
+            _trainingPlanRepository = trainingPlanRepository;
             _mapper = mapper;
         }
 
@@ -154,9 +157,9 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             try
             {
                 var userId = GetUserId();
-                
+
                 var plan = await _dailyPlanRepository.GetByIdAsync(id, userId);
-                if (plan == null) 
+                if (plan == null)
                     return NotFound(new { message = "Daily plan not found" });
 
                 await _dailyPlanRepository.DeleteAsync(plan);
@@ -174,7 +177,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
 
         // ===================== WEEK PLAN =====================
 
-      
+
         [HttpGet("week-plans")]
         public async Task<IActionResult> GetWeekPlansByTrainingPlan([FromQuery] int trainingPlanId)
         {
@@ -194,7 +197,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
                 return StatusCode(500, new { message = "An error occurred while retrieving week plans", error = ex.Message });
             }
         }
-        
+
         [HttpGet("week-plans/{id}")]
         public async Task<IActionResult> GetWeekPlanById(int id)
         {
@@ -202,9 +205,9 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             {
                 var userId = GetUserId();
                 var plan = await _weekPlanRepository.GetByIdAsync(id, userId);
-                if (plan == null) 
+                if (plan == null)
                     return NotFound(new { message = "Week plan not found or you don't have access to it" });
-                
+
                 var planDto = _mapper.Map<WeekPlanDto>(plan);
                 return Ok(planDto);
             }
@@ -229,8 +232,8 @@ namespace Gym_Community.API.Controllers.TrainingPlans
                     return StatusCode(403, new { message = "Only the assigned coach can create week plans" });
 
                 var plan = _mapper.Map<WeekPlan>(planDto);
-                await _weekPlanRepository.AddAsync(plan,userId);
-                
+                await _weekPlanRepository.AddAsync(plan, userId);
+
                 var createdPlanDto = _mapper.Map<WeekPlanDto>(plan);
                 return CreatedAtAction(nameof(GetWeekPlanById), new { id = plan.Id }, createdPlanDto);
             }
@@ -251,20 +254,20 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             try
             {
                 var userId = GetUserId();
-                
-                if (id != planDto.Id) 
+
+                if (id != planDto.Id)
                     return BadRequest(new { message = "ID in URL does not match ID in request body" });
-                
+
                 var existingPlan = await _weekPlanRepository.GetByIdAsync(id, userId);
-                if (existingPlan == null) 
+                if (existingPlan == null)
                     return NotFound(new { message = "Week plan not found" });
 
                 if (!IsCoachAuthorized(existingPlan.TrainingPlan.CoachId))
                     return StatusCode(403, new { message = "Only the assigned coach can update this week plan" });
-                
+
                 _mapper.Map(planDto, existingPlan);
                 await _weekPlanRepository.UpdateAsync(existingPlan);
-                
+
                 return NoContent();
             }
             catch (UnauthorizedAccessException ex)
@@ -284,9 +287,9 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             try
             {
                 var userId = GetUserId();
-                
+
                 var plan = await _weekPlanRepository.GetByIdAsync(id, userId);
-                if (plan == null) 
+                if (plan == null)
                     return NotFound(new { message = "Week plan not found" });
 
                 if (!IsCoachAuthorized(plan.TrainingPlan.CoachId))
@@ -304,5 +307,87 @@ namespace Gym_Community.API.Controllers.TrainingPlans
                 return StatusCode(500, new { message = "An error occurred while deleting the week plan", error = ex.Message });
             }
         }
+
+        // ===================== TRAINING PLAN =====================
+        //create training plan
+        [HttpPost("Create")]
+        [Authorize(Roles = "Coach,Admin")]
+        public async Task<IActionResult> CreateTrainingPlan([FromBody] CreateTrainingPlanDto planDto)
+        {
+            try
+            {
+                var userId = GetUserId();
+                if (!IsCoachAuthorized(userId))
+                    return StatusCode(403, new { message = "Only the assigned coach can create training plans" });
+                var plan = _mapper.Map<TrainingPlan>(planDto);
+                plan.CoachId = userId;
+                if (!IsCoach())
+                {
+                    plan.IsStaticPlan = true;
+                }
+                await _trainingPlanRepository.AddAsync(plan, userId);
+                var createdPlanDto = _mapper.Map<TrainingPlanDto>(plan);
+                return CreatedAtAction(nameof(GetTrainingPlans), createdPlanDto);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while creating the training plan", error = ex.Message });
+            }
+        }
+        //get all training plans for user & coach
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetTrainingPlans()
+        {
+            var arry = new List<GetTrainingPlanDto>();
+
+            try
+            {
+                var userId = GetUserId();
+                var plans = await _trainingPlanRepository.GetAllAsync(userId);
+
+                foreach (var plan in plans)
+                {
+                    var user = await _trainingPlanRepository.GetClientById(plan.ClientId); // assuming it's async
+
+                    var dto = new GetTrainingPlanDto
+                    {
+                        Id = plan.Id,
+                        CoachId = plan.CoachId,
+                        ClientId = plan.ClientId,
+                        IsStaticPlan = plan.IsStaticPlan,
+                        Name = plan.Name,
+                        DurationMonths = plan.DurationMonths,
+                        Type = plan.Type,
+                        StartDate = plan.StartDate,
+                        EndDate = plan.EndDate,
+                        CaloricTarget = plan.CaloricTarget,
+                        ProteinPercentage = plan.ProteinPercentage,
+                        CarbsPercentage = plan.CarbsPercentage,
+                        FatsPercentage = plan.FatsPercentage,
+                        UserName = user.FirstName+" "+user.LastName, // or user?.UserName
+                        ProfileImg = user?.ProfileImg,
+                        Gender = user?.Gender,
+              
+                    };
+
+                    arry.Add(dto);
+                }
+
+                return Ok(arry);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving training plans", error = ex.Message });
+            }
+        }
+
     }
 }

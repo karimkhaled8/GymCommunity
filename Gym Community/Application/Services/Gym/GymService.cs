@@ -1,9 +1,11 @@
 ﻿using Gym_Community.API.DTOs.Gym;
 using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Domain.Models;
-using Gym_Community.Domain.Models.Gym;
+using Gym_Community.Domain.Models.Forum;
 using Gym_Community.Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Gym_Community.Application.Services.Gym
 {
@@ -45,80 +47,27 @@ namespace Gym_Community.Application.Services.Gym
 
             var added = await _repo.AddAsync(gym);
             if (added == null) return null;
-
-            return new GymReadDTO
-            {
-                Id = added.Id,
-                OwnerId = added.OwnerId,
-                Name = added.Name,
-                Location = added.Location,
-                Description = added.Description,
-                PhoneNumber = added.PhoneNumber,
-                Website = added.Website,
-                Email = added.Email,
-                Latitude = added.Latitude,
-                Longitude = added.Longitude,
-                CreatedAt = added.CreatedAt
-            };
+            return added != null ? await GetByIdAsync(added.Id) : null;
         }
 
         public async Task<IEnumerable<GymReadDTO>> ListAsync()
         {
             var gyms = await _repo.ListAsync();
-            return gyms.Select(g => new GymReadDTO
-            {
-                Id = g.Id,
-                OwnerId = g.OwnerId,
-                Name = g.Name,
-                Location = g.Location,
-                Description = g.Description,
-                PhoneNumber = g.PhoneNumber,
-                Website = g.Website,
-                Email = g.Email,
-                Latitude = g.Latitude,
-                Longitude = g.Longitude,
-                CreatedAt = g.CreatedAt
-            });
+            return gyms.Select(Map);
+
         }
 
         public async Task<GymReadDTO?> GetByIdAsync(int id)
         {
             var gym = await _repo.GetByIdAsync(id);
             if (gym == null) return null;
-
-            return new GymReadDTO
-            {
-                Id = gym.Id,
-                OwnerId = gym.OwnerId,
-                Name = gym.Name,
-                Location = gym.Location,
-                Description = gym.Description,
-                PhoneNumber = gym.PhoneNumber,
-                Website = gym.Website,
-                Email = gym.Email,
-                Latitude = gym.Latitude,
-                Longitude = gym.Longitude,
-                CreatedAt = gym.CreatedAt
-            };
+            return gym != null ? Map(gym) : null;
         }
 
         public async Task<IEnumerable<GymReadDTO>> GetNearbyGymsAsync(double lat, double lng, double radiusInKm)
         {
             var gyms = await _repo.GetNearbyGymsAsync(lat, lng, radiusInKm);
-            return gyms.Select(g => new GymReadDTO
-            {
-                Id = g.Id,
-                OwnerId = g.OwnerId,
-                Name = g.Name,
-                Location = g.Location,
-                Description = g.Description,
-                PhoneNumber = g.PhoneNumber,
-                Website = g.Website,
-                Email = g.Email,
-                Latitude = g.Latitude,
-                Longitude = g.Longitude,
-                CreatedAt = g.CreatedAt
-            });
+            return gyms.Select(Map);
         }
 
         public async Task<GymReadDTO?> UpdateAsync(int id, GymCreateDTO dto)
@@ -138,20 +87,8 @@ namespace Gym_Community.Application.Services.Gym
             var updated = await _repo.UpdateAsync(gym);
             if (updated == null) return null;
 
-            return new GymReadDTO
-            {
-                Id = updated.Id,
-                OwnerId=updated.OwnerId,
-                Name = updated.Name,
-                Location = updated.Location,
-                Description = updated.Description,
-                PhoneNumber = updated.PhoneNumber,
-                Website = updated.Website,
-                Email = updated.Email,
-                Latitude = updated.Latitude,
-                Longitude = updated.Longitude,
-                CreatedAt = updated.CreatedAt
-            };
+            return updated != null ? Map(updated) : null;
+
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -161,6 +98,22 @@ namespace Gym_Community.Application.Services.Gym
             return await _repo.DeleteAsync(gym);
         }
 
-        
+        private GymReadDTO Map(Gym_Community.Domain.Models.Gym.Gym gym)
+        {
+            return new GymReadDTO
+            {
+                Id = gym.Id,
+                OwnerId = gym.OwnerId,
+                Name = gym.Name,
+                Location = gym.Location,
+                Description = gym.Description,
+                PhoneNumber = gym.PhoneNumber,
+                Website = gym.Website,
+                Email = gym.Email,
+                Latitude = gym.Latitude,
+                Longitude = gym.Longitude,
+                CreatedAt = gym.CreatedAt
+            };
+        }
     }
 }

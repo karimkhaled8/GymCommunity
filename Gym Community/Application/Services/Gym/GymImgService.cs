@@ -2,6 +2,7 @@
 using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Domain.Models.Gym;
 using Gym_Community.Infrastructure.Interfaces.Gym;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Gym_Community.Application.Services.Gym
 {
@@ -19,11 +20,11 @@ namespace Gym_Community.Application.Services.Gym
             var entity = new GymImgs
             {
                 GymId = dto.GymId,
-                ImageUrl = dto.ImageUrl
+                ImageUrl = dto.ImageUrl??""
             };
 
             var created = await _repo.AddAsync(entity);
-            return created != null ? ToReadDTO(created) : null;
+            return created != null ? await GetByIdAsync(created.Id) : null;
         }
 
         public async Task<IEnumerable<GymImgReadDTO>> GetAllAsync()
@@ -50,10 +51,10 @@ namespace Gym_Community.Application.Services.Gym
             if (existing == null) return null;
 
             existing.GymId = dto.GymId;
-            existing.ImageUrl = dto.ImageUrl;
+            existing.ImageUrl = dto.ImageUrl?? "";
 
             var updated = await _repo.UpdateAsync(existing);
-            return updated != null ? ToReadDTO(updated) : null;
+            return updated != null ? await GetByIdAsync(updated.Id) : null;
         }
 
         public async Task<bool> DeleteAsync(int id)

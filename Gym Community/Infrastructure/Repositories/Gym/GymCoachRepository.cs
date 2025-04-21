@@ -52,6 +52,7 @@ namespace Gym_Community.Infrastructure.Repositories.Gym
         {
             return await _context.GymCoaches
             .Include(gc => gc.Coach)
+            .Include(gc => gc.Gym)
             .Where(gc => gc.GymId == gymId)
             .ToListAsync();
         }

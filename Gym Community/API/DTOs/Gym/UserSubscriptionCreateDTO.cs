@@ -12,7 +12,6 @@ namespace Gym_Community.API.DTOs.Gym
     }
     public class UserSubscriptionUpdateDTO
     {
-        public int Id { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime ExpiresAt { get; set; }

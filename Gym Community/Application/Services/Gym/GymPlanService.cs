@@ -29,7 +29,7 @@ namespace Gym_Community.Application.Services.Gym
             };
 
             var created = await _repo.AddAsync(plan);
-            return created != null ? ToReadDTO(created) : null;
+            return created != null ? await GetByIdAsync(created.Id) : null;
         }
 
         public async Task<IEnumerable<GymPlanReadDTO>> GetAllAsync()
@@ -65,7 +65,7 @@ namespace Gym_Community.Application.Services.Gym
             existing.HasAccessToAllAreas = dto.HasAccessToAllAreas;
 
             var updated = await _repo.UpdateAsync(existing);
-            return updated != null ? ToReadDTO(updated) : null;
+            return updated != null ? await GetByIdAsync(updated.Id) : null;
         }
 
         public async Task<bool> DeleteAsync(int id)
