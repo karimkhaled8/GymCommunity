@@ -63,6 +63,11 @@ namespace Gym_Community.Application.Services.Gym
             if (gym == null) return null;
             return gym != null ? Map(gym) : null;
         }
+        public async Task<IEnumerable<GymReadDTO>> GetByOwnerIdAsync(string ownerId)
+        {
+            var gyms = await _repo.GetByOwnerIdAsync(ownerId);
+            return gyms.Select(Map);
+        }
 
         public async Task<IEnumerable<GymReadDTO>> GetNearbyGymsAsync(double lat, double lng, double radiusInKm)
         {

@@ -31,6 +31,13 @@ namespace Gym_Community.API.Controllers.Gym
             if (gym == null) return NotFound();
             return Ok(gym);
         }
+        [HttpGet("ownerId/{ownerId}")]
+        public async Task<ActionResult<GymReadDTO>> GetByOwnerIdAsync(string ownerId)
+        {
+            var gym = await _service.GetByOwnerIdAsync(ownerId);
+            if (gym == null) return NotFound();
+            return Ok(gym);
+        }
 
         [HttpPost]
         public async Task<ActionResult<GymReadDTO>> AddAsync(GymCreateDTO dto)

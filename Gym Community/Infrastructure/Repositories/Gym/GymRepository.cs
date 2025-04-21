@@ -28,6 +28,10 @@ namespace Gym_Community.Infrastructure.Repositories.Gym
         {
             return await _context.Gym.Include(g => g.Owner).Where(g => g.Id==id).FirstOrDefaultAsync();
         }
+        public async Task<IEnumerable<Domain.Models.Gym.Gym>> GetByOwnerIdAsync(string ownerId)
+        {
+            return await _context.Gym.Include(g => g.Owner).Where(g => g.OwnerId == ownerId).ToListAsync();
+        }
 
         public async Task<IEnumerable<Domain.Models.Gym.Gym>> GetNearbyGymsAsync(double lat, double lng, double radiusInKm)
         {
