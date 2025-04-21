@@ -77,9 +77,9 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             {
                 var userId = GetUserId();
                 var plan = await _dailyPlanRepository.GetByIdAsync(id, userId);
-                if (plan == null) 
+                if (plan == null)
                     return NotFound(new { message = "Daily plan not found or you don't have access to it" });
-                
+
                 var planDto = _mapper.Map<DailyPlanDto>(plan);
                 return Ok(planDto);
             }
@@ -93,18 +93,17 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
+        [Authorize(Roles = "Coach")]
         [HttpPost("daily-plans")]
         public async Task<IActionResult> CreateDailyPlan([FromBody] CreateDailyPlanDto planDto)
         {
             try
             {
                 var userId = GetUserId();
-                if (!IsCoachAuthorized(planDto.WeekPlan.TrainingPlan.CoachId))
-                    return StatusCode(403, new { message = "Only the assigned coach can create daily plans" });
 
                 var plan = _mapper.Map<DailyPlan>(planDto);
                 await _dailyPlanRepository.AddAsync(plan);
-                
+
                 var createdPlanDto = _mapper.Map<DailyPlanDto>(plan);
                 return CreatedAtAction(nameof(GetDailyPlanById), new { id = plan.Id }, createdPlanDto);
             }
@@ -118,26 +117,24 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
+        [Authorize(Roles = "Coach")]
         [HttpPut("daily-plans/{id}")]
         public async Task<IActionResult> UpdateDailyPlan(int id, [FromBody] UpdateDailyPlanDto planDto)
         {
             try
             {
                 var userId = GetUserId();
-                
-                if (id != planDto.Id) 
+
+                if (id != planDto.Id)
                     return BadRequest(new { message = "ID in URL does not match ID in request body" });
-                
+
                 var existingPlan = await _dailyPlanRepository.GetByIdAsync(id, userId);
-                if (existingPlan == null) 
+                if (existingPlan == null)
                     return NotFound(new { message = "Daily plan not found" });
 
-                if (!IsCoachAuthorized(existingPlan.WeekPlan.TrainingPlan.CoachId))
-                    return StatusCode(403, new { message = "Only the assigned coach can update this daily plan" });
-                
                 _mapper.Map(planDto, existingPlan);
                 await _dailyPlanRepository.UpdateAsync(existingPlan);
-                
+
                 return NoContent();
             }
             catch (UnauthorizedAccessException ex)
@@ -150,6 +147,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
+        [Authorize(Roles = "Coach")]
         [HttpDelete("daily-plans/{id}")]
         public async Task<IActionResult> DeleteDailyPlan(int id)
         {
@@ -160,9 +158,6 @@ namespace Gym_Community.API.Controllers.TrainingPlans
                 var plan = await _dailyPlanRepository.GetByIdAsync(id, userId);
                 if (plan == null) 
                     return NotFound(new { message = "Daily plan not found" });
-
-                if (!IsCoachAuthorized(plan.WeekPlan.TrainingPlan.CoachId))
-                    return StatusCode(403, new { message = "Only the assigned coach can delete this daily plan" });
 
                 await _dailyPlanRepository.DeleteAsync(plan);
                 return NoContent();
@@ -179,6 +174,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
 
         // ===================== WEEK PLAN =====================
 
+      
         [HttpGet("week-plans")]
         public async Task<IActionResult> GetWeekPlansByTrainingPlan([FromQuery] int trainingPlanId)
         {
@@ -198,7 +194,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
                 return StatusCode(500, new { message = "An error occurred while retrieving week plans", error = ex.Message });
             }
         }
-
+        
         [HttpGet("week-plans/{id}")]
         public async Task<IActionResult> GetWeekPlanById(int id)
         {
@@ -222,6 +218,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
+        [Authorize(Roles = "Coach")]
         [HttpPost("week-plans")]
         public async Task<IActionResult> CreateWeekPlan([FromBody] CreateWeekPlanDto planDto)
         {
@@ -232,7 +229,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
                     return StatusCode(403, new { message = "Only the assigned coach can create week plans" });
 
                 var plan = _mapper.Map<WeekPlan>(planDto);
-                await _weekPlanRepository.AddAsync(plan);
+                await _weekPlanRepository.AddAsync(plan,userId);
                 
                 var createdPlanDto = _mapper.Map<WeekPlanDto>(plan);
                 return CreatedAtAction(nameof(GetWeekPlanById), new { id = plan.Id }, createdPlanDto);
@@ -247,6 +244,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
+        [Authorize(Roles = "Coach")]
         [HttpPut("week-plans/{id}")]
         public async Task<IActionResult> UpdateWeekPlan(int id, [FromBody] UpdateWeekPlanDto planDto)
         {
@@ -279,6 +277,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
+        [Authorize(Roles = "Coach")]
         [HttpDelete("week-plans/{id}")]
         public async Task<IActionResult> DeleteWeekPlan(int id)
         {
