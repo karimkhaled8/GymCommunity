@@ -51,11 +51,15 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
                     (wp.TrainingPlan.ClientId == userId || wp.TrainingPlan.CoachId == userId));
         }
 
-        public async Task AddAsync(WeekPlan weekPlan)
+        public async Task AddAsync(WeekPlan weekPlan, string userId)
         {
+            if (weekPlan.TrainingPlan.CoachId != userId)
+                throw new UnauthorizedAccessException("Only the assigned coach can add this week plan.");
+
             await _dbSet.AddAsync(weekPlan);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task UpdateAsync(WeekPlan weekPlan)
         {

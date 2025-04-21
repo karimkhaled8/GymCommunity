@@ -4,7 +4,7 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
 {
     public class ExerciseDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int MuscleGroupId { get; set; }
@@ -15,7 +15,7 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
 
     public class MealDto
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Calories { get; set; }
