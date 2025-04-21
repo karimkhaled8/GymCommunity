@@ -30,5 +30,6 @@ namespace Gym_Community.API.DTOs.Gym
         public DateTime ExpiresAt { get; set; }
         public bool IsExpired { get; set; }
         public string QrCodeData { get; set; } = null!;
+        public string rawData { get; set; } = null!;
     }
 }

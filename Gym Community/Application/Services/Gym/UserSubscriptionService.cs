@@ -116,7 +116,8 @@ namespace Gym_Community.Application.Services.Gym
                 ExpiresAt = sub.ExpiresAt,
                 PaymentStatus = sub.paymentStatus,
                 IsExpired = sub.IsExpired,
-                QrCodeData = sub.QrCodeData
+                QrCodeData = sub.QrCodeData,
+                rawData = sub.rawData
             };
         }
     }
