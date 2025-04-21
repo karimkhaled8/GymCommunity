@@ -53,7 +53,7 @@ namespace Gym_Community.API.Controllers.Ecommerce
             {
                 return BadRequest("Product not found in wish list");
             }
-            return Ok("Product removed from wish list");
+            return Ok(new {success=true,message="Product Removed From WishList Successfully"  });
         }
 
         private string getUserID()

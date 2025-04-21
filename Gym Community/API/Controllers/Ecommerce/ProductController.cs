@@ -32,6 +32,12 @@ namespace Gym_Community.API.Controllers.Ecommerce
             var products = await _productService.GetUserProducts(getUserId());
             return products.Any() ? Ok(products) : Ok(new { success = true, message = "No products Found" });
         }
+        [HttpGet("category/{id}")]
+        public async Task<IActionResult> GetProductsByCategory(int id)
+        {
+            var products = await _productService.getProductsByCategory(id);
+            return products.Any() ? Ok(products) : Ok(new { success = true, message = "No products Found" });
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
