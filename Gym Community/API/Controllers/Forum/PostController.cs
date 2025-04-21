@@ -33,7 +33,7 @@ namespace Gym_Community.API.Controllers.Forum
             dto.UserId = userId;
             if (image != null)
             {
-                var imageUrl = await _awsService.UploadFileAsync(image, "products");
+                var imageUrl = await _awsService.UploadFileAsync(image, "posts");
                 if (string.IsNullOrEmpty(imageUrl))
                 {
                     return BadRequest(new { success = false, message = "Failed to upload image" });
@@ -74,7 +74,7 @@ namespace Gym_Community.API.Controllers.Forum
             {
                 if (!string.IsNullOrEmpty(dto.ImgUrl))
                     await _awsService.DeleteFileAsync(dto.ImgUrl);
-                var imageUrl = await _awsService.UploadFileAsync(image, "products");
+                var imageUrl = await _awsService.UploadFileAsync(image, "posts");
                 if (string.IsNullOrEmpty(imageUrl))
                 {
                     return BadRequest(new { success = false, message = "Failed to upload image" });

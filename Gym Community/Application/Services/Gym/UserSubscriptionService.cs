@@ -3,6 +3,7 @@ using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Domain.Enums;
 using Gym_Community.Domain.Models.Gym;
 using Gym_Community.Infrastructure.Interfaces.Gym;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Org.BouncyCastle.Asn1.Pkcs;
 using QRCoder;
 
@@ -16,7 +17,7 @@ namespace Gym_Community.Application.Services.Gym
             _repo = repo;
         }
 
-        public async Task<UserSubscriptionReadDTO> CreateAsync(UserSubscriptionCreateDTO dto)
+        public async Task<UserSubscriptionReadDTO?> CreateAsync(UserSubscriptionCreateDTO dto)
         {
             var rawData = Guid.NewGuid().ToString();
             Console.WriteLine("rawData: " + rawData);
@@ -34,8 +35,7 @@ namespace Gym_Community.Application.Services.Gym
             };
 
             var result = await _repo.AddAsync(subscription);
-
-            return Map(result);
+            return result != null ? await GetByIdAsync(result.Id) : null;
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -66,9 +66,9 @@ namespace Gym_Community.Application.Services.Gym
             return (await _repo.GetByPlanIdAsync(planId)).Select(Map); 
         }
 
-        public async Task<UserSubscriptionReadDTO?> UpdateAsync(UserSubscriptionUpdateDTO dto)
+        public async Task<UserSubscriptionReadDTO?> UpdateAsync(int id, UserSubscriptionUpdateDTO dto)
         {
-            var sub = await _repo.GetByIdAsync(dto.Id);
+            var sub = await _repo.GetByIdAsync(id);
             if (sub == null) return null;
 
             sub.paymentStatus = dto.PaymentStatus;
@@ -77,7 +77,7 @@ namespace Gym_Community.Application.Services.Gym
             sub.IsExpired = dto.IsExpired;
 
             var updated = await _repo.UpdateAsync(sub);
-            return updated == null ? null : Map(updated);
+            return updated != null ? await GetByIdAsync(updated.Id) : null;
         }
         public async Task<UserSubscriptionReadDTO?> ValidateQrCodeAsync(string qrCodeData)
         {

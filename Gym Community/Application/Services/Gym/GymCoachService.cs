@@ -37,7 +37,7 @@ namespace Gym_Community.Application.Services.Gym
             };
 
             var created = await _repo.AddAsync(entity);
-            return created != null ? ToReadDTO(created) : null;
+            return created != null ? await GetByIdAsync(created.Id) : null;
         }
 
         public async Task<IEnumerable<GymCoachDTO>> GetAllAsync()
@@ -64,7 +64,7 @@ namespace Gym_Community.Application.Services.Gym
             entity.CoachID = dto.CoachID;
 
             var updated = await _repo.UpdateAsync(entity);
-            return updated != null ? ToReadDTO(updated) : null;
+            return updated != null ? await GetByIdAsync(updated.Id) : null;
         }
 
         public async Task<bool> DeleteAsync(int id)

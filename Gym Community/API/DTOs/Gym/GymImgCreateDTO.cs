@@ -3,7 +3,7 @@
     public class GymImgCreateDTO
     {
         public int GymId { get; set; }
-        public string ImageUrl { get; set; } = null!;
+        public string? ImageUrl { get; set; } = null!;
     }
 
     public class GymImgReadDTO

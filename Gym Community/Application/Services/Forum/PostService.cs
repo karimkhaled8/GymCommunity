@@ -12,13 +12,10 @@ namespace Gym_Community.Application.Services.Forum
     public class PostService: IPostService
     {
         private readonly IPostRepository _repo;
-        private readonly IAwsService _awsService;
 
-
-        public PostService(IPostRepository repo, IAwsService awsService)
+        public PostService(IPostRepository repo)
         {
             _repo = repo;
-            _awsService = awsService;
         }
 
         public async Task<PostReadDTO?> CreateAsync(PostCreateDTO dto)
