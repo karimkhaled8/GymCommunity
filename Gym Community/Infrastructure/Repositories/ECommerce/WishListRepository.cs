@@ -41,6 +41,8 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
             return await _context.WhishLists
                 .Include(w => w.AppUser)
                 .Include(w => w.Product)
+                .Include(w=>w.Product.Brand)
+                .Include(w => w.Product.Category)
                 .Where(w => w.UserID == userId)
                 .ToListAsync();
         }
