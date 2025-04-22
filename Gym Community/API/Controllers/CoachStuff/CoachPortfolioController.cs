@@ -46,25 +46,26 @@ namespace Gym_Community.API.Controllers.CoachStuff
 
        
         [HttpPost]
-        //added AboutMeImageUrl to send the image
         public async Task<IActionResult> Create([FromForm] CoachPortfolioDto dto,[FromForm] IFormFile AboutMeImageUrl)
         {
 
             string imageUrl = string.Empty;
             if (AboutMeImageUrl != null)
             {
-                //folder location "ProfileImages" must be changed later
-                imageUrl = await _awsService.UploadFileAsync(AboutMeImageUrl, "ProfileImages"); // save in aws and return url as strig 
+               
+                imageUrl = await _awsService.UploadFileAsync(AboutMeImageUrl, "ProfileImages"); 
 
             }
               var CoachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (CoachId == null) return Unauthorized();
 
             dto.CoachId = CoachId;
-            dto.AboutMeImageUrl = imageUrl; // set the image url to the dto
+            dto.AboutMeImageUrl = imageUrl;
 
             var success = await _service.CreateAsync(dto);
-            return success ? Ok("CoachPortofolio added") : BadRequest();
+            return success
+       ? Ok(new { message = "Portfolio created successfully" })
+       : BadRequest(new { message = "Failed to create portfolio" });
         }
 
         [HttpPut("{id}")]
@@ -82,7 +83,9 @@ namespace Gym_Community.API.Controllers.CoachStuff
             dto.CoachId = coachId;
 
             var success = await _service.UpdateAsync(id, dto);
-            return success ? Ok() : NotFound();
+            return success
+     ? Ok(new { message = "Portfolio updated successfully" })
+     : BadRequest(new { message = "Failed to update portfolio" });
         }
 
         [HttpDelete("{id}")]
