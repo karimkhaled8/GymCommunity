@@ -1,4 +1,4 @@
-﻿using Gym_Community.API.DTOs.CoachStuff;
+﻿using Gym_Community.API.DTOs.Coach.CoachStuff;
 using Gym_Community.Application.Interfaces.CoachStuff;
 using Gym_Community.Domain.Models.CoachStuff;
 using Gym_Community.Infrastructure.Interfaces.CoachStuff;

@@ -15,7 +15,10 @@ namespace Gym_Community.Domain.Data.Models.Meals_and_Exercise
         [ForeignKey("Coach")]
         public string CoachId { get; set; }
         public AppUser Coach { get; set; }
-        public string? ClientId { get; set; }
+
+        [ForeignKey("Client")]
+        public string? ClientId { get; set; }   
+        public AppUser? Client { get; set; }
         public bool IsStaticPlan { get; set; }
         public string Name { get; set; }
         public int DurationMonths { get; set; }  // 1, 3, or 6 months

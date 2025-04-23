@@ -6,11 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace Gym_Community.API.Controllers.CoachStuff
+namespace Gym_Community.API.Controllers.Coach.CoachStuff
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class CoachPortfolioController : ControllerBase
     {
         private readonly ICoachPortfolioService _service;
@@ -29,7 +28,6 @@ namespace Gym_Community.API.Controllers.CoachStuff
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetById(int id)
         {
             var item = await _service.GetByIdAsync(id);
@@ -37,7 +35,6 @@ namespace Gym_Community.API.Controllers.CoachStuff
         }
 
         [HttpGet("byCoach/{coachId}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetByCoachId(string coachId)
         {
             var item = await _service.GetByCoachIdAsync(coachId);
@@ -46,57 +43,37 @@ namespace Gym_Community.API.Controllers.CoachStuff
 
        
         [HttpPost]
+        //added AboutMeImageUrl to send the image
         public async Task<IActionResult> Create([FromForm] CoachPortfolioDto dto,[FromForm] IFormFile AboutMeImageUrl)
         {
 
             string imageUrl = string.Empty;
             if (AboutMeImageUrl != null)
             {
-               
-                imageUrl = await _awsService.UploadFileAsync(AboutMeImageUrl, "ProfileImages"); 
+                //folder location "ProfileImages" must be changed later
+                imageUrl = await _awsService.UploadFileAsync(AboutMeImageUrl, "ProfileImages"); // save in aws and return url as strig 
 
             }
               var CoachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (CoachId == null) return Unauthorized();
 
             dto.CoachId = CoachId;
-            dto.AboutMeImageUrl = imageUrl;
+            dto.AboutMeImageUrl = imageUrl; // set the image url to the dto
 
             var success = await _service.CreateAsync(dto);
-            return success
-       ? Ok(new { message = "Portfolio created successfully" })
-       : BadRequest(new { message = "Failed to create portfolio" });
+            return success ? Ok("CoachPortofolio added") : BadRequest();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromForm] CoachPortfolioDto dto, [FromForm] IFormFile? AboutMeImageUrl)
+        public async Task<IActionResult> Update(int id, CoachPortfolioDto dto)
         {
-            var coachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var existing = await _service.GetByIdAsync(id);
-
-            if (existing == null || existing.CoachId != coachId)
-                return Unauthorized();
-
-            if (AboutMeImageUrl != null)
-                dto.AboutMeImageUrl = await _awsService.UploadFileAsync(AboutMeImageUrl, "ProfileImages");
-
-            dto.CoachId = coachId;
-
             var success = await _service.UpdateAsync(id, dto);
-            return success
-     ? Ok(new { message = "Portfolio updated successfully" })
-     : BadRequest(new { message = "Failed to update portfolio" });
+            return success ? Ok() : NotFound();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var coachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var existing = await _service.GetByIdAsync(id);
-
-            if (existing == null || existing.CoachId != coachId)
-                return Unauthorized();
-
             var success = await _service.DeleteAsync(id);
             return success ? Ok() : NotFound();
         }

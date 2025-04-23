@@ -11,8 +11,7 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         
         public string? ClientId { get; set; }
         
-        [Required]
-        public bool IsStaticPlan { get; set; } = false;
+
         
         [Required]
         public string Name { get; set; }

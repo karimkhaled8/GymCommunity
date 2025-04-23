@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using Gym_Community.API.DTOs.CoachStuff;
+using Gym_Community.API.DTOs.Coach.CoachStuff;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.CoachStuff;
 using Microsoft.AspNetCore.Authorization;

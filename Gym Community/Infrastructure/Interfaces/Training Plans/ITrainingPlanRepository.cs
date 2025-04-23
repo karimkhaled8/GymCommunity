@@ -14,6 +14,6 @@ namespace Gym_Community.Infrastructure.Interfaces.Training_Plans
         Task UpdateAsync(TrainingPlan trainingPlan, string coachId);
         Task DeleteAsync(TrainingPlan trainingPlan, string coachId);
 
-        Task<AppUser> GetClientById(string userId);
+        Task<IEnumerable< AppUser>> GetAllCoachClients(string CoachId);
     }
 }

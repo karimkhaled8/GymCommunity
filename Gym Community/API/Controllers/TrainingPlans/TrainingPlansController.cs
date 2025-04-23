@@ -349,35 +349,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
                 var userId = GetUserId();
                 var plans = await _trainingPlanRepository.GetAllAsync(userId);
 
-                foreach (var plan in plans)
-                {
-                    var user = await _trainingPlanRepository.GetClientById(plan.ClientId); // assuming it's async
-
-                    var dto = new GetTrainingPlanDto
-                    {
-                        Id = plan.Id,
-                        CoachId = plan.CoachId,
-                        ClientId = plan.ClientId,
-                        IsStaticPlan = plan.IsStaticPlan,
-                        Name = plan.Name,
-                        DurationMonths = plan.DurationMonths,
-                        Type = plan.Type,
-                        StartDate = plan.StartDate,
-                        EndDate = plan.EndDate,
-                        CaloricTarget = plan.CaloricTarget,
-                        ProteinPercentage = plan.ProteinPercentage,
-                        CarbsPercentage = plan.CarbsPercentage,
-                        FatsPercentage = plan.FatsPercentage,
-                        UserName = user.FirstName+" "+user.LastName, // or user?.UserName
-                        ProfileImg = user?.ProfileImg,
-                        Gender = user?.Gender,
-              
-                    };
-
-                    arry.Add(dto);
-                }
-
-                return Ok(arry);
+                return Ok(plans);
             }
             catch (UnauthorizedAccessException ex)
             {

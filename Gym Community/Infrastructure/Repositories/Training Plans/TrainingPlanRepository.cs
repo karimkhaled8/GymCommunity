@@ -30,6 +30,7 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
         {
             return await _dbSet
                 .Include(tp => tp.WeekPlans)
+                .Include(tp => tp.Client)
                 .Where(tp => tp.ClientId == userId || tp.CoachId == userId)
                 .ToListAsync();
         }
@@ -81,9 +82,14 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
             await _context.SaveChangesAsync();
         }
 
-        public async Task<AppUser> GetClientById(string userId)
+        public async Task<IEnumerable< AppUser>> GetAllCoachClients(string coachId)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return await _dbSet
+            .Where(tp => tp.CoachId == coachId && tp.ClientId != null)
+             .Select(tp => tp.Client)
+             .Distinct()
+             .ToListAsync();
+
         }
     }
 }

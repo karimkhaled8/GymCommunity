@@ -2,15 +2,13 @@
 using Gym_Community.API.DTOs.Coach.CoachStuff;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.CoachStuff;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gym_Community.API.Controllers.CoachStuff
+namespace Gym_Community.API.Controllers.Coach.CoachStuff
 {
     [Route("api/[controller]")]
     [ApiController]
-    
     public class WorkSampleController : ControllerBase
     {
         private readonly IWorkSampleService _service;
@@ -25,7 +23,6 @@ namespace Gym_Community.API.Controllers.CoachStuff
         }
 
         [HttpGet("byPortfolio/{portfolioId}")]
-       
         public async Task<IActionResult> GetByPortfolioId(int portfolioId)
         {
             var result = await _service.GetByPortfolioIdAsync(portfolioId);
@@ -45,14 +42,10 @@ namespace Gym_Community.API.Controllers.CoachStuff
             if (CoachId == null) return Unauthorized();
 
             dto.ProtofolioId = await _portfolioService.GetPortfolioIdByCoachIdAsync(CoachId);
-            if (dto.ProtofolioId == 0) return BadRequest("No portfolio found for coach");
-
             dto.ImageUrl = imageUrl;
 
             var success = await _service.CreateAsync(dto);
-            return success
-     ? Ok(new { message = "Work Sample added" })
-     : BadRequest(new { error = "Could not add certificate" });
+            return success ? Ok("Work Sample Added") : BadRequest();
         }
 
         [HttpDelete("{id}")]

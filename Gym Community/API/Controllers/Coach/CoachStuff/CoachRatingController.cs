@@ -1,9 +1,9 @@
-﻿using Gym_Community.API.DTOs.CoachStuff;
+﻿using Gym_Community.API.DTOs.Coach.CoachStuff;
 using Gym_Community.Application.Interfaces.CoachStuff;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gym_Community.API.Controllers.CoachStuff
+namespace Gym_Community.API.Controllers.Coach.CoachStuff
 {
     [Route("api/[controller]")]
     [ApiController]

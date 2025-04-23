@@ -2,22 +2,20 @@
 using Gym_Community.API.DTOs.Coach.CoachStuff;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.CoachStuff;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Gym_Community.API.Controllers.CoachStuff
+namespace Gym_Community.API.Controllers.Coach.CoachStuff
 {
     [Route("api/[controller]")]
     [ApiController]
-    
-    public class WorkSampleController : ControllerBase
+    public class CoachCertificateController : ControllerBase
     {
-        private readonly IWorkSampleService _service;
+        private readonly ICoachCertificateService _service;
         private readonly IAwsService _awsService;
         private readonly ICoachPortfolioService _portfolioService;
 
-        public WorkSampleController(IWorkSampleService service , IAwsService awsService , ICoachPortfolioService portfolioService)
+        public CoachCertificateController(ICoachCertificateService service , IAwsService awsService , ICoachPortfolioService portfolioService)
         {
             _service = service;
             _awsService = awsService;
@@ -25,34 +23,30 @@ namespace Gym_Community.API.Controllers.CoachStuff
         }
 
         [HttpGet("byPortfolio/{portfolioId}")]
-       
         public async Task<IActionResult> GetByPortfolioId(int portfolioId)
         {
+
             var result = await _service.GetByPortfolioIdAsync(portfolioId);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create( [FromForm] WorkSampleDto dto, [FromForm] IFormFile worksampleimg)
+        public async Task<IActionResult> Create([FromForm] CoachCertificateDto dto, [FromForm] IFormFile CertificateImage)
         {
             string imageUrl = string.Empty;
-            if (worksampleimg != null)
+            if (CertificateImage != null)
             {
-                imageUrl = await _awsService.UploadFileAsync(worksampleimg, "WorkSampleeImages");
+                imageUrl = await _awsService.UploadFileAsync(CertificateImage, "CertificateImages");
             }
 
             var CoachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (CoachId == null) return Unauthorized();
 
-            dto.ProtofolioId = await _portfolioService.GetPortfolioIdByCoachIdAsync(CoachId);
-            if (dto.ProtofolioId == 0) return BadRequest("No portfolio found for coach");
-
+            dto.ProtofolioId = await _portfolioService.GetPortfolioIdByCoachIdAsync(CoachId); 
             dto.ImageUrl = imageUrl;
 
             var success = await _service.CreateAsync(dto);
-            return success
-     ? Ok(new { message = "Work Sample added" })
-     : BadRequest(new { error = "Could not add certificate" });
+            return success ? Ok("Certificate added") : BadRequest("Could not add certificate");
         }
 
         [HttpDelete("{id}")]

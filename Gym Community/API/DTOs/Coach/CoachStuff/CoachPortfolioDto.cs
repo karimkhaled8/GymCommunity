@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Gym_Community.API.DTOs.CoachStuff
+namespace Gym_Community.API.DTOs.Coach.CoachStuff
 {
     public class CoachPortfolioDto
     {
