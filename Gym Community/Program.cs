@@ -89,7 +89,8 @@ namespace Gym_Community
                 // Add Google and Facebook authentication
             }).AddGoogle(googleOptions =>
             {
-               
+                googleOptions.ClientId = "542482302983-oeddeor9j8rirdjnf99oe2um6sucgi58.apps.googleusercontent.com";
+                googleOptions.ClientSecret = "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";
                 googleOptions.CallbackPath = new PathString("/signin-google");
             })
             .AddFacebook(facebookOptions =>
