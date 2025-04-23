@@ -1,5 +1,6 @@
 ﻿using Gym_Community.API.DTOs.Auth;
 using Gym_Community.Domain.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Gym_Community.Application.Interfaces
 {
@@ -18,5 +19,10 @@ namespace Gym_Community.Application.Interfaces
 
         public Task<bool> ForgotPassword(ForgetPasswordDTO forgetPasswordDTO);
         public Task<string> ResetPassword(ResetPasswordDTO resetPasswordDTO,string email,string token);
+
+
+        public Task<ExternalLoginInfo> GetGoogleLoginInfo(string idToken);
+
+        public  Task<ExternalLoginInfo> GetFacebookLoginInfo(string accessToken);
     }
 }

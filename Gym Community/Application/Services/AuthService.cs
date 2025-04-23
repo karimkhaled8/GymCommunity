@@ -9,6 +9,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Google.Apis.Auth;
+using System.Text.Json;
+
 
 namespace Gym_Community.Application.Services
 {
@@ -215,5 +218,61 @@ namespace Gym_Community.Application.Services
                 return "error";
             }
         }
+
+        public async Task<ExternalLoginInfo> GetGoogleLoginInfo(string idToken)
+        {
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(idToken);
+                var claims = new List<Claim>
+                {
+                new Claim(ClaimTypes.NameIdentifier, payload.Subject),
+                new Claim(ClaimTypes.Email, payload.Email),
+                new Claim(ClaimTypes.Name, payload.Name),
+                };
+
+                var identity = new ClaimsIdentity(claims, "Google");
+                var principal = new ClaimsPrincipal(identity);
+
+                return new ExternalLoginInfo(principal, "Google", payload.Subject, payload.Name);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<ExternalLoginInfo> GetFacebookLoginInfo(string accessToken)
+        {
+            var verifyEndpoint = $"https://graph.facebook.com/me?access_token={accessToken}&fields=id,name,email";
+
+            using var httpClient = new HttpClient();
+            var response = await httpClient.GetStringAsync(verifyEndpoint);
+
+            var result = JsonSerializer.Deserialize<FacebookUserInfo>(response, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, result.Id),
+        new Claim(ClaimTypes.Email, result.Email ?? ""),
+        new Claim(ClaimTypes.Name, result.Name ?? "")
+    };
+
+            var identity = new ClaimsIdentity(claims, "Facebook");
+            var principal = new ClaimsPrincipal(identity);
+
+            return new ExternalLoginInfo(principal, "Facebook", result.Id, result.Name);
+        }
+
+        public class FacebookUserInfo
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+            public string Email { get; set; }
+        }
+
     }
 }

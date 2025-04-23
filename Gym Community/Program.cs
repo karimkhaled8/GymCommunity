@@ -85,7 +85,23 @@ namespace Gym_Community
                     ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                 };
+
+                // Add Google and Facebook authentication
+            }).AddGoogle(googleOptions =>
+            {
+               
+                googleOptions.CallbackPath = new PathString("/signin-google");
+            })
+            .AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "FACEBOOK_APP_ID";
+                facebookOptions.AppSecret = "FACEBOOK_APP_SECRET";
             });
+
+
+
+
+
 
             // Add AutoMapper
             builder.Services.AddAutoMapper(typeof(TrainingPlanProfile)); // Option 2: scan where TrainingPlanProfile lives
