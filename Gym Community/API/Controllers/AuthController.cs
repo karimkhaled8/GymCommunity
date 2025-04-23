@@ -136,10 +136,11 @@ namespace Gym_Community.API.Controllers
                     UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
                     Email = info.Principal.FindFirstValue(ClaimTypes.Email),
                     Address = info.Principal.FindFirstValue(ClaimTypes.StreetAddress)??"",
-                    FirstName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "",
+                    FirstName = info.Principal.FindFirstValue(ClaimTypes.Name) ?? "",
                     LastName = info.Principal.FindFirstValue(ClaimTypes.Surname) ?? "",
                     Gender ="m",
-                    ProfileImg = info.Principal.FindFirstValue("picture") ?? "",
+                    //ProfileImg = info.Principal.FindFirstValue("picture") ?? "",
+                    ProfileImg = info.Principal.FindFirstValue(ClaimTypes.Uri) ?? "",
 
                 };
 

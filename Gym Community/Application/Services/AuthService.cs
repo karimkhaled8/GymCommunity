@@ -229,6 +229,7 @@ namespace Gym_Community.Application.Services
                 new Claim(ClaimTypes.NameIdentifier, payload.Subject),
                 new Claim(ClaimTypes.Email, payload.Email),
                 new Claim(ClaimTypes.Name, payload.Name),
+                new Claim(ClaimTypes.Uri, payload.Picture)
                 };
 
                 var identity = new ClaimsIdentity(claims, "Google");
