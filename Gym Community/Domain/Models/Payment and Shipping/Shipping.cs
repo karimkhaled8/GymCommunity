@@ -11,7 +11,7 @@ namespace Gym_Community.Domain.Data.Models.Payment_and_Shipping
         public int Id { get; set; }
 
         [ForeignKey("Order")]
-        public int OrderID { get; set; }
+        public int? OrderID { get; set; }
         public Order Order { get; set; }
 
         [MaxLength(100)]

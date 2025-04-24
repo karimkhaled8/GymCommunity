@@ -3,6 +3,8 @@ using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Domain.Data.Models.E_comm;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Gym_Community.Domain.Enums;
+using Gym_Community.Infrastructure.Repositories.ECommerce;
+using Gym_Community.Domain.Data.Models.Payment_and_Shipping;
 
 namespace Gym_Community.Application.Services.E_comm
 {
@@ -10,23 +12,32 @@ namespace Gym_Community.Application.Services.E_comm
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IShippingRepository _shippingRepository;
-        public OrderService(IOrderRepository orderRepository,IShippingRepository shippingRepository)
+        private readonly IPaymentRepository _paymentRepository;
+
+        public OrderService(IOrderRepository orderRepository
+            , IShippingRepository shippingRepository
+            ,IPaymentRepository paymentRepository)
         {
             _orderRepository = orderRepository;
             _shippingRepository = shippingRepository;
+            _paymentRepository = paymentRepository;
         }
 
-        public async Task<OrderDto?> CreateOrderAsync(OrderDto orderDto,string userId)
+        public async Task<OrderDto?> CreateOrderAsync(OrderDto orderDto, string userId)
         {
+            var payment = await _paymentRepository.GetById(orderDto.PaymentId);
+            if (payment == null)
+            {
+                return null;
+            }
             var order = new Order
             {
                 UserID = userId,
                 OrderDate = DateTime.UtcNow,
-                TotalAmount = orderDto.TotalAmount,
-                PaymentStatus = orderDto.PaymentStatus,
+                PaymentId= orderDto.PaymentId,
                 OrderItems = orderDto.OrderItems.Select(oi => new OrderItem
                 {
-                    ProductID = oi.ProductId,  
+                    ProductID = oi.ProductId,
                     Quantity = oi.Quantity,
                     Price = oi.Price
                 }).ToList()
@@ -37,69 +48,102 @@ namespace Gym_Community.Application.Services.E_comm
             {
                 return null;
             }
+            var shipping = new Shipping
+            {
+                OrderID = createdOrder.OrderID,
+                Carrier = orderDto.Shipping.Carrier,
+                TrackingNumber = orderDto.Shipping.TrackingNumber,
+                Latitude = orderDto.Shipping.Latitude,
+                Longitude = orderDto.Shipping.Longitude,
+                EstimatedDeliveryDate = orderDto.Shipping.EstimatedDeliveryDate,
+                ShippingStatus = ShippingStatus.Pending,
+                ShippingAddress = orderDto.Shipping.ShippingAddress
+            };
 
+            var createdShipping = await _shippingRepository.AddAsync(shipping);
+             
             return new OrderDto
             {
                 Id = createdOrder.OrderID,
-                OrderDate = createdOrder.OrderDate,
-                TotalAmount = createdOrder.TotalAmount,
-                CustomerId = createdOrder.UserID,
-                PaymentStatus = createdOrder.PaymentStatus,
+                UserID = createdOrder.UserID,
+                PaymentId = createdOrder.PaymentId,
                 OrderItems = createdOrder.OrderItems.Select(oi => new OrderItemDto
                 {
+                    Id = oi.Id,
+                    OrderId = order.OrderID,
                     ProductId = oi.ProductID,
+                    ProductName = oi.Product?.Name ?? string.Empty,
                     Quantity = oi.Quantity,
                     Price = oi.Price,
-                    ProductName = oi.Product?.Name ?? string.Empty
                 }).ToList(),
-                ShippingStatus = ShippingStatus.Pending,
-                DelivaryDate = createdOrder.OrderDate.AddDays(3)
-            }; 
+                Shipping = new ShippingDTO
+                {
+                    OrderID = createdShipping.OrderID,
+                    Carrier = createdShipping.Carrier,
+                    TrackingNumber = createdShipping.TrackingNumber,
+                    Latitude = createdShipping.Latitude,
+                    Longitude = createdShipping.Longitude,
+                    EstimatedDeliveryDate = createdShipping.EstimatedDeliveryDate,
+                    ShippingStatus = createdShipping.ShippingStatus,
+                    ShippingAddress = createdShipping.ShippingAddress
+                }
+            };
         }
 
         public async Task<IEnumerable<OrderDto>> GetOrdersAsync()
         {
             var orders = await _orderRepository.ListAsync();
-
             return orders.Select(order => new OrderDto
             {
                 Id = order.OrderID,
-                OrderDate = order.OrderDate,
-                TotalAmount = order.TotalAmount,
-                CustomerId = order.UserID,
-                PaymentStatus = order.PaymentStatus,
+                UserID = order.UserID,
+                PaymentId = order.PaymentId,
                 OrderItems = order.OrderItems.Select(oi => new OrderItemDto
                 {
+                    Id = oi.Id,
+                    OrderId = order.OrderID,
                     ProductId = oi.ProductID,
                     Quantity = oi.Quantity,
                     Price = oi.Price,
-                    ProductName = oi.Product?.Name ?? string.Empty 
+                    ProductName = oi.Product?.Name ?? string.Empty
                 }).ToList(),
-                ShippingStatus = order.Shipping.ShippingStatus, 
-                DelivaryDate = order.Shipping.EstimatedDeliveryDate    
+                Shipping = new ShippingDTO
+                {
+                    Carrier = order.Shipping.Carrier,
+                    TrackingNumber = order.Shipping.TrackingNumber,
+                    Latitude = order.Shipping.Latitude,
+                    Longitude = order.Shipping.Longitude,
+                    EstimatedDeliveryDate = order.Shipping.EstimatedDeliveryDate,
+                    ShippingAddress = order.Shipping.ShippingAddress
+                }
             }).ToList();
         }
 
         public async Task<IEnumerable<OrderDto>> GetUserOrderAsync(string userId)
         {
             var orders = await _orderRepository.ListUserOrdersAsync(userId);
-            
             return orders.Select(order => new OrderDto
             {
                 Id = order.OrderID,
-                OrderDate = order.OrderDate,
-                TotalAmount = order.TotalAmount,
-                CustomerId = order.UserID,
-                PaymentStatus = order.PaymentStatus,
+                UserID = order.UserID,
                 OrderItems = order.OrderItems.Select(oi => new OrderItemDto
                 {
+                    Id = oi.Id,
+                    OrderId = order.OrderID,
                     ProductId = oi.ProductID,
                     Quantity = oi.Quantity,
                     Price = oi.Price,
-                    ProductName = oi.Product?.Name ?? string.Empty 
+                    ProductName = oi.Product?.Name ?? string.Empty
                 }).ToList(),
-                ShippingStatus = order.Shipping.ShippingStatus,  
-                DelivaryDate = order.Shipping.EstimatedDeliveryDate
+                Shipping = new ShippingDTO
+                {
+                    Carrier = order.Shipping.Carrier,
+                    TrackingNumber = order.Shipping.TrackingNumber,
+                    Latitude = order.Shipping.Latitude,
+                    Longitude = order.Shipping.Longitude,
+                    EstimatedDeliveryDate = order.Shipping.EstimatedDeliveryDate,
+                    ShippingAddress = order.Shipping.ShippingAddress
+                }
             }).ToList();
         }
 
@@ -111,23 +155,28 @@ namespace Gym_Community.Application.Services.E_comm
                 return null;
             }
 
-            // Manually map entity to DTO
             return new OrderDto
             {
                 Id = order.OrderID,
-                OrderDate = order.OrderDate,
-                TotalAmount = order.TotalAmount,
-                CustomerId = order.UserID,
-                PaymentStatus = order.PaymentStatus,
+                UserID = order.UserID,
                 OrderItems = order.OrderItems.Select(oi => new OrderItemDto
                 {
+                    Id = oi.Id,
+                    OrderId = order.OrderID,
                     ProductId = oi.ProductID,
                     Quantity = oi.Quantity,
                     Price = oi.Price,
-                    ProductName = oi.Product?.Name ?? string.Empty // Ensure Product is correctly mapped
+                    ProductName = oi.Product?.Name ?? string.Empty
                 }).ToList(),
-                ShippingStatus = null,  // Set based on your business logic
-                DelivaryDate = null     // Set based on your business logic, e.g., from Shipping
+                Shipping = order.Shipping == null ? null : new ShippingDTO
+                {
+                    Carrier = order.Shipping.Carrier,
+                    TrackingNumber = order.Shipping.TrackingNumber,
+                    Latitude = order.Shipping.Latitude,
+                    Longitude = order.Shipping.Longitude,
+                    EstimatedDeliveryDate = order.Shipping.EstimatedDeliveryDate,
+                    ShippingAddress = order.Shipping.ShippingAddress
+                }
             };
         }
 
@@ -139,14 +188,11 @@ namespace Gym_Community.Application.Services.E_comm
                 return null;
             }
 
-            // Update the order with the new details from the DTO
-            existingOrder.UserID = orderDto.CustomerId;
-            existingOrder.OrderDate = orderDto.OrderDate;
-            existingOrder.TotalAmount = orderDto.TotalAmount;
-            existingOrder.PaymentStatus = orderDto.PaymentStatus;
+            existingOrder.UserID = orderDto.UserID;
             existingOrder.OrderItems = orderDto.OrderItems.Select(oi => new OrderItem
             {
-                ProductID = oi.ProductId,  // Use ProductId
+                Id = oi.Id,
+                ProductID = oi.ProductId,
                 Quantity = oi.Quantity,
                 Price = oi.Price
             }).ToList();
@@ -157,23 +203,26 @@ namespace Gym_Community.Application.Services.E_comm
                 return null;
             }
 
-            // Manually map entity back to DTO for response
             return new OrderDto
             {
                 Id = updatedOrder.OrderID,
-                OrderDate = updatedOrder.OrderDate,
-                TotalAmount = updatedOrder.TotalAmount,
-                CustomerId = updatedOrder.UserID,
-                PaymentStatus = updatedOrder.PaymentStatus,
+                UserID = updatedOrder.UserID,
                 OrderItems = updatedOrder.OrderItems.Select(oi => new OrderItemDto
                 {
                     ProductId = oi.ProductID,
                     Quantity = oi.Quantity,
                     Price = oi.Price,
-                    ProductName = oi.Product?.Name ?? string.Empty // Ensure Product is correctly mapped
+                    ProductName = oi.Product?.Name ?? string.Empty
                 }).ToList(),
-                ShippingStatus = null,  // Set based on your business logic
-                DelivaryDate = null     // Set based on your business logic, e.g., from Shipping
+                Shipping = updatedOrder.Shipping == null ? null : new ShippingDTO
+                {
+                    Carrier = updatedOrder.Shipping.Carrier,
+                    TrackingNumber = updatedOrder.Shipping.TrackingNumber,
+                    Latitude = updatedOrder.Shipping.Latitude,
+                    Longitude = updatedOrder.Shipping.Longitude,
+                    EstimatedDeliveryDate = updatedOrder.Shipping.EstimatedDeliveryDate,
+                    ShippingAddress = updatedOrder.Shipping.ShippingAddress
+                }
             };
         }
 

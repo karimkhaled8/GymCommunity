@@ -32,7 +32,7 @@ namespace Gym_Community.API.Controllers.Ecommerce
         public async Task<IActionResult> CreatePayment([FromBody] PaymentDTO paymentDTO)
         {
             var payment = await _paymentService.CreatePaymentAsync(paymentDTO);
-            if (payment != null)
+            if (payment == null)
             {
                 return Ok(new { success = false, message = "Payment creation failed" });
 

@@ -17,18 +17,13 @@ namespace Gym_Community.Domain.Data.Models.E_comm
 
         [ForeignKey("Payment")]
         public int PaymentId { get; set; }
-        public Payment Payment { get; set; } //create payment service
+        public Payment Payment { get; set; } 
 
-        public Shipping Shipping { get; set; }
+        public Shipping? Shipping { get; set; }
 
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
-        [Required]
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal TotalAmount { get; set; }
 
-        [MaxLength(50)]
-        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unknown;
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

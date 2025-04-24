@@ -1,4 +1,5 @@
-﻿using Gym_Community.Domain.Data.Models.E_comm;
+﻿using Google.Apis.Util;
+using Gym_Community.Domain.Data.Models.E_comm;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
             _context.Orders.Add(order);
             if (await _context.SaveChangesAsync() > 0)
             {
-                return order;
+                return await GetById(order.OrderID);
             }
             else {
                 return null; 
@@ -37,10 +38,11 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         {
             return await _context.Orders
                 .Where(o => o.UserID == userId)
-                .Include(o=>o.Shipping)
+                .Include(o=>o.AppUser)
                 .Include(o => o.Payment)
+                .Include(o=>o.Shipping)
                 .Include(o=>o.OrderItems)
-                .ThenInclude(oi => oi.Product)  
+                    .ThenInclude(oi => oi.Product)  
                 .ToListAsync(); 
         }
 
@@ -50,14 +52,17 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
                 .Include(o => o.AppUser)
                 .Include(o => o.Payment)
                 .Include(o => o.Shipping)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Product) 
                 .FirstOrDefaultAsync(o => o.OrderID == id);
         }
+
         public async Task<Order?> UpdateAsync(Order order)
         {
             _context.Orders.Update(order);
             if (await _context.SaveChangesAsync() > 0)
             {
-                return order;
+                return await GetById(order.OrderID);
             }
             else
             {

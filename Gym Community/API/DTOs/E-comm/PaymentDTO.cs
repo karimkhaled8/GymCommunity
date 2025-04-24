@@ -4,7 +4,7 @@ namespace Gym_Community.API.DTOs.E_comm
 {
     public class PaymentDTO
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public decimal Amount { get; set; }
         public string Currency { get; set; } = string.Empty;
         public PaymentStatus Status { get; set; } = PaymentStatus.Pending;

@@ -21,18 +21,15 @@ namespace Gym_Community.API.Controllers.Ecommerce
         [HttpPost]
         public async Task<IActionResult> CreateShipping([FromBody] ShippingDTO dto)
         {
-            if (!Enum.TryParse(dto.ShippingStatus, true, out ShippingStatus status))
-                status = ShippingStatus.Pending;
-            if (dto == null) return BadRequest();
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var shipping = new Shipping
             {
-                OrderID = dto.OrderID ?? 0,
                 Carrier = dto.Carrier,
                 TrackingNumber = dto.TrackingNumber,
                 Latitude = dto.Latitude,
                 Longitude = dto.Longitude,
                 EstimatedDeliveryDate = dto.EstimatedDeliveryDate,
-                ShippingStatus = status,
+                ShippingStatus = dto.ShippingStatus,
                 ShippingAddress = dto.ShippingAddress
             };
             var Createdshipping = await _shippingService.CreateShippingAsync(shipping);
@@ -48,7 +45,6 @@ namespace Gym_Community.API.Controllers.Ecommerce
             if (shipping == null) return NotFound();
             return Ok(shipping);
         }
-
 
         [HttpGet("order/{orderId}")]
         public async Task<IActionResult> GetShippingByOrder(int orderId)

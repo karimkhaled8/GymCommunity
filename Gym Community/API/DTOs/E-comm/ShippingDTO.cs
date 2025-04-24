@@ -10,7 +10,7 @@ namespace Gym_Community.API.DTOs.E_comm
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public DateTime? EstimatedDeliveryDate { get; set; }
-        public string ShippingStatus { get; set; } = "Pending"; 
+        public ShippingStatus ShippingStatus { get; set; }  
         public string ShippingAddress { get; set; }
     }
 }
