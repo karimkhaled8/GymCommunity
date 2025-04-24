@@ -161,6 +161,8 @@ namespace Gym_Community
             builder.Services.AddScoped<IShoppingCartItemRepository, ShoppingCartItemRepository>();
             builder.Services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
             builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IShippingRepository, ShippingRepository>();
 
 
             //Client repository
@@ -176,6 +178,8 @@ namespace Gym_Community
             builder.Services.AddScoped<IShoppingCartItemService, ShoppingCartItemService>();
             builder.Services.AddScoped<IOrderItemService, OrderItemService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IShippingService, ShippingService>();
 
             //Forum Repository
             builder.Services.AddScoped<ISubRepository, SubRepository>();

@@ -65,7 +65,7 @@ namespace Gym_Community.API.Controllers.Ecommerce
         public async Task<IActionResult> Post([FromBody] OrderDto orderDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var order = await _orderService.CreateOrderAsync(orderDto);
+            var order = await _orderService.CreateOrderAsync(orderDto, getUserID());
             if (order == null) return NotFound();
             return Ok(order);
         }

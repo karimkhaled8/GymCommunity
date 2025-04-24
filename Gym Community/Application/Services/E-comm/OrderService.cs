@@ -9,24 +9,24 @@ namespace Gym_Community.Application.Services.E_comm
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
-
-        public OrderService(IOrderRepository orderRepository)
+        private readonly IShippingRepository _shippingRepository;
+        public OrderService(IOrderRepository orderRepository,IShippingRepository shippingRepository)
         {
             _orderRepository = orderRepository;
+            _shippingRepository = shippingRepository;
         }
 
-        public async Task<OrderDto?> CreateOrderAsync(OrderDto orderDto)
+        public async Task<OrderDto?> CreateOrderAsync(OrderDto orderDto,string userId)
         {
-            // Manually map DTO to entity model
             var order = new Order
             {
-                UserID = orderDto.CustomerId,
-                OrderDate = orderDto.OrderDate,
+                UserID = userId,
+                OrderDate = DateTime.UtcNow,
                 TotalAmount = orderDto.TotalAmount,
                 PaymentStatus = orderDto.PaymentStatus,
                 OrderItems = orderDto.OrderItems.Select(oi => new OrderItem
                 {
-                    ProductID = oi.ProductId,  // Use ProductId
+                    ProductID = oi.ProductId,  
                     Quantity = oi.Quantity,
                     Price = oi.Price
                 }).ToList()
@@ -38,7 +38,6 @@ namespace Gym_Community.Application.Services.E_comm
                 return null;
             }
 
-            // Manually map entity back to DTO for response
             return new OrderDto
             {
                 Id = createdOrder.OrderID,
@@ -51,17 +50,17 @@ namespace Gym_Community.Application.Services.E_comm
                     ProductId = oi.ProductID,
                     Quantity = oi.Quantity,
                     Price = oi.Price,
-                    ProductName = oi.Product?.Name ?? string.Empty  // Ensure Product is correctly mapped
+                    ProductName = oi.Product?.Name ?? string.Empty
                 }).ToList(),
-                ShippingStatus = null,  // Set based on your business logic
-                DelivaryDate = null     // Set based on your business logic, e.g., from Shipping
-            };
+                ShippingStatus = ShippingStatus.Pending,
+                DelivaryDate = createdOrder.OrderDate.AddDays(3)
+            }; 
         }
 
         public async Task<IEnumerable<OrderDto>> GetOrdersAsync()
         {
             var orders = await _orderRepository.ListAsync();
-            // Manually map entity to DTO
+
             return orders.Select(order => new OrderDto
             {
                 Id = order.OrderID,
@@ -74,10 +73,10 @@ namespace Gym_Community.Application.Services.E_comm
                     ProductId = oi.ProductID,
                     Quantity = oi.Quantity,
                     Price = oi.Price,
-                    ProductName = oi.Product?.Name ?? string.Empty // Ensure Product is correctly mapped
+                    ProductName = oi.Product?.Name ?? string.Empty 
                 }).ToList(),
-                ShippingStatus = null,  // Set based on your business logic
-                DelivaryDate = null     // Set based on your business logic, e.g., from Shipping
+                ShippingStatus = order.Shipping.ShippingStatus, 
+                DelivaryDate = order.Shipping.EstimatedDeliveryDate    
             }).ToList();
         }
 

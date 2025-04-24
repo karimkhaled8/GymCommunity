@@ -17,10 +17,8 @@ namespace Gym_Community.Domain.Data.Models.E_comm
 
         [ForeignKey("Payment")]
         public int PaymentId { get; set; }
-        public Payment Payment { get; set; }
+        public Payment Payment { get; set; } //create payment service
 
-        [ForeignKey("Shipping")]
-        public int ShipingId { get; set; }
         public Shipping Shipping { get; set; }
 
         public DateTime OrderDate { get; set; } = DateTime.Now;

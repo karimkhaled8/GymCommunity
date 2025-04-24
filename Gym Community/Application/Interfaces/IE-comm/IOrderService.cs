@@ -4,7 +4,7 @@ namespace Gym_Community.Application.Interfaces.IE_comm
 {
     public interface IOrderService
     {
-        Task<OrderDto?> CreateOrderAsync(OrderDto orderDto);
+        Task<OrderDto?> CreateOrderAsync(OrderDto orderDto,string userId);
         Task<IEnumerable<OrderDto>> GetOrdersAsync();
         public Task<IEnumerable<OrderDto>> GetUserOrderAsync(string userId);
         Task<OrderDto?> GetOrderByIdAsync(int id);
