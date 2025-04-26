@@ -228,7 +228,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             try
             {
                 var userId = GetUserId();
-                if (!IsCoachAuthorized(planDto.TrainingPlan.CoachId))
+                if (!IsCoachAuthorized(userId))
                     return StatusCode(403, new { message = "Only the assigned coach can create week plans" });
 
                 var plan = _mapper.Map<WeekPlan>(planDto);
@@ -358,6 +358,28 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "An error occurred while retrieving training plans", error = ex.Message });
+            }
+        }
+        //get training plan by id
+        [HttpGet("get/{id}")]
+        public async Task<IActionResult> GetTrainingPlanById(int id)
+        {
+            try
+            {
+                var userId = GetUserId();
+                var plan = await _trainingPlanRepository.GetByIdAsync(id, userId);
+                if (plan == null)
+                    return NotFound(new { message = "Training plan not found or you don't have access to it" });
+                var planDto = _mapper.Map<TrainingPlanDto>(plan);
+                return Ok(planDto);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving the training plan", error = ex.Message });
             }
         }
 

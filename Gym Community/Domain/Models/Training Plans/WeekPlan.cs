@@ -11,6 +11,7 @@ namespace Gym_Community.Domain.Models.Coach_Plans
         public int Id { get; set; }
         [ForeignKey("ClientPlan")]
         public int TrainingPlanId { get; set; }
+        [NotMapped]
         public TrainingPlan TrainingPlan { get; set; }
 
         public string WeekName { get; set; }

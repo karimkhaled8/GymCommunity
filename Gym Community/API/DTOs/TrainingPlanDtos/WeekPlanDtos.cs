@@ -9,7 +9,7 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         [Required]
         public int TrainingPlanId { get; set; }
         
-        public TrainingPlan TrainingPlan { get; set; }
+        //public TrainingPlan TrainingPlan { get; set; }
         
         [Required]
         public string WeekName { get; set; }

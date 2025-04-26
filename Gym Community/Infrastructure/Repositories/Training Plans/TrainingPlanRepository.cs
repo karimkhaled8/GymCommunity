@@ -22,6 +22,7 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
         {
             return await _dbSet
                 .Include(tp => tp.WeekPlans)
+                .ThenInclude(wp => wp.WorkoutDays)
                 .Where(tp => tp.Id == id && (tp.ClientId == userId || tp.CoachId == userId))
                 .FirstOrDefaultAsync();
         }

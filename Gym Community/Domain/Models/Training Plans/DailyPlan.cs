@@ -10,6 +10,7 @@ namespace Gym_Community.Domain.Data.Models.Meals_and_Exercise
         public int Id { get; set; }
         [ForeignKey("WeekPlan")]
         public int WeekPlanId { get; set; }
+        [NotMapped]
         public WeekPlan WeekPlan { get; set; }
         public string ExtraTips { get; set; }
         public DateTime DayDate { get; set; }
