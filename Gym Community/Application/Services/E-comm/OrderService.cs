@@ -55,6 +55,8 @@ namespace Gym_Community.Application.Services.E_comm
                 TrackingNumber = orderDto.Shipping.TrackingNumber,
                 Latitude = orderDto.Shipping.Latitude,
                 Longitude = orderDto.Shipping.Longitude,
+                CustomerName = orderDto.Shipping.CustomerName,
+                PhoneNumber = orderDto.Shipping.PhoneNumber,
                 EstimatedDeliveryDate = orderDto.Shipping.EstimatedDeliveryDate,
                 ShippingStatus = ShippingStatus.Pending,
                 ShippingAddress = orderDto.Shipping.ShippingAddress
@@ -80,6 +82,8 @@ namespace Gym_Community.Application.Services.E_comm
                 {
                     OrderID = createdShipping.OrderID,
                     Carrier = createdShipping.Carrier,
+                    CustomerName = createdShipping.CustomerName,
+                    PhoneNumber = createdShipping.PhoneNumber,
                     TrackingNumber = createdShipping.TrackingNumber,
                     Latitude = createdShipping.Latitude,
                     Longitude = createdShipping.Longitude,
@@ -111,6 +115,8 @@ namespace Gym_Community.Application.Services.E_comm
                 {
                     Carrier = order.Shipping.Carrier,
                     TrackingNumber = order.Shipping.TrackingNumber,
+                    CustomerName = order.Shipping.CustomerName,
+                    PhoneNumber = order.Shipping.PhoneNumber,
                     Latitude = order.Shipping.Latitude,
                     Longitude = order.Shipping.Longitude,
                     EstimatedDeliveryDate = order.Shipping.EstimatedDeliveryDate,
@@ -139,6 +145,8 @@ namespace Gym_Community.Application.Services.E_comm
                 {
                     Carrier = order.Shipping.Carrier,
                     TrackingNumber = order.Shipping.TrackingNumber,
+                    CustomerName = order.Shipping.CustomerName,
+                    PhoneNumber = order.Shipping.PhoneNumber,
                     Latitude = order.Shipping.Latitude,
                     Longitude = order.Shipping.Longitude,
                     EstimatedDeliveryDate = order.Shipping.EstimatedDeliveryDate,
@@ -172,6 +180,8 @@ namespace Gym_Community.Application.Services.E_comm
                 {
                     Carrier = order.Shipping.Carrier,
                     TrackingNumber = order.Shipping.TrackingNumber,
+                    CustomerName = order.Shipping.CustomerName,
+                    PhoneNumber = order.Shipping.PhoneNumber,
                     Latitude = order.Shipping.Latitude,
                     Longitude = order.Shipping.Longitude,
                     EstimatedDeliveryDate = order.Shipping.EstimatedDeliveryDate,
@@ -218,6 +228,8 @@ namespace Gym_Community.Application.Services.E_comm
                 {
                     Carrier = updatedOrder.Shipping.Carrier,
                     TrackingNumber = updatedOrder.Shipping.TrackingNumber,
+                    CustomerName = updatedOrder.Shipping.CustomerName,
+                    PhoneNumber = updatedOrder.Shipping.PhoneNumber,
                     Latitude = updatedOrder.Shipping.Latitude,
                     Longitude = updatedOrder.Shipping.Longitude,
                     EstimatedDeliveryDate = updatedOrder.Shipping.EstimatedDeliveryDate,

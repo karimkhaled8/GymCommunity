@@ -20,7 +20,7 @@ namespace Gym_Community.Application.Services.E_comm
                 Amount = paymentDto.Amount,
                 Currency = paymentDto.Currency,
                 PaymentMethod = paymentDto.PaymentMethod,
-                Status = PaymentStatus.Pending,
+                Status = paymentDto.Status,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

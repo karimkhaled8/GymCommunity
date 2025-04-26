@@ -21,6 +21,8 @@ namespace Gym_Community.Domain.Data.Models.Payment_and_Shipping
         public string TrackingNumber { get; set; }
         public double Latitude { get; set; } 
         public double Longitude { get; set; }
+        public string PhoneNumber { get; set; }
+        public string CustomerName { get; set; }
         public DateTime? EstimatedDeliveryDate { get; set; }
 
         [MaxLength(50)]
