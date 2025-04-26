@@ -65,7 +65,7 @@ namespace Gym_Community.API.Controllers.Ecommerce
         public async Task<IActionResult> CreateOrder([FromBody] OrderDto orderDto)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (getUserID == null) return BadRequest("User ID is required"); 
+            if (getUserID() == null) return BadRequest("User ID is required"); 
             var order = await _orderService.CreateOrderAsync(orderDto, getUserID());
             if (order == null) return NotFound();
             return Ok(order);
