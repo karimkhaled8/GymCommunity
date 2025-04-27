@@ -64,6 +64,17 @@ namespace Gym_Community.Application.Services.E_comm
             };
 
             var addedReview = await _reviewRepository.AddAsync(review);
+
+            // Debugging line to ensure the review is created
+            if (addedReview != null)
+            {
+                Console.WriteLine($"Review created successfully for product {reviewDto.ProductID}");
+            }
+            else
+            {
+                Console.WriteLine("Failed to create review");
+            }
+
             return addedReview?.Id ?? 0;
         }
 
