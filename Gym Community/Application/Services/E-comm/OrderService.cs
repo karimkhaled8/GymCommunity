@@ -167,6 +167,7 @@ namespace Gym_Community.Application.Services.E_comm
             {
                 Id = order.OrderID,
                 UserID = order.UserID,
+                OrderDate = order.OrderDate,
                 OrderItems = order.OrderItems.Select(oi => new OrderItemDto
                 {
                     Id = oi.Id,
