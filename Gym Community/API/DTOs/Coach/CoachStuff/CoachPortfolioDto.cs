@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace Gym_Community.API.DTOs.Coach.CoachStuff
 {
@@ -13,5 +14,7 @@ namespace Gym_Community.API.DTOs.Coach.CoachStuff
         public int ExperienceYears { get; set; }
         public List<string> SkillsJson { get; set; } 
         public List<string> SocialMediaLinksJson { get; set; }
+
+        
     }
 }
