@@ -45,8 +45,8 @@ namespace Gym_Community.API.Controllers.Ecommerce
         {
             var userId = getUserID();
             if (string.IsNullOrEmpty(userId)) return Unauthorized();
-            var role = await _authService.GetRole(userId);
-            if (role == null) return BadRequest(new { sucess = false, message = "Not Authantictated" });
+            //var role = await _authService.GetRole(userId);
+            //if (role == null) return BadRequest(new { sucess = false, message = "Not Authantictated" });
             var orders = await _orderService.GetUserOrderAsync(userId);    
             return Ok(orders);
         }
