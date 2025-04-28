@@ -32,11 +32,15 @@ namespace Gym_Community.API.Controllers.Ecommerce
             var products = await _productService.GetUserProducts(getUserId());
             return products.Any() ? Ok(products) : Ok(new { success = true, message = "No products Found" });
         }
-        [HttpGet("category/{id}")]
-        public async Task<IActionResult> GetProductsByCategory(int id)
+
+        // filter by category 
+        [HttpGet("by-category/{categoryId}")]
+        public async Task<IActionResult> GetProductsByCategory(int categoryId)
         {
-            var products = await _productService.getProductsByCategory(id);
-            return products.Any() ? Ok(products) : Ok(new { success = true, message = "No products Found" });
+            var products = await _productService.GetProductsByCategory(categoryId);
+            return products.Any()
+                ? Ok(products)
+                : Ok(new { success = true, message = "No products found for this category" });
         }
 
         [HttpGet("{id}")]
@@ -107,7 +111,7 @@ namespace Gym_Community.API.Controllers.Ecommerce
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
 
-        // for filteration 
+        // for filteration by brand
         [HttpGet("by-brand/{brandId}")]
         public async Task<IActionResult> GetProductsByBrand(int brandId)
         {
@@ -116,5 +120,32 @@ namespace Gym_Community.API.Controllers.Ecommerce
                 ? Ok(products)
                 : Ok(new { success = true, message = "No products found for this brand" });
         }
+
+        // filter by price 
+
+        // In ProductController.cs
+        [HttpGet("by-price")]
+        public async Task<IActionResult> GetProductsByPriceRange(
+            [FromQuery] decimal? minPrice,
+            [FromQuery] decimal? maxPrice,
+            [FromQuery] int? categoryId)
+        {
+            IEnumerable<ProductDTO> products;
+
+            if (categoryId.HasValue)
+            {
+                products = await _productService.GetProductsByPriceRangeAndCategory(
+                    categoryId, minPrice, maxPrice);
+            }
+            else
+            {
+                products = await _productService.GetProductsByPriceRange(minPrice, maxPrice);
+            }
+
+            return products.Any()
+                ? Ok(products)
+                : Ok(new { success = true, message = "No products found in this price range" });
+        }
+
     }
 }

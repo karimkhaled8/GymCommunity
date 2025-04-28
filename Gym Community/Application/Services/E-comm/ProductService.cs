@@ -30,33 +30,14 @@ namespace Gym_Community.Application.Services.E_comm
                 CategoryID = p.CategoryID,
                 CategoryName = p.Category?.Name ?? string.Empty,
                 BrandId = p.BrandId,
-                BrandName = p.Category?.Name ?? string.Empty
+                BrandName = p.Brand?.Name ?? string.Empty
+
             });
 
             return productDtos;
         }
         
-             public async Task<IEnumerable<ProductDTO>> getProductsByCategory(int categoryId)
-        {
-            var products = await _productRepository.ListbyCategoryAsync(categoryId);
-            var productDtos = products.Select(p => new ProductDTO
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price,
-                Stock = p.Stock,
-                ImageUrl = p.ImageUrl,
-                CreatedAt = p.CreatedAt,
-                AverageRating = p.AverageRating,
-                CategoryID = p.CategoryID,
-                CategoryName = p.Category?.Name ?? string.Empty,
-                BrandId = p.BrandId,
-                BrandName = p.Category?.Name ?? string.Empty
-            });
-
-            return productDtos;
-        }
+        
         public async Task<IEnumerable<ProductDTO>> SearchProducts(string name)
         {
             var products = await _productRepository.ListAsync(name);
@@ -73,7 +54,8 @@ namespace Gym_Community.Application.Services.E_comm
                 CategoryID = p.CategoryID,
                 CategoryName = p.Category?.Name ?? string.Empty,
                 BrandId = p.BrandId,
-                BrandName = p.Category?.Name ?? string.Empty
+                BrandName = p.Brand?.Name ?? string.Empty
+
             });
 
             return productDtos;
@@ -97,7 +79,8 @@ namespace Gym_Community.Application.Services.E_comm
                 CategoryID = product.CategoryID,
                 CategoryName = product.Category?.Name ?? string.Empty,
                 BrandId = product.BrandId,
-                BrandName = product.Category?.Name ?? string.Empty
+                BrandName = product.Brand?.Name ?? string.Empty
+
             };
 
             return productDto;
@@ -134,7 +117,7 @@ namespace Gym_Community.Application.Services.E_comm
                 CategoryID = addedProduct.CategoryID,
                 CategoryName = addedProduct.Category?.Name ?? string.Empty,
                 BrandId = addedProduct.BrandId,
-                BrandName = addedProduct.Category?.Name ?? string.Empty
+                BrandName = addedProduct.Brand?.Name ?? string.Empty
             }; 
         }
 
@@ -166,7 +149,7 @@ namespace Gym_Community.Application.Services.E_comm
                 CategoryID = updatedProduct.CategoryID,
                 CategoryName = updatedProduct.Category?.Name ?? string.Empty,
                 BrandId = updatedProduct.BrandId,
-                BrandName = updatedProduct.Category?.Name ?? string.Empty
+                BrandName = updatedProduct.Brand?.Name ?? string.Empty
             };
 
         }
@@ -196,7 +179,8 @@ namespace Gym_Community.Application.Services.E_comm
                 CategoryID = p.CategoryID,
                 CategoryName = p.Category?.Name ?? string.Empty,
                 BrandId = p.BrandId,
-                BrandName = p.Category?.Name ?? string.Empty
+                BrandName = p.Brand?.Name ?? string.Empty
+
             });
             return productDtos;
         }
@@ -223,6 +207,61 @@ namespace Gym_Community.Application.Services.E_comm
                     BrandName = p.Brand?.Name ?? string.Empty // Fixed: Changed from p.Category to p.Brand
                 })
                 .ToList();
+        }
+
+        // filter by category 
+
+        public async Task<IEnumerable<ProductDTO>> GetProductsByCategory(int categoryId)
+        {
+            var products = await _productRepository.GetProductsByCategoryAsync(categoryId);
+            return products.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                ImageUrl = p.ImageUrl,
+                CreatedAt = p.CreatedAt,
+                AverageRating = p.AverageRating,
+                CategoryID = p.CategoryID,
+                CategoryName = p.Category?.Name ?? string.Empty,
+                BrandId = p.BrandId,
+                BrandName = p.Brand?.Name ?? string.Empty
+
+            });
+        }
+
+        // filter by price 
+        public async Task<IEnumerable<ProductDTO>> GetProductsByPriceRange(decimal? minPrice, decimal? maxPrice)
+        {
+            var products = await _productRepository.GetProductsByPriceRangeAsync(minPrice, maxPrice);
+            return MapProductsToDTOs(products);
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetProductsByPriceRangeAndCategory(int? categoryId, decimal? minPrice, decimal? maxPrice)
+        {
+            var products = await _productRepository.GetProductsByPriceRangeAndCategoryAsync(categoryId, minPrice, maxPrice);
+            return MapProductsToDTOs(products);
+        }
+
+        private IEnumerable<ProductDTO> MapProductsToDTOs(IEnumerable<Product> products)
+        {
+            return products.Select(p => new ProductDTO
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                ImageUrl = p.ImageUrl,
+                CreatedAt = p.CreatedAt,
+                AverageRating = p.AverageRating,
+                CategoryID = p.CategoryID,
+                CategoryName = p.Category?.Name ?? string.Empty,
+                BrandId = p.BrandId,
+                BrandName = p.Brand?.Name ?? string.Empty
+            });
         }
     }
 }
