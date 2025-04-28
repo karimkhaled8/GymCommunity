@@ -20,6 +20,9 @@ namespace Gym_Community.Application.Services.CoachStuff
             return ratings.Select(r => new CoachRatingDto
             {
                 Id = r.Id,
+                ClientFirstName = r.Coach.FirstName,
+                ClientLastName = r.Coach.LastName,
+                
                 ClientId = r.ClientId,
                 CoachId = r.CoachId,
                 Rate = r.Rate,

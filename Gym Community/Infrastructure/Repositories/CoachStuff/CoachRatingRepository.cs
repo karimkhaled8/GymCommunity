@@ -17,13 +17,13 @@ namespace Gym_Community.Infrastructure.Repositories.CoachStuff
         public async Task<IEnumerable<CoachRating>> GetByCoachIdAsync(string coachId)
         {
             return await _context.CoachRatings
-                .Where(r => r.CoachId == coachId)
+                .Where(r => r.CoachId == coachId).Include(c => c.Coach)
                 .ToListAsync();
         }
 
         public async Task<CoachRating?> GetByIdAsync(int id)
         {
-            return await _context.CoachRatings.FindAsync(id);
+            return await _context.CoachRatings.Include(c => c.Coach).FirstOrDefaultAsync(c=>c.Id==id);
         }
 
         public async Task AddAsync(CoachRating rating)
