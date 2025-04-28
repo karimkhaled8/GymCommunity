@@ -12,5 +12,6 @@ namespace Gym_Community.Application.Interfaces.IE_comm
         Task<ProductDTO?> CreateProduct(ProductDTO productDto);
         Task<ProductDTO?> UpdateProduct(int productId, ProductDTO productDto);
         Task<bool> DeleteProduct(int productId);
+        Task<IEnumerable<ProductDTO>> GetProductsByBrand(int brandId);
     }
 }

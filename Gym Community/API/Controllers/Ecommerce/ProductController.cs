@@ -106,5 +106,15 @@ namespace Gym_Community.API.Controllers.Ecommerce
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
+
+        // for filteration 
+        [HttpGet("by-brand/{brandId}")]
+        public async Task<IActionResult> GetProductsByBrand(int brandId)
+        {
+            var products = await _productService.GetProductsByBrand(brandId);
+            return products.Any()
+                ? Ok(products)
+                : Ok(new { success = true, message = "No products found for this brand" });
+        }
     }
 }

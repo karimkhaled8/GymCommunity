@@ -6,6 +6,7 @@ namespace Gym_Community.Infrastructure.Interfaces.ECommerce
     {
         public Task<Brand?> AddAsync(Brand brand);
         public Task<IEnumerable<Brand>> ListAsync();
+        public Task<IEnumerable<Brand>> GetFilteredBrandsAsync(string? nameFilter); // Add this for filtering
         public Task<Brand?> GetById(int id);
         public Task<Brand?> UpdateAsync(Brand brand);
         public Task<bool> RemoveAsync(Brand brand); 

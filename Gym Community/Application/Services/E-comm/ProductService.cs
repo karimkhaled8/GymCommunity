@@ -200,5 +200,29 @@ namespace Gym_Community.Application.Services.E_comm
             });
             return productDtos;
         }
+
+        public async Task<IEnumerable<ProductDTO>> GetProductsByBrand(int brandId)
+        {
+            var products = await _productRepository.ListAsync(); // Gets all products with includes
+
+            return products
+                .Where(p => p.BrandId == brandId)
+                .Select(p => new ProductDTO
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    Stock = p.Stock,
+                    ImageUrl = p.ImageUrl,
+                    CreatedAt = p.CreatedAt,
+                    AverageRating = p.AverageRating,
+                    CategoryID = p.CategoryID,
+                    CategoryName = p.Category?.Name ?? string.Empty,
+                    BrandId = p.BrandId,
+                    BrandName = p.Brand?.Name ?? string.Empty // Fixed: Changed from p.Category to p.Brand
+                })
+                .ToList();
+        }
     }
 }

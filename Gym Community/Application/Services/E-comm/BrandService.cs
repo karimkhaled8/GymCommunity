@@ -43,6 +43,17 @@ namespace Gym_Community.Application.Services.E_comm
             }).ToList();
         }
 
+        public async Task<IEnumerable<BrandDTO>> GetFilteredBrands(string? nameFilter)
+        {
+            var brands = await _brandRepository.GetFilteredBrandsAsync(nameFilter);
+            return brands.Select(b => new BrandDTO
+            {
+                BrandID = b.BrandID,
+                Name = b.Name,
+                Description = b.Description
+            });
+        }
+
         public async Task<BrandDTO?> GetBrandById(int brandId)
         {
             var brand = await _brandRepository.GetById(brandId);

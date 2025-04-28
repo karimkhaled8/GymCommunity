@@ -22,7 +22,14 @@ namespace Gym_Community.API.Controllers.Ecommerce
             return Ok(brands);
         }
 
-        
+        [HttpGet("filter")]
+        public async Task<IActionResult> GetFilteredBrands([FromQuery] string? name)
+        {
+            var brands = await _brandService.GetFilteredBrands(name);
+            return Ok(brands);
+        }
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {

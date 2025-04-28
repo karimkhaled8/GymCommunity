@@ -25,6 +25,17 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         {
             return await _context.Brands.ToListAsync(); 
         }
+        public async Task<IEnumerable<Brand>> GetFilteredBrandsAsync(string? name = null)
+        {
+            var query = _context.Brands.AsQueryable();
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(b => b.Name.Contains(name));
+            }
+
+            return await query.ToListAsync();
+        }
         public async Task<Brand?> GetById(int id)
         {
             return await _context.Brands.FirstOrDefaultAsync(b => b.BrandID == id);
