@@ -20,12 +20,45 @@ namespace Gym_Community.API.Controllers.Ecommerce
             _productService = ps;
             _awsService = aws; 
         }
+
+
+
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(
+            string query = ""
+            , int page = 1
+            , int eleNo = 8
+            , int? categoryId = null
+            , int? brandId = null
+            , string sort ="asc"
+            , decimal? minPrice = null
+            , decimal? maxPrice = null
+            )
         {
-            var products = await _productService.GetProducts();
-            return products.Any() ? Ok(products) : Ok(new {success = true ,message = "No products Found" });
+            var userId = getUserId();
+            var userRole = "Client"; 
+            //var access="Client"; 
+            if (string.IsNullOrEmpty(userId))
+            {
+                
+            }
+            var totalCount = await _productService.GetTotalCount(query,categoryId,brandId,minPrice,maxPrice);
+            var totalPages = (int)Math.Ceiling((double)totalCount / eleNo);
+            var products = await _productService.GetProducts(query, page, eleNo,categoryId,brandId,sort,minPrice,maxPrice);
+
+            return Ok(new
+            {
+                success = true,
+                data = products,
+                totalCount = totalCount,
+                totalPages = totalPages,
+                message = products.Any() ? null : "No products found"
+            });
         }
+
+
+
+
         [HttpGet("user")]
         public async Task<IActionResult> GetUser()
         {

@@ -14,9 +14,9 @@ namespace Gym_Community.Application.Services.E_comm
             _productRepository = productRepository;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetProducts()
+        public async Task<IEnumerable<ProductDTO>> GetProducts(string query, int page, int eleNo, int? categoryId, int? brandId, string sort, decimal? minPrice, decimal? maxPrice)
         {
-            var products = await _productRepository.ListAsync();
+            var products = await _productRepository.ListAsync(query,page,eleNo, sort, categoryId,brandId,minPrice,maxPrice);
             var productDtos = products.Select(p => new ProductDTO
             {
                 Id = p.Id,
@@ -36,8 +36,12 @@ namespace Gym_Community.Application.Services.E_comm
 
             return productDtos;
         }
-        
-        
+        public async Task<int> GetTotalCount(string query,int? categoryId,int? brandId,decimal? minPrice,decimal? maxPrice)
+        {
+            return await _productRepository.GetTotalCount(query,categoryId,brandId,minPrice,maxPrice); 
+        }
+
+
         public async Task<IEnumerable<ProductDTO>> SearchProducts(string name)
         {
             var products = await _productRepository.ListAsync(name);

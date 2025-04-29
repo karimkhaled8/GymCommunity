@@ -4,9 +4,10 @@ namespace Gym_Community.Application.Interfaces.IE_comm
 {
     public interface IProductService
     {
-        Task<IEnumerable<ProductDTO>> GetProducts();
+        Task<IEnumerable<ProductDTO>> GetProducts(string query,int page,int eleNo,int? categoryId,int? brandId,string sort,decimal?minPrice,decimal?maxPrice);
         public Task<IEnumerable<ProductDTO>> SearchProducts(string name);
-      
+        public Task<int> GetTotalCount(string query,int? categoryId,int? productId,decimal? minPrice,decimal?maxPrice);
+
         Task<IEnumerable<ProductDTO>> GetUserProducts(string userId);
         Task<ProductDTO?> GetProductById(int productId);
         Task<ProductDTO?> CreateProduct(ProductDTO productDto);

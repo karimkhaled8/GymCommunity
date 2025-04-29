@@ -2,6 +2,7 @@
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Gym_Community.Infrastructure.Repositories.ECommerce
 {
@@ -25,13 +26,85 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
                 return null;
             }
         }
-        public async Task<IEnumerable<Product>> ListAsync()
+        public async Task<IEnumerable<Product>> ListAsync(string query, int page, int eleNo, string sort, int? categoryId, int? brandId, decimal? minPrice, decimal? maxPrice)
         {
-            return await _context.Products
-                .Include(p => p.Brand)
-                .Include(p => p.Category)
-                .ToListAsync();
+            var queryable = _context.Products
+                            .Include(p => p.Brand)
+                            .Include(p => p.Category)
+                            .AsQueryable();
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                queryable = queryable.Where(p => p.Name.Contains(query));
+            }
+
+            if (categoryId.HasValue)
+            {
+                queryable = queryable.Where(p => p.CategoryID == categoryId.Value);
+            }
+
+            if (brandId.HasValue)
+            {
+                queryable = queryable.Where(p => p.BrandId == brandId.Value);
+            }
+
+            if (minPrice.HasValue)
+            {
+                queryable = queryable.Where(p => p.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                queryable = queryable.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            // Sorting by price
+            if (sort == "asc")
+            {
+                queryable = queryable.OrderBy(p => p.Price);
+            }
+            else if (sort == "desc")
+            {
+                queryable = queryable.OrderByDescending(p => p.Price);
+            }
+            return await queryable
+                    .Skip((page - 1) * eleNo)
+                    .Take(eleNo)
+                    .ToListAsync();
         }
+        public async Task<int> GetTotalCount(string query, int? categoryId, int? brandId, decimal? minPrice, decimal? maxPrice)
+        {
+            var queryable = _context.Products.AsQueryable();
+
+            if (!string.IsNullOrEmpty(query))
+            {
+                queryable = queryable.Where(p => p.Name.Contains(query));
+            }
+
+            if (categoryId.HasValue)
+            {
+                queryable = queryable.Where(p => p.CategoryID == categoryId.Value);
+            }
+
+            if (brandId.HasValue)
+            {
+                queryable = queryable.Where(p => p.BrandId == brandId.Value);
+            }
+
+            if (minPrice.HasValue)
+            {
+                queryable = queryable.Where(p => p.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                queryable = queryable.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            return await queryable.CountAsync();
+        }
+
+
         public async Task<IEnumerable<Product>> ListAsync(string name)
         {
             return await _context.Products
