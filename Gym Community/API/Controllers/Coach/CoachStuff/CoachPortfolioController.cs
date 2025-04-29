@@ -48,27 +48,35 @@ namespace Gym_Community.API.Controllers.CoachStuff
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CoachPortfolioDto dto, [FromForm] IFormFile AboutMeImageUrl)
         {
-
+           
             string imageUrl = string.Empty;
             if (AboutMeImageUrl != null)
             {
-
                 imageUrl = await _awsService.UploadFileAsync(AboutMeImageUrl, "ProfileImages");
-
             }
-            var CoachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (CoachId == null) return Unauthorized();
 
-            dto.CoachId = CoachId;
+           
+            var coachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (coachId == null) return Unauthorized();
+
+           
+            var existingPortfolio = await _service.GetByCoachIdAsync(coachId);
+            if (existingPortfolio != null)
+            {
+                return BadRequest(new { message = "Portfolio already exists for this coach." });
+            }
+
+
+            dto.CoachId = coachId;
             dto.AboutMeImageUrl = imageUrl;
 
             var success = await _service.CreateAsync(dto);
             return success
-       ? Ok(new { message = "Portfolio created successfully" })
-       : BadRequest(new { message = "Failed to create portfolio" });
+                ? Ok(new { message = "Portfolio created successfully" })
+                : BadRequest(new { message = "Failed to create portfolio" });
         }
 
-        [HttpPut("{id}")]
+            [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromForm] CoachPortfolioDto dto, [FromForm] IFormFile? AboutMeImageUrl)
         {
             var coachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
