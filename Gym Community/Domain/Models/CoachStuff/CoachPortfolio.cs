@@ -19,8 +19,8 @@ namespace Gym_Community.Domain.Models.CoachStuff
 
         public string Qualifications { get; set; } // Certifications or degrees
         public int ExperienceYears { get; set; } 
-        public List<string> SkillsJson { get; set; } 
-        public List<string> SocialMediaLinksJson { get; set; }
+        public string SkillsJson { get; set; } 
+        public string SocialMediaLinksJson { get; set; }
 
     }
 }
