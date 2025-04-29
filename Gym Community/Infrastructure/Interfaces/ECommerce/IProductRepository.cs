@@ -9,9 +9,12 @@ namespace Gym_Community.Infrastructure.Interfaces.ECommerce
         public Task<IEnumerable<Product>> ListAsync();
         public Task<IEnumerable<Product>> ListAsync(string name);
         public Task<IEnumerable<Product>> ListUserAsync(string userId);
-        public Task<IEnumerable<Product>> ListbyCategoryAsync(int caategoryId);
         public Task<Product?> GetById(int id);
         public Task<Product?> UpdateAsync(Product product);
         public Task<bool> RemoveAsync(Product product);
+        Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId);//filter by category
+                                                                              // In IProductRepository.cs
+        Task<IEnumerable<Product>> GetProductsByPriceRangeAsync(decimal? minPrice, decimal? maxPrice);
+        Task<IEnumerable<Product>> GetProductsByPriceRangeAndCategoryAsync(int? categoryId, decimal? minPrice, decimal? maxPrice);
     }
 }

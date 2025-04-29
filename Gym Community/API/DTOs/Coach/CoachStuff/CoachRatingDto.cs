@@ -3,6 +3,12 @@
     public class CoachRatingDto
     {
         public int Id { get; set; }
+
+        public string ClientFirstName { get; set; }
+        public string ClientLastName
+        {
+            get; set;
+        }
         public string ClientId { get; set; }
         public string CoachId { get; set; }
         public int Rate { get; set; }

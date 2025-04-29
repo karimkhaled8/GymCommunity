@@ -21,6 +21,9 @@ namespace Gym_Community.Application.Services.CoachStuff
             return items.Select(p => new CoachPortfolioDto
             {
                 Id = p.Id,
+                coachFirstName = p.Coach.FirstName,
+                coachLastName = p.Coach.LastName,
+                gender = p.Coach.Gender,
                 CoachId = p.CoachId,
                 AboutMeImageUrl = p.AboutMeImageUrl,
                 AboutMeDescription = p.AboutMeDescription,
@@ -40,6 +43,9 @@ namespace Gym_Community.Application.Services.CoachStuff
             {
                 Id = p.Id,
                 CoachId = p.CoachId,
+                coachFirstName = p.Coach.FirstName,
+                coachLastName = p.Coach.LastName,
+                gender = p.Coach.Gender,
                 AboutMeImageUrl = p.AboutMeImageUrl,
                 AboutMeDescription = p.AboutMeDescription,
                 Qualifications = p.Qualifications,
@@ -58,6 +64,9 @@ namespace Gym_Community.Application.Services.CoachStuff
             {
                 Id = p.Id,
                 CoachId = p.CoachId,
+                coachFirstName = p.Coach.FirstName,
+                coachLastName = p.Coach.LastName,
+                gender = p.Coach.Gender,
                 AboutMeImageUrl = p.AboutMeImageUrl,
                 AboutMeDescription = p.AboutMeDescription,
                 Qualifications = p.Qualifications,

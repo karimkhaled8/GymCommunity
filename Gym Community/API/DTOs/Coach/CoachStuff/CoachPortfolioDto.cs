@@ -8,6 +8,12 @@ namespace Gym_Community.API.DTOs.Coach.CoachStuff
         public  int Id { get; set; }
         public string  CoachId { get; set; }
 
+        public string coachFirstName { get; set; }
+        public string coachLastName { get; set; }
+
+        public string gender { get; set; }
+
+
         public string? AboutMeImageUrl { get; set; }
         public string AboutMeDescription { get; set; }
         public string Qualifications { get; set; }

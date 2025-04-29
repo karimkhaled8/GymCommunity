@@ -14,17 +14,17 @@ namespace Gym_Community.Infrastructure.Repositories.CoachStuff
         }
         public async Task<IEnumerable<CoachPortfolio>> GetAllAsync()
         {
-            return await _context.CoachPortfolios.ToListAsync();
+            return await _context.CoachPortfolios.Include(c=>c.Coach).ToListAsync();
         }
 
         public async Task<CoachPortfolio?> GetByIdAsync(int id)
         {
-            return await _context.CoachPortfolios.FindAsync(id);
+            return await _context.CoachPortfolios.Include(c => c.Coach).FirstOrDefaultAsync(c=>c.Id==id);
         }
 
         public async Task<CoachPortfolio?> GetByCoachIdAsync(string coachId)
         {
-            return await _context.CoachPortfolios.FirstOrDefaultAsync(p => p.CoachId == coachId);
+            return await _context.CoachPortfolios.Include(c => c.Coach).FirstOrDefaultAsync(p => p.CoachId == coachId);
         }
 
         public async Task AddAsync(CoachPortfolio portfolio)

@@ -35,19 +35,12 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         public async Task<IEnumerable<Product>> ListAsync(string name)
         {
             return await _context.Products
-                .Where(p=>p.Name.Contains(name))
+                .Where(p => p.Name.ToLower().Contains(name.ToLower()))
                 .Include(p => p.Brand)
                 .Include(p => p.Category)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<Product>> ListbyCategoryAsync(int categoryId)
-        {
-            return await _context.Products
-                .Where(p => p.CategoryID==categoryId)
-                .Include(p => p.Brand)
-                .Include(p => p.Category)
-                .ToListAsync();
-        }
+
         public async Task<Product?> GetById(int id)
         {
             return await _context.Products
@@ -92,6 +85,65 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
                 .Include(p => p.Brand)
                 .Where(p => p.OwnerId == userId).ToListAsync();
             return products;
+        }
+
+        // filter by category
+
+        public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
+        {
+            return await _context.Products
+                .Where(p => p.CategoryID == categoryId)
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .ToListAsync();
+        }
+
+        // filter by price 
+
+        // In ProductRepository.cs
+        public async Task<IEnumerable<Product>> GetProductsByPriceRangeAsync(decimal? minPrice, decimal? maxPrice)
+        {
+            var query = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            return await query.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsByPriceRangeAndCategoryAsync(int? categoryId, decimal? minPrice, decimal? maxPrice)
+        {
+            var query = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .AsQueryable();
+
+            if (categoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryID == categoryId.Value);
+            }
+
+            if (minPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= maxPrice.Value);
+            }
+
+            return await query.ToListAsync();
         }
     }
 }
