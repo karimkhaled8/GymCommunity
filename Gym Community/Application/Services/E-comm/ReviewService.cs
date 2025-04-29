@@ -104,17 +104,21 @@ namespace Gym_Community.Application.Services.E_comm
         public async Task<IEnumerable<ReviewDTO>> GetProductReviews(int productId)
         {
             var reviews = await _reviewRepository.ListAsync();
-            var productReviews = reviews.Where(r => r.ProductID == productId).Select(r => new ReviewDTO
-            {
-                Id = r.Id,
-                Rating = r.Rating,
-                Comment = r.Comment,
-                CreatedAt = r.CreatedAt,
-                ProductID = r.ProductID,
-                UserID = r.UserID,
-                ProductName = r.Product?.Name,
-                UserName = r.AppUser?.UserName
-            });
+            var productReviews = reviews
+                .Where(r => r.ProductID == productId)
+                .Select(r => new ReviewDTO
+                {
+                    Id = r.Id,
+                    Rating = r.Rating,
+                    Comment = r.Comment,
+                    CreatedAt = r.CreatedAt,
+                    ProductID = r.ProductID,
+                    UserID = r.UserID,
+                    ProductName = r.Product?.Name,
+                    UserName = r.AppUser?.UserName ?? "Anonymous", // Fallback to "Anonymous" if null
+                    UserAvatar = r.AppUser?.ProfileImg // Include avatar if needed
+                })
+                .ToList();
 
             return productReviews;
         }

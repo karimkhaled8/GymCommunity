@@ -10,5 +10,6 @@
         public string? UserID { get; set; }
         public string? ProductName { get; set; }
         public string? UserName { get; set; }
+        public string? UserAvatar { get; set; } // Add this line
     }
 }
