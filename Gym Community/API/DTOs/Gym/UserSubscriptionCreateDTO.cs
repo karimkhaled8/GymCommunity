@@ -9,6 +9,8 @@ namespace Gym_Community.API.DTOs.Gym
         public int PlanId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime ExpiresAt { get; set; }
+
+        public PaymentStatus paymentStatus { get; set; }
     }
     public class UserSubscriptionUpdateDTO
     {

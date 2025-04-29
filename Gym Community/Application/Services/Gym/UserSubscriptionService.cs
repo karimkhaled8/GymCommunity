@@ -19,7 +19,8 @@ namespace Gym_Community.Application.Services.Gym
 
         public async Task<UserSubscriptionReadDTO?> CreateAsync(UserSubscriptionCreateDTO dto)
         {
-            var rawData = Guid.NewGuid().ToString();
+            var rawData = dto.UserId;
+            var currentTime = DateTime.UtcNow;
             Console.WriteLine("rawData: " + rawData);
             var subscription = new UserSubscription
             {
@@ -31,7 +32,8 @@ namespace Gym_Community.Application.Services.Gym
                 PurchaseDate = DateTime.UtcNow,
                 rawData = rawData,
                 QrCodeData = GenerateQrCodeBase64(rawData),
-                paymentStatus = PaymentStatus.Pending
+                paymentStatus = dto.paymentStatus,
+                IsExpired = dto.ExpiresAt <= currentTime
             };
 
             var result = await _repo.AddAsync(subscription);
@@ -54,6 +56,10 @@ namespace Gym_Community.Application.Services.Gym
         {
             var sub = await _repo.GetByIdAsync(id);
             return sub == null ? null : Map(sub);
+        }
+        public async Task<IEnumerable<UserSubscriptionReadDTO>> GetByUserIdAsync(string userId)
+        {
+            return (await _repo.GetByUserIdAsync(userId)).Select(Map);
         }
 
         public async Task<IEnumerable<UserSubscriptionReadDTO>> GetByGymIdAsync(int gymId)
@@ -81,15 +87,33 @@ namespace Gym_Community.Application.Services.Gym
         }
         public async Task<UserSubscriptionReadDTO?> ValidateQrCodeAsync(string qrCodeData)
         {
-            var allSubs = await _repo.GetAllAsync();
-            var sub = allSubs.FirstOrDefault(s => s.rawData == qrCodeData);
-
-            if (sub == null || sub.IsExpired || sub.paymentStatus != PaymentStatus.Completed || sub.ExpiresAt < DateTime.UtcNow)
+            if (string.IsNullOrWhiteSpace(qrCodeData))
             {
                 return null;
             }
 
-            return Map(sub);
+            var allSubs = await _repo.GetAllAsync();
+            var subscription = allSubs.FirstOrDefault(s => s.rawData == qrCodeData);
+
+            if (subscription == null)
+            {
+                return null; 
+            }
+
+            // Check expiration 
+            var isCurrentlyExpired = subscription.ExpiresAt < DateTime.UtcNow;
+            if (isCurrentlyExpired && !subscription.IsExpired)
+            {
+                subscription.IsExpired = true;
+                await _repo.UpdateAsync(subscription);
+            }
+
+            if (subscription.IsExpired ||
+                subscription.paymentStatus != PaymentStatus.Completed)
+            {
+                return null;
+            }
+            return Map(subscription);
         }
 
         private string GenerateQrCodeBase64(string qrText)

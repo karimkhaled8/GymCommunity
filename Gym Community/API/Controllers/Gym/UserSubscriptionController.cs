@@ -29,8 +29,15 @@ namespace Gym_Community.API.Controllers.Gym
             return sub == null ? NotFound() : Ok(sub);
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<UserSubscriptionReadDTO>>> GetByGymId(string userId)
+        {
+            var allSub = await _service.GetByUserIdAsync(userId);
+            return allSub == null ? NotFound() : Ok(allSub);
+        }
+
         [HttpGet("gym/{gymId}")]
-        public async Task<ActionResult<IEnumerable<UserSubscriptionReadDTO>>> GetByGymId(int gymId)
+        public async Task<ActionResult<IEnumerable<UserSubscriptionReadDTO>>> GetByUserId(int gymId)
         {
             var allSub = await _service.GetByGymIdAsync(gymId);
             return allSub == null ? NotFound() : Ok(allSub);

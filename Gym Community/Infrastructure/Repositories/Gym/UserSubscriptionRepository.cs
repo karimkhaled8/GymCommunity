@@ -44,6 +44,14 @@ namespace Gym_Community.Infrastructure.Repositories.Gym
                 .Include(u => u.Plan)
                 .FirstOrDefaultAsync();
         }
+        public async Task<IEnumerable<UserSubscription>> GetByUserIdAsync(string userId)
+        {
+            return await _context.UserSubscriptions.Where(x => x.UserId == userId)
+                .Include(u => u.User)
+                .Include(u => u.Gym)
+                .Include(u => u.Plan)
+                .ToListAsync();
+        }
 
         public async Task<IEnumerable<UserSubscription>> GetByGymIdAsync(int gymId)
         {
