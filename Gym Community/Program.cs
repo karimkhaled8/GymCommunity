@@ -5,12 +5,14 @@ using AutoMapper;
 using EmailServices;
 using Gym_Community.API.Mapping;
 using Gym_Community.Application.Interfaces;
+using Gym_Community.Application.Interfaces.Admin;
 using Gym_Community.Application.Interfaces.Client;
 using Gym_Community.Application.Interfaces.CoachStuff;
 using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Application.Services;
+using Gym_Community.Application.Services.Admin;
 using Gym_Community.Application.Services.Chat;
 using Gym_Community.Application.Services.Client;
 using Gym_Community.Application.Services.CoachStuff;
@@ -20,6 +22,7 @@ using Gym_Community.Application.Services.Gym;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces;
+using Gym_Community.Infrastructure.Interfaces.Admin;
 using Gym_Community.Infrastructure.Interfaces.Client;
 using Gym_Community.Infrastructure.Interfaces.CoachStuff;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
@@ -28,6 +31,7 @@ using Gym_Community.Infrastructure.Interfaces.Gym;
 using Gym_Community.Infrastructure.Interfaces.Meals_and_Exercise;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
 using Gym_Community.Infrastructure.Repositories;
+using Gym_Community.Infrastructure.Repositories.Admin;
 using Gym_Community.Infrastructure.Repositories.Client;
 using Gym_Community.Infrastructure.Repositories.CoachStuff;
 using Gym_Community.Infrastructure.Repositories.ECommerce;
@@ -179,7 +183,9 @@ namespace Gym_Community
             builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<IShippingRepository, ShippingRepository>();
-
+            //Admin
+            builder.Services.AddScoped<IAdminDashboardRepository, AdminDashboardRepository>();
+            builder.Services.AddScoped<IAdminDashboardService, AdminDashboardService>();
 
             //Client repository
             builder.Services.AddScoped<IClientInfoRepository, ClientInfoRepository>();
