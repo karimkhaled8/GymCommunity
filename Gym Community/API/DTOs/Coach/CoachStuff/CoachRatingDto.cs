@@ -9,6 +9,7 @@
         {
             get; set;
         }
+        public string clientimg { get; set; }
         public string ClientId { get; set; }
         public string CoachId { get; set; }
         public int Rate { get; set; }

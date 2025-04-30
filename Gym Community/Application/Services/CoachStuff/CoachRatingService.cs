@@ -22,7 +22,7 @@ namespace Gym_Community.Application.Services.CoachStuff
                 Id = r.Id,
                 ClientFirstName = r.Coach.FirstName,
                 ClientLastName = r.Coach.LastName,
-                
+                clientimg=r.Coach.ProfileImg,
                 ClientId = r.ClientId,
                 CoachId = r.CoachId,
                 Rate = r.Rate,
