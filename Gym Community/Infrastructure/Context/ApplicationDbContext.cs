@@ -3,6 +3,7 @@ using Gym_Community.Domain.Data.Models.E_comms;
 using Gym_Community.Domain.Data.Models.Meals_and_Exercise;
 using Gym_Community.Domain.Data.Models.Payment_and_Shipping;
 using Gym_Community.Domain.Models;
+using Gym_Community.Domain.Models.Chat;
 using Gym_Community.Domain.Models.ClientStuff;
 using Gym_Community.Domain.Models.CoachStuff;
 using Gym_Community.Domain.Models.Forum;
@@ -57,6 +58,11 @@ namespace Gym_Community.Infrastructure.Context
         public DbSet<GymCoach> GymCoaches { get; set; }
         public DbSet<GymImgs> GymImgs { get; set; }
         public DbSet<UserSubscription> UserSubscriptions { get; set; }
+
+        //Chat
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<ChatGroup> ChatGroups { get; set; }
+        public DbSet<GroupMember> GroupMembers { get; set; }
 
 
 

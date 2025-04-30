@@ -1,4 +1,5 @@
 using Gym_Community.Domain.Enums;
+using Gym_Community.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -92,6 +93,7 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         public int ProteinPercentage { get; set; }
         public int CarbsPercentage { get; set; }
         public int FatsPercentage { get; set; }
+        public AppUser Coach { get; set; } 
         public ICollection<WeekPlanDto> WeekPlans { get; set; } = new List<WeekPlanDto>();
     }
 
