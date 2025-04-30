@@ -311,21 +311,21 @@ namespace Gym_Community.API.Controllers.TrainingPlans
         // ===================== TRAINING PLAN =====================
         //create training plan
         [HttpPost("Create")]
-        [Authorize(Roles = "Coach,Admin")]
+        [Authorize]
         public async Task<IActionResult> CreateTrainingPlan([FromBody] CreateTrainingPlanDto planDto)
         {
             try
             {
                 var userId = GetUserId();
-                if (!IsCoachAuthorized(userId))
-                    return StatusCode(403, new { message = "Only the assigned coach can create training plans" });
+                //if (!IsCoachAuthorized(userId))
+                //    return StatusCode(403, new { message = "Only the assigned coach can create training plans" });
                 var plan = _mapper.Map<TrainingPlan>(planDto);
-                plan.CoachId = userId;
-                if (!IsCoach())
-                {
-                    plan.IsStaticPlan = true;
-                }
-                await _trainingPlanRepository.AddAsync(plan, userId);
+                //plan.CoachId = userId;
+                //if (!IsCoach())
+                //{
+                //    plan.IsStaticPlan = true;
+                //}
+                await _trainingPlanRepository.AddAsync(plan, planDto.CoachId);
                 var createdPlanDto = _mapper.Map<TrainingPlanDto>(plan);
                 return CreatedAtAction(nameof(GetTrainingPlans), createdPlanDto);
             }
