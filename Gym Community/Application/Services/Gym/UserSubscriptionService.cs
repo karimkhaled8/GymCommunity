@@ -152,6 +152,9 @@ namespace Gym_Community.Application.Services.Gym
                 UserName = sub.User.FirstName + " " + sub.User.LastName,
                 UserEmail = sub.User.Email??"N/A",
                 PlanDuration = sub.Plan.DurationMonths,
+                HasAccessToAllAreas = sub.Plan.HasAccessToAllAreas,
+                HasNutritionPlan = sub.Plan.HasNutritionPlan,
+                HasPrivateCoach = sub.Plan.HasPrivateCoach
             };
         }
     }
