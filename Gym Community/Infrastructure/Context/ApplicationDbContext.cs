@@ -28,6 +28,7 @@ namespace Gym_Community.Infrastructure.Context
         public DbSet<CoachPortfolio> CoachPortfolios { get; set; }
         public DbSet<CoachRating> CoachRatings { get; set; }
         public DbSet<WorkSample> WorkSamples { get; set; }
+        public DbSet<CoachOffers> CoachOffers  { get; set; }
         //E-Commerce
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
