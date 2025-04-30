@@ -1,5 +1,6 @@
 ﻿using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Domain.Data.Models.Payment_and_Shipping;
+using Gym_Community.Domain.Enums;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
 
 namespace Gym_Community.Application.Services
@@ -36,9 +37,9 @@ namespace Gym_Community.Application.Services
             return await _shippingRepository.GetByOrderId(orderId);
         }
 
-        public async Task<Shipping?> UpdateShippingAsync(Shipping shipping)
+        public async Task<bool> UpdateShippingAsync(int shippingId , string status)
         {
-            return await _shippingRepository.UpdateAsync(shipping);
+            return await _shippingRepository.UpdateAsync(shippingId,status);
         }
     }
 }

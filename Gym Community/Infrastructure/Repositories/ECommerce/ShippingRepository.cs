@@ -1,4 +1,5 @@
 ﻿using Gym_Community.Domain.Data.Models.Payment_and_Shipping;
+using Gym_Community.Domain.Enums;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Microsoft.EntityFrameworkCore;
@@ -45,23 +46,34 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
 
         public async Task<bool> RemoveAsync(int id)
         {
-            var shipping = _context.Shippings.FirstOrDefaultAsync(s=>s.Id==id);
+            var shipping = _context.Shippings.FirstOrDefaultAsync(s => s.Id == id);
             if (shipping != null)
             {
                 _context.Shippings.Remove(shipping.Result);
                 return await _context.SaveChangesAsync() > 0;
             }
-            return false; 
+            return false;
         }
 
-        public async Task<Shipping?> UpdateAsync(Shipping shipping)
+        public async Task<bool> UpdateAsync(int shippingId, string status)
         {
-            _context.Shippings.Update(shipping);
+            if (!Enum.TryParse(status, out ShippingStatus shippingStatus))
+            {
+                return false;
+            }
+
+            var shipping = await _context.Shippings.FirstOrDefaultAsync(s => s.Id == shippingId);
+            if (shipping != null)
+            {
+                shipping.ShippingStatus = shippingStatus;
+                _context.Shippings.Update(shipping);
+            }
             if (await _context.SaveChangesAsync() > 0)
             {
-                return shipping;
+                return true;
             }
-            return null;
+            return false;
         }
     }
-}
+
+  }

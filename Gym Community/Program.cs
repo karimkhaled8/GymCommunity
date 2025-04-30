@@ -11,6 +11,7 @@ using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Application.Services;
+using Gym_Community.Application.Services.Chat;
 using Gym_Community.Application.Services.Client;
 using Gym_Community.Application.Services.CoachStuff;
 using Gym_Community.Application.Services.E_comm;
@@ -202,7 +203,8 @@ namespace Gym_Community
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
 
-
+            //Chat
+            builder.Services.AddSignalR();
 
 
             // CoachstuffRepo
@@ -251,6 +253,7 @@ namespace Gym_Community
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+            app.MapHub<ChatHub>("/chatHub");
             app.Run();
         }
     }

@@ -1,6 +1,9 @@
-﻿using Gym_Community.API.DTOs.E_comm;
+﻿using Amazon.S3.Model.Internal.MarshallTransformations;
+using Gym_Community.API.DTOs.E_comm;
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.IE_comm;
+using Gym_Community.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -15,29 +18,43 @@ namespace Gym_Community.API.Controllers.Ecommerce
         private readonly IOrderService _orderService;
         private readonly IAuthService _authService; 
        
-        public OrderController(IOrderService orderService , IAuthService _authService)
+        public OrderController(IOrderService orderService , IAuthService authService)
         {
             _orderService = orderService;
+            _authService = authService; 
         }
 
+        [Authorize]
         [HttpGet("admin")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string query = "", int page = 1, int eleNo = 10, string sort = "asc", ShippingStatus? status = null, DateOnly? date = null)
         {
             var userId = getUserID();
-            if (string.IsNullOrEmpty(userId)) return Unauthorized();
-            
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID is null or token is invalid.");
+            }
+
             var role = await _authService.GetRole(userId);
-            if (role == null) return Unauthorized();
-            
-            if (role == "Admin")
+            if (string.IsNullOrEmpty(role))
             {
-                var orders = await _orderService.GetOrdersAsync();
-                return Ok(orders);
+                return Unauthorized("Role not found or user does not exist.");
             }
-            else
+
+            if (role != "Admin")
             {
-                return BadRequest(new { sucess = false, message = "Not Authantictated" });
+                return Unauthorized("User is not an admin.");
             }
+
+            var result = await _orderService.GetOrdersAsync(query, page, eleNo, sort, status, date);
+
+            return Ok(new
+            {
+                success = true,
+                data = result.Items,
+                totalCount = result.TotalCount,
+                totalPages = (int)Math.Ceiling(result.TotalCount / (double)eleNo),
+                currentPage = page
+            });
         }
 
         [HttpGet("user")]
@@ -91,7 +108,13 @@ namespace Gym_Community.API.Controllers.Ecommerce
         }
         private string getUserID()
         {
-            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var claim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim == null)
+            {
+                return null;
+            }
+            return claim.Value;
         }
+
     }
 }

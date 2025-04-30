@@ -82,15 +82,18 @@ namespace Gym_Community.Application.Services
                 return null;
             }
         }
-
         public async Task<string?> GetRole(string userID)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userID);
             if (user == null) return null;
+
             var userRole = await _userManager.GetRolesAsync(user);
             if (userRole == null) return null;
+
             return userRole.FirstOrDefault();
         }
+
+
         public async Task<bool> IsAuthenticated(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
