@@ -31,7 +31,8 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
         public async Task<IEnumerable<TrainingPlan>> GetAllAsync(string userId)
         {
             return await _dbSet
-                .Include(tp => tp.WeekPlans)
+                //.Include(tp => tp.WeekPlans)
+                .Include(tp=>tp.Coach)
                 .Include(tp => tp.Client)
                 .Where(tp => tp.ClientId == userId || tp.CoachId == userId)
                 .ToListAsync();
