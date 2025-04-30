@@ -60,9 +60,13 @@ namespace Gym_Community.API.Controllers.Ecommerce
 
 
         [HttpGet("user")]
-        public async Task<IActionResult> GetUser()
+        public async Task<IActionResult> GetUser([FromQuery] string userid)
         {
-            var products = await _productService.GetUserProducts(getUserId());
+            if (string.IsNullOrEmpty(userid))
+            {
+                return BadRequest(new { message = "UserId is required" });
+            }
+            var products = await _productService.GetUserProducts(userid);
             return products.Any() ? Ok(products) : Ok(new { success = true, message = "No products Found" });
         }
 
