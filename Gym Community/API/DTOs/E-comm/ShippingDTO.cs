@@ -4,6 +4,7 @@ namespace Gym_Community.API.DTOs.E_comm
 {
     public class ShippingDTO
     {
+        public int? Id { get; set; }
         public int? OrderID { get; set; }
         public string Carrier { get; set; }
         public string TrackingNumber { get; set; }
