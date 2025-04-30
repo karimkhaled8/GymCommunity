@@ -49,9 +49,17 @@ namespace Gym_Community.API.Controllers.Client
             return Ok();
         }
 
-        [HttpGet("{userId}/groups")]
-        public async Task<ActionResult<IEnumerable<ChatGroup>>> GetUserGroups(string userId)
+        [HttpGet("groups")]
+        //[Authorize] // Restrict to authenticated users
+        public async Task<ActionResult<IEnumerable<ChatGroup>>> GetUserGroups()
         {
+            // Get userId from the authenticated user's claims
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("User ID not found in claims.");
+            }
+
             var groups = await _context.GroupMembers
                 .Where(m => m.UserId == userId)
                 .Join(_context.ChatGroups,
@@ -59,7 +67,9 @@ namespace Gym_Community.API.Controllers.Client
                     g => g.GroupId,
                     (m, g) => g)
                 .ToListAsync();
+
             return Ok(groups);
         }
-    }
+    
+}
 }

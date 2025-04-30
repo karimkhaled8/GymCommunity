@@ -86,6 +86,18 @@ namespace Gym_Community
                     ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Path.StartsWithSegments("/chathub"))
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
 
                 // Add Google and Facebook authentication
             }).AddGoogle(googleOptions =>
