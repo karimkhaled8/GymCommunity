@@ -99,6 +99,8 @@ namespace Gym_Community.API.Controllers.Ecommerce
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] ProductDTO productDto, [FromForm] IFormFile productImg)
         {
+            var userId = getUserId();
+            if (userId == null) return Unauthorized(); 
             if (productImg == null || productImg.Length == 0)
             {
                 return BadRequest(new {success=false , message = "Product Image is required"});
@@ -110,7 +112,7 @@ namespace Gym_Community.API.Controllers.Ecommerce
             }
             if(!ModelState.IsValid) return BadRequest(ModelState);
             productDto.ImageUrl = imageUrl;
-            var createdProduct = await _productService.CreateProduct(productDto);
+            var createdProduct = await _productService.CreateProduct(productDto,userId);
             return createdProduct==null ? NotFound() : Ok(createdProduct);
         }
 

@@ -91,10 +91,11 @@ namespace Gym_Community.Application.Services.E_comm
         }
 
 
-        public async Task<ProductDTO?> CreateProduct(ProductDTO productDto)
+        public async Task<ProductDTO?> CreateProduct(ProductDTO productDto,string userId)
         {
             var product = new Product
             {
+                OwnerId = userId,
                 Name = productDto.Name,
                 Description = productDto.Description,
                 Price = productDto.Price,
