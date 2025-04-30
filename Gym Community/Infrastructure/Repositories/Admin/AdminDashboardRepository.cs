@@ -20,7 +20,13 @@ namespace Gym_Community.Infrastructure.Repositories.Admin
             var totalSales = await _context.Orders.CountAsync();
             var totalProductsSold = await _context.OrderItems.SumAsync(i => i.Quantity);
             var activeGyms = await _context.Gym.CountAsync();
-            var activeCoaches = await _context.Users.CountAsync(c => c.IsActive);
+            var activeCoaches = await (
+                from user in _context.Users
+                join userRole in _context.UserRoles on user.Id equals userRole.UserId
+                join role in _context.Roles on userRole.RoleId equals role.Id
+                where role.Name == "Coach" && user.IsActive
+                select user
+            ).CountAsync();
             var premiumSubscribers = await _context.Users.CountAsync(u => u.IsPremium);
             var totalRevenue = await _context.Orders.SumAsync(o => o.Payment.Amount);
 
