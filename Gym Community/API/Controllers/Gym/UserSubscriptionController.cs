@@ -1,4 +1,5 @@
-﻿using Gym_Community.API.DTOs.Gym;
+﻿using System.Numerics;
+using Gym_Community.API.DTOs.Gym;
 using Gym_Community.Application.Interfaces.Gym;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,14 @@ namespace Gym_Community.API.Controllers.Gym
             var allSub = await _service.GetByPlanIdAsync(planId);
             return allSub == null ? NotFound() : Ok(allSub);
         }
+
+        [HttpGet("ownerId/{ownerId}")]
+        public async Task<ActionResult<UserSubscriptionReadDTO>> GetAllSubscriptionsByGymOwnerId(string ownerId)
+        {
+            var allSub = await _service.GetAllSubscriptionsByGymOwnerId(ownerId);
+            return allSub == null ? NotFound() : Ok(allSub);
+        }
+
 
         [HttpPost]
         public async Task<ActionResult<UserSubscriptionReadDTO>> Create(UserSubscriptionCreateDTO dto)

@@ -13,6 +13,7 @@ namespace Gym_Community.Application.Interfaces.Gym
         Task<bool> DeleteAsync(int id);
         Task<UserSubscriptionReadDTO?> ValidateQrCodeAsync(string qrCodeData);
         Task<IEnumerable<UserSubscriptionReadDTO>> GetByUserIdAsync(string userId);
+        public Task<IEnumerable<UserSubscriptionReadDTO>> GetAllSubscriptionsByGymOwnerId(string ownerId);
 
 
     }

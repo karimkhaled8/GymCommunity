@@ -12,6 +12,8 @@ namespace Gym_Community.Infrastructure.Interfaces.Gym
         Task<UserSubscription?> UpdateAsync(UserSubscription subscription);
         Task<bool> DeleteAsync(UserSubscription subscription);
         Task<IEnumerable<UserSubscription>> GetByUserIdAsync(string userId);
+        public Task<IEnumerable<UserSubscription>> GetAllSubscriptionsByGymOwnerId(string ownerId);
+
 
     }
 }

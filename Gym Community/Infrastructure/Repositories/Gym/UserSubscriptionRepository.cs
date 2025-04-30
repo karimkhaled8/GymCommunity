@@ -1,4 +1,5 @@
-﻿using Gym_Community.Domain.Models.Gym;
+﻿using System.Numerics;
+using Gym_Community.Domain.Models.Gym;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Gym;
 using Microsoft.EntityFrameworkCore;
@@ -69,6 +70,15 @@ namespace Gym_Community.Infrastructure.Repositories.Gym
                 .Include(u => u.Gym)
                 .Include(u => u.Plan)
                 .ToListAsync();
+        }
+        public async Task<IEnumerable<UserSubscription>> GetAllSubscriptionsByGymOwnerId(string ownerId)
+        {
+            return await _context.UserSubscriptions
+               .Where(s => s.Gym.OwnerId == ownerId)
+               .Include(s => s.Gym)
+               .Include(s => s.User)
+               .Include(s => s.Plan)
+               .ToListAsync();
         }
 
         public async Task<UserSubscription?> UpdateAsync(UserSubscription subscription)

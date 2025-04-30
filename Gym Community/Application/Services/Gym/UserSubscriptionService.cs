@@ -1,4 +1,5 @@
-﻿using Gym_Community.API.DTOs.Gym;
+﻿using System.Numerics;
+using Gym_Community.API.DTOs.Gym;
 using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Domain.Enums;
 using Gym_Community.Domain.Models.Gym;
@@ -71,6 +72,10 @@ namespace Gym_Community.Application.Services.Gym
         {
             return (await _repo.GetByPlanIdAsync(planId)).Select(Map); 
         }
+        public async Task<IEnumerable<UserSubscriptionReadDTO>> GetAllSubscriptionsByGymOwnerId(string ownerId)
+        {
+            return (await _repo.GetAllSubscriptionsByGymOwnerId(ownerId)).Select(Map);
+        }
 
         public async Task<UserSubscriptionReadDTO?> UpdateAsync(int id, UserSubscriptionUpdateDTO dto)
         {
@@ -135,13 +140,18 @@ namespace Gym_Community.Application.Services.Gym
                 UserId = sub.UserId,
                 GymId = sub.GymId,
                 PlanId = sub.PlanId,
+                PlanTitle = sub.Plan.Title,
                 PurchaseDate = sub.PurchaseDate,
                 StartDate = sub.StartDate,
                 ExpiresAt = sub.ExpiresAt,
                 PaymentStatus = sub.paymentStatus,
                 IsExpired = sub.IsExpired,
                 QrCodeData = sub.QrCodeData,
-                rawData = sub.rawData
+                rawData = sub.rawData,
+                GymName = sub.Gym.Name,
+                UserName = sub.User.FirstName + " " + sub.User.LastName,
+                UserEmail = sub.User.Email??"N/A",
+                PlanDuration = sub.Plan.DurationMonths,
             };
         }
     }
