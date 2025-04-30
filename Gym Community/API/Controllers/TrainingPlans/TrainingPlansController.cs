@@ -371,6 +371,9 @@ namespace Gym_Community.API.Controllers.TrainingPlans
                 if (plan == null)
                     return NotFound(new { message = "Training plan not found or you don't have access to it" });
                 var planDto = _mapper.Map<TrainingPlanDto>(plan);
+
+                planDto.Coach = plan.Coach;
+
                 return Ok(planDto);
             }
             catch (UnauthorizedAccessException ex)

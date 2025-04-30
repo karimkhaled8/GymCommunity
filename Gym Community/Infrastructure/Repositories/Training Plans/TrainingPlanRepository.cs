@@ -21,6 +21,7 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
         public async Task<TrainingPlan?> GetByIdAsync(int id, string userId)
         {
             return await _dbSet
+                .Include(tp => tp.Coach)
                 .Include(tp => tp.WeekPlans)
                 .ThenInclude(wp => wp.WorkoutDays)
                 .Where(tp => tp.Id == id && (tp.ClientId == userId || tp.CoachId == userId))
