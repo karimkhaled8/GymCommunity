@@ -29,7 +29,25 @@ namespace Gym_Community.Application.Services.Chat
             // Send to all group members except the sender
             await Clients.OthersInGroup(groupId).SendAsync("ReceiveMessage", senderId, message, chatMessage.Timestamp);
 
-            
+
         }
-    }
-}
+        public async Task JoinGroup(string groupId)
+        {
+            if (string.IsNullOrWhiteSpace(groupId))
+            {
+                throw new HubException("Group ID cannot be empty.");
+            }
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
+            await Clients.Caller.SendAsync("JoinedGroup", groupId); // Confirm to client
+        }
+
+        public async Task LeaveGroup(string groupId)
+        {
+            if (string.IsNullOrWhiteSpace(groupId))
+            {
+                throw new HubException("Group ID cannot be empty.");
+            }
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupId);
+        }
+    } }
+

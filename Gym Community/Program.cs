@@ -52,11 +52,12 @@ namespace Gym_Community
             //CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", policy =>
+                options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
+                    policy.WithOrigins("http://localhost:4200") // Explicitly allow Angular frontend
+                          .AllowAnyMethod()                    // Allow GET, POST, OPTIONS, etc.
+                          .AllowAnyHeader()                    // Allow Authorization, Content-Type, etc.
+                          .AllowCredentials();                 // Support credentialed requests
                 });
             });
 
@@ -257,8 +258,7 @@ namespace Gym_Community
                 app.MapScalarApiReference();
             }
 
-            app.UseCors("AllowAll");
-            app.UseHttpsRedirection();
+            app.UseCors("AllowAngularApp"); // Apply CORS policy before routing            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
