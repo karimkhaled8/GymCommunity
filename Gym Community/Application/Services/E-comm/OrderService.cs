@@ -135,6 +135,7 @@ namespace Gym_Community.Application.Services.E_comm
                     Latitude = order.Shipping.Latitude,
                     Longitude = order.Shipping.Longitude,
                     EstimatedDeliveryDate = order.Shipping.EstimatedDeliveryDate,
+                    ShippingStatus = order.Shipping.ShippingStatus,
                     ShippingAddress = order.Shipping.ShippingAddress
                 }
             }).ToList();
@@ -171,6 +172,7 @@ namespace Gym_Community.Application.Services.E_comm
                     Latitude = order.Shipping.Latitude,
                     Longitude = order.Shipping.Longitude,
                     EstimatedDeliveryDate = order.Shipping.EstimatedDeliveryDate,
+                    ShippingStatus = order.Shipping.ShippingStatus,
                     ShippingAddress = order.Shipping.ShippingAddress
                 }
             }).ToList();
@@ -207,7 +209,9 @@ namespace Gym_Community.Application.Services.E_comm
                     Latitude = order.Shipping.Latitude,
                     Longitude = order.Shipping.Longitude,
                     EstimatedDeliveryDate = order.Shipping.EstimatedDeliveryDate,
+                    ShippingStatus = order.Shipping.ShippingStatus,
                     ShippingAddress = order.Shipping.ShippingAddress
+                    
                 }
             };
         }
