@@ -48,25 +48,24 @@ namespace Gym_Community.API.Controllers.CoachStuff
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CoachPortfolioDto dto, [FromForm] IFormFile AboutMeImageUrl)
         {
-           
+            
             string imageUrl = string.Empty;
             if (AboutMeImageUrl != null)
             {
                 imageUrl = await _awsService.UploadFileAsync(AboutMeImageUrl, "ProfileImages");
             }
 
-           
             var coachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (coachId == null) return Unauthorized();
 
-           
+            
             var existingPortfolio = await _service.GetByCoachIdAsync(coachId);
             if (existingPortfolio != null)
             {
                 return BadRequest(new { message = "Portfolio already exists for this coach." });
             }
 
-
+            
             dto.CoachId = coachId;
             dto.AboutMeImageUrl = imageUrl;
 
@@ -74,26 +73,36 @@ namespace Gym_Community.API.Controllers.CoachStuff
             return success
                 ? Ok(new { message = "Portfolio created successfully" })
                 : BadRequest(new { message = "Failed to create portfolio" });
-        }
+            }
 
             [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromForm] CoachPortfolioDto dto, [FromForm] IFormFile? AboutMeImageUrl)
         {
             var coachId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var existing = await _service.GetByIdAsync(id);
+            if (coachId == null) return Unauthorized();
 
-            if (existing == null || existing.CoachId != coachId)
-                return Unauthorized();
+            var existing = await _service.GetByCoachIdAsync(coachId);
 
             if (AboutMeImageUrl != null)
                 dto.AboutMeImageUrl = await _awsService.UploadFileAsync(AboutMeImageUrl, "ProfileImages");
 
             dto.CoachId = coachId;
 
-            var success = await _service.UpdateAsync(id, dto);
-            return success
-     ? Ok(new { message = "Portfolio updated successfully" })
-     : BadRequest(new { message = "Failed to update portfolio" });
+            if (existing == null)
+            {
+                var created = await _service.CreateAsync(dto);
+                return created != null
+                    ? Ok(new { message = "Portfolio created successfully", data = created })
+                    : BadRequest(new { message = "Failed to create portfolio" });
+            }
+            else
+            {
+                var updated = await _service.UpdateAsync(existing.Id, dto);
+                return updated
+                    ? Ok(new { message = "Portfolio updated successfully" })
+                    : BadRequest(new { message = "Failed to update portfolio" });
+            }
+        
         }
 
         [HttpDelete("{id}")]

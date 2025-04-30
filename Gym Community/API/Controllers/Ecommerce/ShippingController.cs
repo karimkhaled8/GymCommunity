@@ -1,4 +1,5 @@
 ﻿using Gym_Community.API.DTOs.E_comm;
+using Gym_Community.API.DTOs.E_comm.Creation;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Domain.Data.Models.Payment_and_Shipping;
 using Gym_Community.Domain.Enums;
@@ -62,13 +63,13 @@ namespace Gym_Community.API.Controllers.Ecommerce
 
         // PUT api/<ShippingController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateShipping(int id, [FromBody] string value)
+        public async Task<IActionResult> UpdateShipping(int id, [FromBody] UpdateShippingStatusDto request)
         {
             if (id < 0) return BadRequest();
             var shipping = await _shippingService.GetShippingByIdAsync(id);
             if (shipping == null) return NotFound();
 
-            var Updatedshipping = await _shippingService.UpdateShippingAsync(shipping);
+            var Updatedshipping = await _shippingService.UpdateShippingAsync(id,request.Status);
             if (Updatedshipping == null) return BadRequest();
             return Ok(Updatedshipping);
         }

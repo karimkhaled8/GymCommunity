@@ -11,6 +11,7 @@ using Gym_Community.Application.Interfaces.Forum;
 using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Gym_Community.Application.Services;
+using Gym_Community.Application.Services.Chat;
 using Gym_Community.Application.Services.Client;
 using Gym_Community.Application.Services.CoachStuff;
 using Gym_Community.Application.Services.E_comm;
@@ -51,11 +52,12 @@ namespace Gym_Community
             //CORS
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll", policy =>
+                options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader();
+                    policy.WithOrigins("http://localhost:4200") // Explicitly allow Angular frontend
+                          .AllowAnyMethod()                    // Allow GET, POST, OPTIONS, etc.
+                          .AllowAnyHeader()                    // Allow Authorization, Content-Type, etc.
+                          .AllowCredentials();                 // Support credentialed requests
                 });
             });
 
@@ -84,6 +86,18 @@ namespace Gym_Community
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidAudience = builder.Configuration["Jwt:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Path.StartsWithSegments("/chathub"))
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
 
                 // Add Google and Facebook authentication
@@ -206,7 +220,8 @@ namespace Gym_Community
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
 
-
+            //Chat
+            builder.Services.AddSignalR();
 
 
             // CoachstuffRepo
@@ -214,6 +229,9 @@ namespace Gym_Community
             builder.Services.AddScoped<ICoachRatingRepository, CoachRatingRepository>();
             builder.Services.AddScoped<ICoachCertificateRepository, CoachCertificateRepository>();
             builder.Services.AddScoped<ICoachPortfolioRepository, CoachPortfolioRepository>();
+            builder.Services.AddScoped<ICoachOffersRepository, CoachOffersRepository>();
+
+
 
             // CoachStuffServices
             builder.Services.AddScoped<IWorkSampleService, WorkSampleService>();
@@ -247,11 +265,11 @@ namespace Gym_Community
                 app.MapScalarApiReference();
             }
 
-            app.UseCors("AllowAll");
-            app.UseHttpsRedirection();
+            app.UseCors("AllowAngularApp"); // Apply CORS policy before routing            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+            app.MapHub<ChatHub>("/chatHub");
             app.Run();
         }
     }

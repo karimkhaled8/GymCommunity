@@ -4,6 +4,7 @@ using Gym_Community.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym_Community.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250430044538_coach offers")]
+    partial class coachoffers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -655,74 +658,6 @@ namespace Gym_Community.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Gym_Community.Domain.Models.Chat.ChatGroup", b =>
-                {
-                    b.Property<string>("GroupId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("GroupId");
-
-                    b.ToTable("ChatGroups");
-                });
-
-            modelBuilder.Entity("Gym_Community.Domain.Models.Chat.ChatMessage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GroupId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ChatMessages");
-                });
-
-            modelBuilder.Entity("Gym_Community.Domain.Models.Chat.GroupMember", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ChatGroupGroupId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("GroupId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatGroupGroupId");
-
-                    b.ToTable("GroupMembers");
-                });
-
             modelBuilder.Entity("Gym_Community.Domain.Models.ClientStuff.ClientInfo", b =>
                 {
                     b.Property<int>("Id")
@@ -801,12 +736,14 @@ namespace Gym_Community.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Desc")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DurationMonths")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
@@ -1593,13 +1530,6 @@ namespace Gym_Community.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Gym_Community.Domain.Models.Chat.GroupMember", b =>
-                {
-                    b.HasOne("Gym_Community.Domain.Models.Chat.ChatGroup", null)
-                        .WithMany("Members")
-                        .HasForeignKey("ChatGroupGroupId");
-                });
-
             modelBuilder.Entity("Gym_Community.Domain.Models.ClientStuff.ClientInfo", b =>
                 {
                     b.HasOne("Gym_Community.Domain.Models.AppUser", "ClientUser")
@@ -1904,11 +1834,6 @@ namespace Gym_Community.Migrations
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.TrainingPlan", b =>
                 {
                     b.Navigation("WeekPlans");
-                });
-
-            modelBuilder.Entity("Gym_Community.Domain.Models.Chat.ChatGroup", b =>
-                {
-                    b.Navigation("Members");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Coach_Plans.WeekPlan", b =>

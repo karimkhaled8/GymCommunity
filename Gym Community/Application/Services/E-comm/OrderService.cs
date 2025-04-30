@@ -5,6 +5,7 @@ using Gym_Community.Infrastructure.Interfaces.ECommerce;
 using Gym_Community.Domain.Enums;
 using Gym_Community.Infrastructure.Repositories.ECommerce;
 using Gym_Community.Domain.Data.Models.Payment_and_Shipping;
+using Gym_Community.API.DTOs;
 
 namespace Gym_Community.Application.Services.E_comm
 {
@@ -94,14 +95,26 @@ namespace Gym_Community.Application.Services.E_comm
             };
         }
 
-        public async Task<IEnumerable<OrderDto>> GetOrdersAsync()
+        public async Task<PageResult<OrderDto>> GetOrdersAsync(string query, int page, int eleNo, string sort, ShippingStatus? status, DateOnly? date)
         {
-            var orders = await _orderRepository.ListAsync();
-            return orders.Select(order => new OrderDto
+            var pagedOrders = await _orderRepository.ListAsync(query, page, eleNo, sort, status, date);
+
+            var orderDtos = pagedOrders.Items.Select(order => new OrderDto
             {
                 Id = order.OrderID,
                 UserID = order.UserID,
+                CustomerEmail = order.AppUser.UserName,
+                Payment = new PaymentDTO
+                {
+                    Id = order.PaymentId,
+                    Status = order.Payment.Status,
+                    Amount= order.Payment.Amount,
+                    Currency= order.Payment.Currency,
+                    PaymentMethod= order.Payment.PaymentMethod,
+                    CreatedAt = order.Payment.CreatedAt,    
+                },
                 PaymentId = order.PaymentId,
+                OrderDate = order.OrderDate,
                 OrderItems = order.OrderItems.Select(oi => new OrderItemDto
                 {
                     Id = oi.Id,
@@ -113,6 +126,8 @@ namespace Gym_Community.Application.Services.E_comm
                 }).ToList(),
                 Shipping = new ShippingDTO
                 {
+                    Id = order.Shipping.Id,
+                    OrderID = order.OrderID,
                     Carrier = order.Shipping.Carrier,
                     TrackingNumber = order.Shipping.TrackingNumber,
                     CustomerName = order.Shipping.CustomerName,
@@ -123,6 +138,12 @@ namespace Gym_Community.Application.Services.E_comm
                     ShippingAddress = order.Shipping.ShippingAddress
                 }
             }).ToList();
+
+            return new PageResult<OrderDto>
+            {
+                Items = orderDtos,
+                TotalCount = pagedOrders.TotalCount
+            };
         }
 
         public async Task<IEnumerable<OrderDto>> GetUserOrderAsync(string userId)
