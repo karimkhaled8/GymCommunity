@@ -150,6 +150,8 @@ namespace Gym_Community
             builder.Services.AddScoped<IGymImgService, GymImgService>();
             builder.Services.AddScoped<IGymPlanService, GymPlanService>();
             builder.Services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
+            builder.Services.AddScoped<IDashboardService, DashboardService>();
+
 
             //Ecommerce Repository
             builder.Services.AddScoped<IBrandRepository, BrandRepository>();
@@ -193,6 +195,8 @@ namespace Gym_Community
             builder.Services.AddScoped<IGymImgRepository, GymImgRepository>();
             builder.Services.AddScoped<IGymPlanRepository, GymPlanRepository>();
             builder.Services.AddScoped<IUserSubscriptionRepository, UserSubscriptionRepository>();
+            builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+
 
             builder.Services.AddScoped<IDailyPlanRepository, DailyPlanRepository>();
             builder.Services.AddScoped<IWeekPlanRepository, WeekPlanRepository>();
