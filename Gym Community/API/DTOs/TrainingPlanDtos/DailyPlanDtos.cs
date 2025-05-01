@@ -20,6 +20,12 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         
         [Required]
         public string DailyPlanJson { get; set; }
+
+        //new
+        public double? TotalCalories { get; set; }
+        public double? TotalProtein { get; set; }  
+        public double? TotalCarbs { get; set; }
+        public double? TotalFats { get; set; } 
     }
 
     public class UpdateDailyPlanDto
@@ -36,6 +42,13 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         public int DayNumber { get; set; }
         
         public string DailyPlanJson { get; set; }
+
+
+        //new
+        public double? TotalCalories { get; set; }
+        public double? TotalProtein { get; set; }
+        public double? TotalCarbs { get; set; }
+        public double? TotalFats { get; set; } // in grams
     }
 
     public class DailyPlanDto
@@ -47,5 +60,12 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         public DateTime DayDate { get; set; }
         public int DayNumber { get; set; }
         public string DailyPlanJson { get; set; }
+
+        //new
+        public double? TotalCalories { get; set; }
+        public double? TotalProtein { get; set; }
+        public double? TotalCarbs { get; set; }
+        public double? TotalFats { get; set; } // in grams
+
     }
 } 
