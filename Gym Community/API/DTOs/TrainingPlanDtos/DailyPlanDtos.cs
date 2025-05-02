@@ -25,7 +25,9 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         public double? TotalCalories { get; set; }
         public double? TotalProtein { get; set; }  
         public double? TotalCarbs { get; set; }
-        public double? TotalFats { get; set; } 
+        public double? TotalFats { get; set; }
+
+        public bool? IsDone { get; set; } = false;
     }
 
     public class UpdateDailyPlanDto
@@ -49,6 +51,8 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         public double? TotalProtein { get; set; }
         public double? TotalCarbs { get; set; }
         public double? TotalFats { get; set; } // in grams
+
+        public bool? IsDone { get; set; } = false;
     }
 
     public class DailyPlanDto
@@ -66,6 +70,8 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         public double? TotalProtein { get; set; }
         public double? TotalCarbs { get; set; }
         public double? TotalFats { get; set; } // in grams
+
+        public bool? IsDone { get; set; } = false;
 
     }
 } 

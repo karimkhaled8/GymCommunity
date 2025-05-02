@@ -175,6 +175,32 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             }
         }
 
+
+        [HttpPatch("markDailyPlan/{id}")]
+        [Authorize(Roles ="Client")]
+        public async Task<IActionResult> MarkDailyPlan(int id)
+        {
+            try
+            {
+                var userId = GetUserId();
+                var dailyPlan = await _dailyPlanRepository.GetByIdAsync(id, userId);
+                if (dailyPlan == null)
+                    return NotFound(new { message = "Daily plan not found or you don't have access to it" });
+                dailyPlan.IsDone = !dailyPlan.IsDone;
+                await _dailyPlanRepository.UpdateAsync(dailyPlan);
+                return Ok(new { message = "Day Marked" });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while marking the daily plan", error = ex.Message });
+            }
+        }
+
+
         // ===================== WEEK PLAN =====================
 
 

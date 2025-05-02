@@ -11,5 +11,7 @@ namespace Gym_Community.Infrastructure.Interfaces.Training_Plans
         Task AddAsync(DailyPlan dailyPlan);
         Task UpdateAsync(DailyPlan dailyPlan);
         Task DeleteAsync(DailyPlan dailyPlan);
+
+        
     }
 }
