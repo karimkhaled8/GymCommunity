@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.API.DTOs.Client;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections;
 
 namespace Gym_Community.API.Controllers.Ai_ChatBot
 {
@@ -74,6 +75,7 @@ namespace Gym_Community.API.Controllers.Ai_ChatBot
         public async Task<IActionResult> Chat([FromBody] ChatRequest request)
         {
             var userClaims = User.Claims.ToList();
+          
 
             // Extract the "IsPremium" claim
             var isPremiumClaim = userClaims.FirstOrDefault(c => c.Type == "IsPremium");
@@ -97,8 +99,9 @@ namespace Gym_Community.API.Controllers.Ai_ChatBot
 
             try
             {
+              
                 var client = _httpClientFactory.CreateClient();
-                var apiKey = _configuration["DeepSeek:ApiKey"];
+                var apiKey = Environment.GetEnvironmentVariable("AI_API_KEY");
                 var apiUrl = _configuration["DeepSeek:ApiUrl"];
 
                 if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(apiUrl))

@@ -2,6 +2,7 @@ using System.Text;
 using Amazon.Runtime;
 using Amazon.S3;
 using AutoMapper;
+using DotNetEnv;
 using EmailServices;
 using Gym_Community.API.Mapping;
 using Gym_Community.Application.Interfaces;
@@ -51,6 +52,7 @@ namespace Gym_Community
     {
         public static void Main(string[] args)
         {
+            DotNetEnv.Env.Load();
             var builder = WebApplication.CreateBuilder(args);
 
             //CORS
@@ -119,7 +121,7 @@ namespace Gym_Community
 
 
 
-
+         
 
 
             // Add AutoMapper
@@ -191,6 +193,7 @@ namespace Gym_Community
             //Client repository
             builder.Services.AddScoped<IClientInfoRepository, ClientInfoRepository>();
 
+
             // Ecommerce Service
             builder.Services.AddScoped<IBrandService, BrandService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
@@ -227,6 +230,7 @@ namespace Gym_Community
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
 
+           
             //Chat
             builder.Services.AddSignalR();
 
@@ -258,6 +262,7 @@ namespace Gym_Community
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddEndpointsApiExplorer();
+        
 
 
             //serialization 
