@@ -67,6 +67,7 @@ namespace Gym_Community.API.Controllers.Coach.CoachClients
                     .Select(p => new CoachClientsDTO
                     {
                         PlanId = p.Id,
+                        PlanName = p.Name,
                         Client = p.Client
                     })
                     .ToList();
