@@ -8,6 +8,7 @@ using Gym_Community.Domain.Models.ClientStuff;
 using Gym_Community.Domain.Models.CoachStuff;
 using Gym_Community.Domain.Models.Forum;
 using Gym_Community.Domain.Models.Gym;
+using Gym_Community.Domain.Models.Notify;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +46,8 @@ namespace Gym_Community.Infrastructure.Context
         public DbSet<Post> Posts { get; set; }
         public DbSet<Sub> Subs { get; set; }
         public DbSet<Vote> Votes { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+
         //Meals and Exercise
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<Meal> Meals { get; set; }

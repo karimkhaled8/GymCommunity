@@ -4,6 +4,7 @@ using Gym_Community.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gym_Community.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250503141322_Notification")]
+    partial class Notification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +43,7 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("BrandID");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.E_comm.Category", b =>
@@ -61,7 +64,7 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("CategoryID");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.E_comm.Order", b =>
@@ -87,7 +90,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.E_comm.OrderItem", b =>
@@ -116,7 +119,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("ProductID");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.E_comm.Review", b =>
@@ -149,7 +152,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.E_comm.ShoppingCart", b =>
@@ -168,7 +171,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShoppingCarts", (string)null);
+                    b.ToTable("ShoppingCarts");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.E_comm.ShoppingCartItem", b =>
@@ -194,7 +197,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("ShoppingCartID");
 
-                    b.ToTable("ShoppingCartItems", (string)null);
+                    b.ToTable("ShoppingCartItems");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.E_comm.Wishlist", b =>
@@ -220,7 +223,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("WhishLists", (string)null);
+                    b.ToTable("WhishLists");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.E_comms.Product", b =>
@@ -272,7 +275,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.DailyPlan", b =>
@@ -319,7 +322,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("WeekPlanId");
 
-                    b.ToTable("DailyPlan", (string)null);
+                    b.ToTable("DailyPlan");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.Exercise", b =>
@@ -353,7 +356,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("MuscleGroupId");
 
-                    b.ToTable("Exercises", (string)null);
+                    b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.Meal", b =>
@@ -389,7 +392,7 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Meals", (string)null);
+                    b.ToTable("Meals");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.MuscleGroup", b =>
@@ -406,7 +409,7 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MuscleGroups", (string)null);
+                    b.ToTable("MuscleGroups");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Meals_and_Exercise.TrainingPlan", b =>
@@ -461,7 +464,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.ToTable("TrainingPlans", (string)null);
+                    b.ToTable("TrainingPlans");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Payment_and_Shipping.Payment", b =>
@@ -511,7 +514,7 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Data.Models.Payment_and_Shipping.Shipping", b =>
@@ -567,7 +570,7 @@ namespace Gym_Community.Migrations
                         .IsUnique()
                         .HasFilter("[OrderID] IS NOT NULL");
 
-                    b.ToTable("Shippings", (string)null);
+                    b.ToTable("Shippings");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.AppUser", b =>
@@ -681,7 +684,7 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("GroupId");
 
-                    b.ToTable("ChatGroups", (string)null);
+                    b.ToTable("ChatGroups");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Chat.ChatMessage", b =>
@@ -709,7 +712,7 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatMessages", (string)null);
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Chat.GroupMember", b =>
@@ -735,7 +738,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("ChatGroupGroupId");
 
-                    b.ToTable("GroupMembers", (string)null);
+                    b.ToTable("GroupMembers");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.ClientStuff.ClientInfo", b =>
@@ -778,7 +781,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("Client");
 
-                    b.ToTable("ClientInfo", (string)null);
+                    b.ToTable("ClientInfo");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.CoachStuff.CoachCertificate", b =>
@@ -800,7 +803,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("ProtofolioId");
 
-                    b.ToTable("CoachCertificates", (string)null);
+                    b.ToTable("CoachCertificates");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.CoachStuff.CoachOffers", b =>
@@ -835,7 +838,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.ToTable("CoachOffers", (string)null);
+                    b.ToTable("CoachOffers");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.CoachStuff.CoachPortfolio", b =>
@@ -877,7 +880,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.ToTable("CoachPortfolios", (string)null);
+                    b.ToTable("CoachPortfolios");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.CoachStuff.CoachRating", b =>
@@ -915,7 +918,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("CoachId");
 
-                    b.ToTable("CoachRatings", (string)null);
+                    b.ToTable("CoachRatings");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.CoachStuff.WorkSample", b =>
@@ -941,7 +944,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("ProtofolioId");
 
-                    b.ToTable("WorkSamples", (string)null);
+                    b.ToTable("WorkSamples");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Coach_Plans.WeekPlan", b =>
@@ -966,7 +969,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("TrainingPlanId");
 
-                    b.ToTable("WeekPlan", (string)null);
+                    b.ToTable("WeekPlan");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Forum.Comment", b =>
@@ -1000,7 +1003,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Forum.Notification", b =>
@@ -1033,7 +1036,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Forum.Post", b =>
@@ -1072,7 +1075,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Forum.Sub", b =>
@@ -1092,7 +1095,7 @@ namespace Gym_Community.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subs", (string)null);
+                    b.ToTable("Subs");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Forum.Vote", b =>
@@ -1124,7 +1127,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Votes", (string)null);
+                    b.ToTable("Votes");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Gym.Gym", b =>
@@ -1173,7 +1176,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Gym", (string)null);
+                    b.ToTable("Gym");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Gym.GymCoach", b =>
@@ -1197,7 +1200,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("GymCoaches", (string)null);
+                    b.ToTable("GymCoaches");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Gym.GymImgs", b =>
@@ -1219,7 +1222,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("GymImgs", (string)null);
+                    b.ToTable("GymImgs");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Gym.GymPlan", b =>
@@ -1260,7 +1263,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("GymId");
 
-                    b.ToTable("GymPlans", (string)null);
+                    b.ToTable("GymPlans");
                 });
 
             modelBuilder.Entity("Gym_Community.Domain.Models.Gym.UserSubscription", b =>
@@ -1312,7 +1315,7 @@ namespace Gym_Community.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSubscriptions", (string)null);
+                    b.ToTable("UserSubscriptions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
