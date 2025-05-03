@@ -93,7 +93,7 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         public int ProteinPercentage { get; set; }
         public int CarbsPercentage { get; set; }
         public int FatsPercentage { get; set; }
-        public AppUser Coach { get; set; } 
+        public AppUser Client { get; set; } 
         public ICollection<WeekPlanDto> WeekPlans { get; set; } = new List<WeekPlanDto>();
     }
 
