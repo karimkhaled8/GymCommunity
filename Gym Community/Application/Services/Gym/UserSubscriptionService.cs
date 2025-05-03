@@ -32,12 +32,14 @@ namespace Gym_Community.Application.Services.Gym
                 ExpiresAt = dto.ExpiresAt,
                 PurchaseDate = DateTime.UtcNow,
                 rawData = rawData,
-                QrCodeData = GenerateQrCodeBase64(rawData),
+                QrCodeData = "",
                 paymentStatus = dto.paymentStatus,
                 IsExpired = dto.ExpiresAt <= currentTime
             };
 
             var result = await _repo.AddAsync(subscription);
+            subscription.QrCodeData = GenerateQrCodeBase64((subscription.Id).ToString());
+            await _repo.UpdateAsync(subscription);
             return result != null ? await GetByIdAsync(result.Id) : null;
         }
 
