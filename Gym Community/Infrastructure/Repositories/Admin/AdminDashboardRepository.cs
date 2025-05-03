@@ -1,4 +1,5 @@
-﻿using Gym_Community.API.DTOs.Admin;
+﻿using Gym_Community.API.DTOs;
+using Gym_Community.API.DTOs.Admin;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Admin;
@@ -92,7 +93,48 @@ namespace Gym_Community.Infrastructure.Repositories.Admin
 
             return fullYear;
         }
+      
 
-   
+        public async Task<PageResult<AppUser>> GetUsers(
+            string role, string query, bool? isActive, bool? isPremium, string gender,
+            int pageNumber, int pageSize)
+        {
+            var users = await _userManager.GetUsersInRoleAsync(role);
+            var filteredUsers = users.AsQueryable();
+
+            if (isActive.HasValue)
+                filteredUsers = filteredUsers.Where(u => u.IsActive == isActive.Value);
+
+            if (isPremium.HasValue)
+                filteredUsers = filteredUsers.Where(u => u.IsPremium == isPremium.Value);
+
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                var loweredQuery = query.ToLower();
+                filteredUsers = filteredUsers.Where(u =>
+                    (!string.IsNullOrEmpty(u.FirstName) && u.FirstName.ToLower().Contains(loweredQuery)) ||
+                    (!string.IsNullOrEmpty(u.LastName) && u.LastName.ToLower().Contains(loweredQuery)) ||
+                    (!string.IsNullOrEmpty(u.UserName) && u.UserName.ToLower().Contains(loweredQuery)) ||
+                    (!string.IsNullOrEmpty(u.Email) && u.Email.ToLower().Contains(loweredQuery))
+                );
+            }
+
+            if (!string.IsNullOrWhiteSpace(gender) && gender.ToLower() != "all")
+                filteredUsers = filteredUsers.Where(u => u.Gender.ToLower() == gender.ToLower());
+
+            var totalCount = filteredUsers.Count();
+            var pagedUsers = filteredUsers
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new PageResult<AppUser>
+            {
+                TotalCount = totalCount,
+                Items = pagedUsers
+            };
+        }
+
+
     }
 }
