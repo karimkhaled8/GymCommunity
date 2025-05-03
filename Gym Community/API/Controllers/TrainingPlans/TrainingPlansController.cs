@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Gym_Community.API.DTOs.TrainingPlanDtos;
+using Gym_Community.Application.Interfaces.CoachStuff;
 using Gym_Community.Domain.Data.Models.Meals_and_Exercise;
 using Gym_Community.Domain.Models.Coach_Plans;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
@@ -18,17 +19,19 @@ namespace Gym_Community.API.Controllers.TrainingPlans
         private readonly IWeekPlanRepository _weekPlanRepository;
         private readonly ITrainingPlanRepository _trainingPlanRepository;
         private readonly IMapper _mapper;
+        private readonly ICoachPortfolioService _CoachPortfolioService;
 
         public TrainingPlansController(
             IDailyPlanRepository dailyPlanRepository,
             IWeekPlanRepository weekPlanRepository,
             ITrainingPlanRepository trainingPlanRepository,
-            IMapper mapper)
+            IMapper mapper, ICoachPortfolioService CoachPortfolioService)
         {
             _dailyPlanRepository = dailyPlanRepository;
             _weekPlanRepository = weekPlanRepository;
             _trainingPlanRepository = trainingPlanRepository;
             _mapper = mapper;
+            _CoachPortfolioService = CoachPortfolioService; 
         }
 
         private string GetUserId()
@@ -400,7 +403,9 @@ namespace Gym_Community.API.Controllers.TrainingPlans
 
                 planDto.Coach = plan.Coach;
 
-                return Ok(planDto);
+                var coachPortofoilio = await _CoachPortfolioService.GetByCoachIdAsync(planDto.CoachId);
+
+                return Ok(new {plan=planDto,coach= coachPortofoilio});
             }
             catch (UnauthorizedAccessException ex)
             {
