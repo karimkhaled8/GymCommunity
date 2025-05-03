@@ -29,9 +29,10 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
         public async Task<IEnumerable<Product>> ListAsync(string query, int page, int eleNo, string sort, int? categoryId, int? brandId, decimal? minPrice, decimal? maxPrice)
         {
             var queryable = _context.Products
-                            .Include(p => p.Brand)
-                            .Include(p => p.Category)
-                            .AsQueryable();
+                             .Include(p => p.Brand)
+                             .Include(p => p.Category)
+                             .Include(p => p.Reviews) // Include reviews
+                             .AsQueryable();
 
             if (!string.IsNullOrEmpty(query))
             {
@@ -68,9 +69,25 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
                 queryable = queryable.OrderByDescending(p => p.Price);
             }
             return await queryable
-                    .Skip((page - 1) * eleNo)
-                    .Take(eleNo)
-                    .ToListAsync();
+         .Skip((page - 1) * eleNo)
+         .Take(eleNo)
+         .Select(p => new Product
+         {
+             Id = p.Id,
+             Name = p.Name,
+             Description = p.Description,
+             Price = p.Price,
+             Stock = p.Stock,
+             ImageUrl = p.ImageUrl,
+             CreatedAt = p.CreatedAt,
+             AverageRating = p.Reviews.Any() ? (float?)p.Reviews.Average(r => r.Rating) : null,
+             Reviews = p.Reviews,
+             CategoryID = p.CategoryID,
+             Category = p.Category,
+             BrandId = p.BrandId,
+             Brand = p.Brand
+         })
+         .ToListAsync();
         }
         public async Task<int> GetTotalCount(string query, int? categoryId, int? brandId, decimal? minPrice, decimal? maxPrice)
         {

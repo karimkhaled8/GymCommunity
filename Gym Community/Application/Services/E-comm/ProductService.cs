@@ -27,6 +27,7 @@ namespace Gym_Community.Application.Services.E_comm
                 ImageUrl = p.ImageUrl,
                 CreatedAt = p.CreatedAt,
                 AverageRating = p.AverageRating,
+                ReviewCount = p.Reviews.Count,
                 CategoryID = p.CategoryID,
                 CategoryName = p.Category?.Name ?? string.Empty,
                 BrandId = p.BrandId,

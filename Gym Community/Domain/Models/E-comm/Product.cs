@@ -37,5 +37,11 @@ namespace Gym_Community.Domain.Data.Models.E_comms
         [ForeignKey("Category")]
         public int? CategoryID { get; set; }
         public Category? Category { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+
+        // Add this computed property (optional but recommended)
+        [NotMapped]
+        public float? CalculatedAverageRating =>
+            Reviews?.Any() == true ? (float?)Reviews.Average(r => r.Rating) : null;
     }
 }

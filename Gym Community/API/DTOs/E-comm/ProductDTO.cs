@@ -17,6 +17,7 @@
         public DateTime? CreatedAt { get; set; }
 
         public float? AverageRating { get; set; }
+        public int ReviewCount { get; set; } // Add this
 
         public int? CategoryID { get; set; }
 
