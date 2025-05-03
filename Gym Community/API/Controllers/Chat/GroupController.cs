@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using AutoMapper.Execution;
 
 namespace Gym_Community.API.Controllers.Client
 {
@@ -18,6 +19,21 @@ namespace Gym_Community.API.Controllers.Client
     {
         public string GroupName { get; set; }
         public string OtherUserId { get; set; }
+    }
+    public class ChatGroupDto
+    {
+        public string GroupId { get; set; }
+
+        public GroupNameDto GroupName { get; set; }
+
+        public List<Member> Members { get; set; } = new();
+    }
+
+    public class GroupNameDto
+    {
+        public string CoachId { get; set; }
+        public string ClientId { get; set; }
+        public string Name { get; set; }
     }
 
     public class UserInfoDto
@@ -123,7 +139,7 @@ namespace Gym_Community.API.Controllers.Client
                 .Distinct()
                 .ToListAsync();
 
-            var userGroups = await _context.ChatGroups
+            IEnumerable < ChatGroup >  userGroups = await _context.ChatGroups
                 .Where(g => groups.Contains(g.GroupId))
                 .Include(g => g.Members)
                 .ToListAsync();
@@ -147,6 +163,21 @@ namespace Gym_Community.API.Controllers.Client
                 Name = user.FirstName,
                 ProfileImage = user.ProfileImg
             };
+
+            return Ok(userInfo);
+        }
+        [HttpGet("userName/{id}")]
+       
+        public async Task<ActionResult<string>> GetUserNameById(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var userInfo = $"{user.FirstName} {user.LastName}";
+
 
             return Ok(userInfo);
         }
