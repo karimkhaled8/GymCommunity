@@ -15,5 +15,7 @@ namespace Gym_Community.Infrastructure.Interfaces.Training_Plans
         Task DeleteAsync(TrainingPlan trainingPlan, string coachId);
 
         Task<IEnumerable< AppUser>> GetAllCoachClients(string CoachId);
+
+        Task<IEnumerable<TrainingPlan>> GetAllIncWeeksAsync(string userId);
     }
 }

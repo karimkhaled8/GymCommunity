@@ -37,6 +37,15 @@ namespace Gym_Community.Infrastructure.Repositories.Training_Plans
                 .Where(tp => tp.ClientId == userId || tp.CoachId == userId)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<TrainingPlan>> GetAllIncWeeksAsync(string userId)
+        {
+            return await _dbSet
+                .Include(tp => tp.Coach)
+                .Include(tp => tp.Client)
+                .Include(tp => tp.WeekPlans).ThenInclude(wp => wp.WorkoutDays)
+                .Where(tp => tp.ClientId == userId || tp.CoachId == userId)
+                .ToListAsync();
+        }
 
         public async Task<IEnumerable<TrainingPlan>> GetByCoachIdAsync(string coachId)
         {
