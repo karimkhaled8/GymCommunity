@@ -13,6 +13,11 @@ namespace Gym_Community.Application.Services.Admin
             _dashboardRepository = dashboardRepository;
         }
 
+        public async Task<List<UserMonthlyCountDto>> GetMonthlyUserCountByRoleAsync(string role, int year)
+        {
+            return await _dashboardRepository.GetMonthlyUserCountByRoleAsync(role, year);
+        }
+
         public async Task<DashboardSummaryDto> GetSummaryAsync()
         {
             return await _dashboardRepository.GetDashboardSummaryAsync();

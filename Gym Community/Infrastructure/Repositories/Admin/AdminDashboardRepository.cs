@@ -1,6 +1,8 @@
 ﻿using Gym_Community.API.DTOs.Admin;
+using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Admin;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -9,10 +11,12 @@ namespace Gym_Community.Infrastructure.Repositories.Admin
     public class AdminDashboardRepository : IAdminDashboardRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<AppUser> _userManager; 
 
-        public AdminDashboardRepository(ApplicationDbContext context)
+        public AdminDashboardRepository(ApplicationDbContext context,UserManager<AppUser> userManager)
         {
             _context = context;
+            _userManager = userManager; 
         }
 
         public async Task<DashboardSummaryDto> GetDashboardSummaryAsync()
@@ -63,5 +67,32 @@ namespace Gym_Community.Infrastructure.Repositories.Admin
                 SalesTrend = salesTrend
             };
         }
+
+        public async Task<List<UserMonthlyCountDto>> GetMonthlyUserCountByRoleAsync(string role, int year)
+        {
+            var users = await _userManager.GetUsersInRoleAsync(role);
+
+            var result = users
+                             .Where(u => u.CreatedAt.Year == year)
+                             .GroupBy(u => u.CreatedAt.Month)
+                             .Select(g => new UserMonthlyCountDto
+                             {
+                                 Month = g.Key,
+                                 Count = g.Count()
+                             })
+                             .ToList();
+
+            var fullYear = Enumerable.Range(1, 12)
+                .Select(m => new UserMonthlyCountDto
+                {
+                    Month = m,
+                    Count = result.FirstOrDefault(x => x.Month == m)?.Count ?? 0
+                })
+                .ToList();
+
+            return fullYear;
+        }
+
+   
     }
 }

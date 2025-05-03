@@ -21,5 +21,11 @@ namespace Gym_Community.API.Controllers.Admin
             var summary = await _dashboardService.GetSummaryAsync();
             return Ok(summary);
         }
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsersSummary(string role, int year)
+        {
+            var summary = await _dashboardService.GetMonthlyUserCountByRoleAsync(role,year);
+            return Ok(summary);
+        }
     }
 }
