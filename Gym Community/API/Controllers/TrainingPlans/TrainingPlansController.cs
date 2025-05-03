@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using Gym_Community.API.Controllers.Client;
 using Gym_Community.API.DTOs.TrainingPlanDtos;
 using Gym_Community.Application.Interfaces.CoachStuff;
 using Gym_Community.Domain.Data.Models.Meals_and_Exercise;
+using Gym_Community.Domain.Models.Chat;
 using Gym_Community.Domain.Models.Coach_Plans;
+using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces.Training_Plans;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace Gym_Community.API.Controllers.TrainingPlans
 {
@@ -20,18 +24,23 @@ namespace Gym_Community.API.Controllers.TrainingPlans
         private readonly ITrainingPlanRepository _trainingPlanRepository;
         private readonly IMapper _mapper;
         private readonly ICoachPortfolioService _CoachPortfolioService;
+        private readonly ApplicationDbContext _context;
 
         public TrainingPlansController(
             IDailyPlanRepository dailyPlanRepository,
             IWeekPlanRepository weekPlanRepository,
             ITrainingPlanRepository trainingPlanRepository,
-            IMapper mapper, ICoachPortfolioService CoachPortfolioService)
+            IMapper mapper, ICoachPortfolioService CoachPortfolioService,
+            ApplicationDbContext context
+            )
+
         {
             _dailyPlanRepository = dailyPlanRepository;
             _weekPlanRepository = weekPlanRepository;
             _trainingPlanRepository = trainingPlanRepository;
             _mapper = mapper;
-            _CoachPortfolioService = CoachPortfolioService; 
+            _CoachPortfolioService = CoachPortfolioService;
+            _context = context;
         }
 
         private string GetUserId()
@@ -356,6 +365,19 @@ namespace Gym_Community.API.Controllers.TrainingPlans
                 //}
                 await _trainingPlanRepository.AddAsync(plan, planDto.CoachId);
                 var createdPlanDto = _mapper.Map<TrainingPlanDto>(plan);
+                if(planDto.CoachId != null)
+                {
+                    var data = new
+                    {
+                        CoachId = planDto.CoachId,
+                        ClientId = planDto.ClientId,
+                        Name = planDto.Name,
+                    };
+
+                    string jsonString = JsonSerializer.Serialize(data);
+                    await CreateTraingPlanChat(jsonString, planDto.CoachId, planDto.ClientId);
+                }
+               
                 return CreatedAtAction(nameof(GetTrainingPlans), createdPlanDto);
             }
             catch (UnauthorizedAccessException ex)
@@ -405,7 +427,7 @@ namespace Gym_Community.API.Controllers.TrainingPlans
 
                 var coachPortofoilio = await _CoachPortfolioService.GetByCoachIdAsync(planDto.CoachId);
 
-                return Ok(new {plan=planDto,coach= coachPortofoilio});
+                return Ok(new { plan = planDto, coach = coachPortofoilio });
             }
             catch (UnauthorizedAccessException ex)
             {
@@ -415,6 +437,29 @@ namespace Gym_Community.API.Controllers.TrainingPlans
             {
                 return StatusCode(500, new { message = "An error occurred while retrieving the training plan", error = ex.Message });
             }
+        }
+        private async         Task
+CreateTraingPlanChat(string groupName ,string coachId , string clientId)
+        {
+            var newGroupId = Guid.NewGuid().ToString();
+
+            var group = new ChatGroup
+            {
+                GroupId = newGroupId,
+                GroupName = groupName
+            };
+
+            _context.ChatGroups.Add(group);
+
+            var members = new List<GroupMember>
+            {
+                new GroupMember { UserId = coachId, GroupId = newGroupId },
+                new GroupMember { UserId = clientId, GroupId = newGroupId }
+            };
+
+            _context.GroupMembers.AddRange(members);
+
+            await _context.SaveChangesAsync();
         }
 
     }
