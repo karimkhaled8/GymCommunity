@@ -1,4 +1,7 @@
-﻿using Gym_Community.Application.Services.Notification;
+﻿using AutoMapper;
+using Gym_Community.API.DTOs;
+using Gym_Community.API.Mapping;
+using Gym_Community.Application.Services.Notification;
 using Gym_Community.Domain.Models.Notify;
 using Gym_Community.Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -12,15 +15,21 @@ namespace Gym_Community.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class NotificationController : ControllerBase
     {
         private readonly INotificationRepository _notificationRepository;
-        private readonly IHubContext<NotificationHub> _hub; 
-        public NotificationController(INotificationRepository notificationRepository, IHubContext<NotificationHub> hub)
+        private readonly IHubContext<NotificationHub> _hub;
+        private readonly IMapper _mapper; 
+        public NotificationController(
+            INotificationRepository notificationRepository
+           ,IHubContext<NotificationHub> hub
+           , IMapper mapper
+            )
         {
             _notificationRepository = notificationRepository;
             _hub = hub;
+            _mapper = mapper; 
         }
 
         [HttpGet]
@@ -48,16 +57,18 @@ namespace Gym_Community.API.Controllers
             return Ok(notification);
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Notification notification)
+        public async Task<IActionResult> Add(NotificationDto notificationDto)
         {
-            if (ModelState.IsValid!) return BadRequest(ModelState);
-            notification.CreatedAt = DateTime.UtcNow;
-            var userId = getUserId();
-            if (userId == null) return BadRequest();
-            var createdNotification = await _notificationRepository.AddNotificationAsync(notification);
-            if (createdNotification == null) return NotFound();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-            // Send real-time notification to the user
+            var notification = _mapper.Map<Notification>(notificationDto);
+            var createdNotification = await _notificationRepository.AddNotificationAsync(notification);
+
+            if (createdNotification == null)
+                return NotFound("Notification could not be created");
+
+            // Send a real-time notification to the user via SignalR
             await _hub.Clients.User(notification.UserId).SendAsync("ReceiveNotification", createdNotification);
 
             return Ok(createdNotification);

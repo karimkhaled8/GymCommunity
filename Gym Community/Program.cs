@@ -174,6 +174,7 @@ namespace Gym_Community
             builder.Services.AddScoped<IGymPlanService, GymPlanService>();
             builder.Services.AddScoped<IUserSubscriptionService, UserSubscriptionService>();
             builder.Services.AddScoped<IDashboardService, DashboardService>();
+            
 
 
             //Ecommerce Repository
@@ -236,6 +237,7 @@ namespace Gym_Community
 
             //Chat
             builder.Services.AddSignalR();
+            builder.Services.AddScoped<INotificationRepository, NotificationRepository>(); 
 
 
             // CoachstuffRepo

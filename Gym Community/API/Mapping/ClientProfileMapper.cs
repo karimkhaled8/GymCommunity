@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Gym_Community.API.DTOs;
 using Gym_Community.API.DTOs.Client;
 using Gym_Community.Domain.Models;
 using Gym_Community.Domain.Models.ClientStuff;
+using Gym_Community.Domain.Models.Notify;
 
 namespace Gym_Community.API.Mapping
 {
@@ -28,8 +30,14 @@ namespace Gym_Community.API.Mapping
 
             CreateMap<ClientInfo, ClientProfileDTO>();
 
+            // Map NotificationDto to Notification
+            CreateMap<NotificationDto, Notification>()
+                .ForMember(dest => dest.isRead, opt => opt.MapFrom(src => src.isRead ?? false)) // Default to false if null
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt ?? DateTime.UtcNow)) // Default to current UTC time if null
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId)); // Map UserId directly
 
-          
+
+
 
             CreateMap<UpdateClientProfileDTO, ClientInfo>();
             CreateMap<UpdateClientProfileDTO, AppUser>();
