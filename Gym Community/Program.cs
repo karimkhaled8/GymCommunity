@@ -20,6 +20,7 @@ using Gym_Community.Application.Services.CoachStuff;
 using Gym_Community.Application.Services.E_comm;
 using Gym_Community.Application.Services.Forum;
 using Gym_Community.Application.Services.Gym;
+using Gym_Community.Application.Services.Notification;
 using Gym_Community.Domain.Models;
 using Gym_Community.Infrastructure.Context;
 using Gym_Community.Infrastructure.Interfaces;
@@ -282,6 +283,7 @@ namespace Gym_Community
             app.UseAuthorization();
             app.MapControllers();
             app.MapHub<ChatHub>("/chatHub");
+            app.MapHub<NotificationHub>("/notificationHub");
             app.Run();
         }
     }
