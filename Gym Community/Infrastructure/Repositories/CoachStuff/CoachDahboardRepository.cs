@@ -102,7 +102,8 @@ namespace Gym_Community.Infrastructure.Repositories.CoachStuff
                 .Select(g => new TopProductDto
                 {
                     ProductName = g.Key,
-                    QuantitySold = g.Sum(x => x.Quantity)
+                    QuantitySold = g.Sum(x => x.Quantity),
+                    ProductImg = g.FirstOrDefault().Product.ImageUrl,
                 })
                 .OrderByDescending(x => x.QuantitySold)
                 .Take(5)
