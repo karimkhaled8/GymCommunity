@@ -147,7 +147,7 @@ namespace Gym_Community.Application.Services.Gym
                 StartDate = sub.StartDate,
                 ExpiresAt = sub.ExpiresAt,
                 PaymentStatus = sub.paymentStatus,
-                IsExpired = sub.IsExpired,
+                IsExpired = sub.ExpiresAt < DateTime.UtcNow ? true:false,
                 QrCodeData = sub.QrCodeData,
                 rawData = sub.rawData,
                 GymName = sub.Gym.Name,
