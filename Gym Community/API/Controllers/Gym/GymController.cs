@@ -1,8 +1,11 @@
-﻿using Gym_Community.API.DTOs.Gym;
+﻿using Google;
+using Gym_Community.API.DTOs.Gym;
 using Gym_Community.Application.Interfaces.Gym;
 using Gym_Community.Application.Services.Gym;
+using Gym_Community.Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gym_Community.API.Controllers.Gym
 {
@@ -12,9 +15,12 @@ namespace Gym_Community.API.Controllers.Gym
     {
         private readonly IGymService _service;
 
-        public GymController(IGymService service)
+        public ApplicationDbContext _context { get; }
+
+        public GymController(IGymService service , ApplicationDbContext applicationDbContext)
         {
             _service = service;
+            _context = applicationDbContext;
         }
 
         [HttpGet]
@@ -68,5 +74,79 @@ namespace Gym_Community.API.Controllers.Gym
             var gyms = await _service.GetNearbyGymsAsync(lat, lng, radiusInKm);
             return Ok(gyms);
         }
+        [HttpGet("all")]
+        public async Task<IEnumerable<GymReadDTO>> GetAllAsync()
+        {
+            var gyms = await _context.Gym
+                .Include(g => g.Images)
+                .ToListAsync();
+
+            var gymDTOs = gyms.Select(g => new GymReadDTO
+            {
+                Id = g.Id,
+                Name = g.Name,
+                Location = g.Location,
+                OwnerId = g.OwnerId,
+                Images = g.Images.Select(img => new GymImgDTO
+                {
+                    Id = img.Id,
+                    ImageUrl = img.ImageUrl
+                }).ToList()
+            });
+
+            return gymDTOs;
+        }
+
+        [HttpPut("edit/{id}")]
+        public async Task<IActionResult> UpdateGymAsync(int id, [FromBody] GymUpdateDTO gymDto)
+        {
+            var gym = await _context.Gym.FindAsync(id);
+            if (gym == null) return NotFound();
+
+            gym.Name = gymDto.Name;
+            gym.Location = gymDto.Location;
+            // Add more fields if needed
+
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteGymAsync(int id)
+        {
+            var gym = await _context.Gym.FindAsync(id);
+            if (gym == null) return NotFound();
+
+            _context.Gym.Remove(gym);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+      
+       public class GymUpdateDTO
+        {
+            public string Name { get; set; } = null!;
+            public string Location { get; set; } = null!;
+            // 'OwnerId' is typically not updated in most cases
+            public List<GymImgDTO> Images { get; set; } = new();
+        }
+
+
+        public class GymReadDTO
+        {
+            public int Id { get; set; }
+            public string Name { get; set; } = null!;
+            public string Location { get; set; } = null!;
+            public string OwnerId { get; set; } = null!;
+
+            public List<GymImgDTO> Images { get; set; } = new();
+        }
+
+        public class GymImgDTO
+        {
+            public int Id { get; set; }
+            public string ImageUrl { get; set; } = null!;
+        }
+
     }
 }
