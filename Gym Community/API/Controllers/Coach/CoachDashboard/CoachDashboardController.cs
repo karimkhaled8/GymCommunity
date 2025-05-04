@@ -43,7 +43,7 @@ namespace Gym_Community.API.Controllers.Coach.CoachDashboard
                 {
                     return NotFound(new { message = "No dashboard data found for this coach." });
                 }
-                return Ok(new {data = coachDashboardData });
+                return Ok(new {tplans=trainingPlans ,data = coachDashboardData });
             }
             catch (Exception ex)
             {
