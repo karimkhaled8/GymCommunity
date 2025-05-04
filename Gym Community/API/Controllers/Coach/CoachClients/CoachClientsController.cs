@@ -47,7 +47,7 @@ namespace Gym_Community.API.Controllers.Coach.CoachClients
         }
 
         [HttpGet("GetAll")]
-        [Authorize(Roles = "Coach")]
+        //[Authorize(Roles = "Coach")]
         public async Task<IActionResult> GetAllCoachClients([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             try
