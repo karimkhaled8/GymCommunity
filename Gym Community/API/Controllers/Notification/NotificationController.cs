@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.SignalR;
 using Sprache;
 using System.Security.Claims;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Gym_Community.API.Controllers
 {
@@ -64,7 +63,7 @@ namespace Gym_Community.API.Controllers
             return Ok(createdNotification);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> MarkAsRead(int id)
         {
             var result = await _notificationRepository.MarkAsReadAsync(id);

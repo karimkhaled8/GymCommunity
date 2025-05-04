@@ -43,6 +43,7 @@ using Gym_Community.Infrastructure.Repositories.Meals_and_Exercise;
 using Gym_Community.Infrastructure.Repositories.Training_Plans;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -231,7 +232,8 @@ namespace Gym_Community
             builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
             builder.Services.AddScoped<IMuscleGroupRepository, MuscleGroupRepository>();
 
-           
+            builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+
             //Chat
             builder.Services.AddSignalR();
 
