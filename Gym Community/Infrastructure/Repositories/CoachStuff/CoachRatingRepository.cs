@@ -17,7 +17,7 @@ namespace Gym_Community.Infrastructure.Repositories.CoachStuff
         public async Task<IEnumerable<CoachRating>> GetByCoachIdAsync(string coachId)
         {
             return await _context.CoachRatings
-                .Where(r => r.CoachId == coachId).Include(c => c.Coach)
+                .Where(r => r.CoachId == coachId).Include(c => c.Coach).Include(c=>c.Client)
                 .ToListAsync();
         }
 
