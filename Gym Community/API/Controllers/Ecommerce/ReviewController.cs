@@ -1,6 +1,10 @@
 ﻿using Gym_Community.API.DTOs.E_comm;
 using Gym_Community.Application.Interfaces.IE_comm;
+using Gym_Community.Domain.Enums;
+using Gym_Community.Infrastructure.Context;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,9 +15,14 @@ namespace Gym_Community.API.Controllers.Ecommerce
     public class ReviewController : ControllerBase
     {
         private readonly IReviewService _reviewService;
-        public ReviewController(IReviewService reviewService)
+        private readonly ApplicationDbContext _context;
+        public ReviewController(
+            IReviewService reviewService
+           ,ApplicationDbContext context
+            )
         {
-            _reviewService = reviewService; 
+            _reviewService = reviewService;
+            _context = context; 
         }
 
         [HttpGet("{productId}")]  // Match parameter name
@@ -58,6 +67,32 @@ namespace Gym_Community.API.Controllers.Ecommerce
                 return Ok(new { success = true, message = "Review deleting succeeded!" });
             else
                 return BadRequest(new { success = false, message = "Review deleting failed!" });
+        }
+
+        [HttpGet("can-review/{productId}")]
+        public async Task<IActionResult> CanUserReview(int productId)
+        {
+            var userId = getUserId();
+
+            var delivered = await _context.Orders
+                .Include(o=>o.Shipping)
+                .Include(o => o.OrderItems)
+                .AnyAsync(o => o.UserID == userId &&
+                               o.Shipping.ShippingStatus == ShippingStatus.Delivered &&
+                               o.OrderItems.Any(i => i.ProductID == productId));
+
+            if (!delivered)
+                return Ok(false);
+
+            var alreadyReviewed = await _context.Reviews
+                .AnyAsync(r => r.UserID == userId && r.ProductID == productId);
+
+            return Ok(!alreadyReviewed);
+        }
+
+        private string getUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier); 
         }
 
     }
