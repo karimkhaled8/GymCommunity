@@ -18,9 +18,38 @@ namespace Gym_Community.Infrastructure.Repositories.ECommerce
 
         public async Task<Order?> AddAsync(Order order)
         {
+            foreach (var item in order.OrderItems)
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == item.ProductID);
+                if (product != null)
+                {
+                    if (product.Stock < item.Quantity)
+                    {
+                        return null; 
+                    }
+
+                    //product.Stock -= item.Quantity;
+                }
+            }
+            foreach (var item in order.OrderItems)
+            {
+                var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == item.ProductID);
+                if (product != null)
+                {
+                    if (product.Stock < item.Quantity)
+                    {
+                        return null;
+                    }
+
+                    product.Stock -= item.Quantity;
+                }
+            }
+
+
             _context.Orders.Add(order);
             if (await _context.SaveChangesAsync() > 0)
             {
+
                 return await GetById(order.OrderID);
             }
             else {
