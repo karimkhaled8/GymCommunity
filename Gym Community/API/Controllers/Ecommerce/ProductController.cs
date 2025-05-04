@@ -2,6 +2,7 @@
 using Gym_Community.Application.Interfaces;
 using Gym_Community.Application.Interfaces.IE_comm;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -116,25 +117,49 @@ namespace Gym_Community.API.Controllers.Ecommerce
             return createdProduct==null ? NotFound() : Ok(createdProduct);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromForm] ProductDTO productDTO , [FromForm] IFormFile productImg)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (productImg != null && productImg.Length > 0)
-            {
-                if(!string.IsNullOrEmpty(productDTO.ImageUrl)) 
-                    await _awsService.DeleteFileAsync(productDTO.ImageUrl);
 
-                var imageUrl = await _awsService.UploadFileAsync(productImg, "products");
-                if (string.IsNullOrEmpty(imageUrl))
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromForm] IFormFile productImg, [FromForm] string productDTO)
+        {
+            try
+            {
+                // Deserialize the product data
+                var productDto = JsonConvert.DeserializeObject<ProductDTO>(productDTO);
+
+                if (productDto == null || productDto.Id != id)
                 {
-                   return BadRequest(new { success = false, message = "Failed to upload image" });
+                    return BadRequest("Invalid product data");
                 }
-                productDTO.ImageUrl = imageUrl;
+
+                // Handle image upload only if a new file was provided
+                if (productImg != null && productImg.Length > 0)
+                {
+                    if (!string.IsNullOrEmpty(productDto.ImageUrl))
+                    {
+                        await _awsService.DeleteFileAsync(productDto.ImageUrl);
+                    }
+
+                    var imageUrl = await _awsService.UploadFileAsync(productImg, "products");
+                    if (string.IsNullOrEmpty(imageUrl))
+                    {
+                        return BadRequest(new { success = false, message = "Failed to upload image" });
+                    }
+                    productDto.ImageUrl = imageUrl;
+                }
+
+                // Validate model after potential image update
+                if (!TryValidateModel(productDto))
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var updatedProduct = await _productService.UpdateProduct(id, productDto);
+                return updatedProduct == null ? NotFound() : Ok(updatedProduct);
             }
-            var updatedProduct = await _productService.UpdateProduct(id, productDTO);
-            if (updatedProduct == null) return NotFound();
-            return Ok(updatedProduct); 
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
