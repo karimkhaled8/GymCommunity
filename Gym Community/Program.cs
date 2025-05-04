@@ -289,7 +289,7 @@ namespace Gym_Community
             app.UseAuthorization();
             app.MapControllers();
             app.MapHub<ChatHub>("/chatHub");
-            app.MapHub<NotificationHub>("/notificationHub");
+            app.MapHub<NotificationHub>("api/notificationHub");
             app.Run();
         }
     }

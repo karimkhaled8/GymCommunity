@@ -5,18 +5,22 @@ namespace Gym_Community.Application.Services.Notification
 {
     public class NotificationHub : Hub
     {
-        private readonly INotificationRepository _notificationRepository;
-        public NotificationHub(INotificationRepository notificationRepository)
+        public override async Task OnConnectedAsync()
         {
-            _notificationRepository = notificationRepository;
+            await base.OnConnectedAsync();
         }
-        public override Task OnConnectedAsync()
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            return base.OnConnectedAsync();
+            await base.OnDisconnectedAsync(exception);
         }
-        public override Task OnDisconnectedAsync(Exception? exception)
+
+        // Method to send notification to a specific user
+        public async Task SendNotificationToUser(string userId, string message)
         {
-            return base.OnDisconnectedAsync(exception);
+            Console.WriteLine($"Sending notification to user {userId}: {message}");
+            // Send notification to specific user
+            await Clients.User(userId).SendAsync("ReceiveNotification", message);
         }
     }
 }

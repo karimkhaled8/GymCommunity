@@ -69,7 +69,9 @@ namespace Gym_Community.API.Controllers
                 return NotFound("Notification could not be created");
 
             // Send a real-time notification to the user via SignalR
-            await _hub.Clients.User(notification.UserId).SendAsync("ReceiveNotification", createdNotification);
+            await _hub.Clients.All
+             .SendAsync("ReceiveNotification", notificationDto.Body);
+
 
             return Ok(createdNotification);
         }
