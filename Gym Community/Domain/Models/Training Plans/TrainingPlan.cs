@@ -1,4 +1,5 @@
-﻿using Gym_Community.Domain.Enums;
+﻿using Gym_Community.Domain.Data.Models.Payment_and_Shipping;
+using Gym_Community.Domain.Enums;
 using Gym_Community.Domain.Models;
 using Gym_Community.Domain.Models.Coach_Plans;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,10 @@ namespace Gym_Community.Domain.Data.Models.Meals_and_Exercise
         [ForeignKey("Coach")]
         public string CoachId { get; set; }
         public AppUser Coach { get; set; }
+
+        [ForeignKey("Payment")]
+        public int? paymentId { get; set; } 
+        public Payment? Payment { get; set; } 
 
         [ForeignKey("Client")]
         public string? ClientId { get; set; }   

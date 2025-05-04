@@ -243,6 +243,8 @@ namespace Gym_Community
             builder.Services.AddScoped<ICoachPortfolioRepository, CoachPortfolioRepository>();
             builder.Services.AddScoped<ICoachOffersRepository, CoachOffersRepository>();
 
+            builder.Services.AddScoped<ICoachDashboardRepository, CoachDahboardRepository>();
+
 
 
             // CoachStuffServices

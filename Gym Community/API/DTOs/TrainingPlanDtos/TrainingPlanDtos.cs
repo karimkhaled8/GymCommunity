@@ -20,9 +20,10 @@ namespace Gym_Community.API.DTOs.TrainingPlanDtos
         [Required]
         [Range(1, 6)]
         public int DurationMonths { get; set; }
-   
-        
-        
+
+        public int? paymentId { get; set; }
+
+
         public TrainingPlanType? Type { get; set; }
         
         [Required]
