@@ -98,7 +98,7 @@ namespace Gym_Community.API.Controllers.Client
             var result = await _clientInfoService.ChangeCoverImg(imageUrl, userId);
             if (!result)
                 return NotFound(new { success = false, message = "Client info not found" });
-            return Ok(new { success = true, message = "Cover image changed successfully" });
+            return Ok(new { success = true, message = "Cover image changed successfully",imgUrl= imageUrl });
         }
     }
 }
