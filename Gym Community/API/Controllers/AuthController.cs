@@ -144,7 +144,8 @@ namespace Gym_Community.API.Controllers
                     ProfileImg = info.Principal.FindFirstValue(ClaimTypes.Uri) ?? "",
 
                 };
-
+               
+                appUser.EmailConfirmed = true;
                 var result = await _userManager.CreateAsync(appUser);
                 if (!result.Succeeded) return BadRequest("User creation failed");
 
