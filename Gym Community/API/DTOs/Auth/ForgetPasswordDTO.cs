@@ -9,6 +9,6 @@ namespace Gym_Community.API.DTOs.Auth
         public string Email { get; set; } = null!;
 
         [Required]
-        public string? ClientUri { get; set; } = "https://www.ourWebsite.com/ResetPassword"; 
+        public string? ClientUri { get; set; } = "http://localhost:4200/ResetPassword"; 
     }
 }
