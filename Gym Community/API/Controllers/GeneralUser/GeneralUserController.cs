@@ -1,4 +1,5 @@
 ﻿using Gym_Community.Application.Interfaces;
+using Gym_Community.Application.Services;
 using Gym_Community.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +17,12 @@ namespace Gym_Community.API.Controllers.GeneralUser
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IAuthService _authService;
-        public GeneralUserController(UserManager<AppUser> userManager , IAuthService authService)
+        private readonly IAwsService _awsService;
+        public GeneralUserController(UserManager<AppUser> userManager , IAuthService authService,IAwsService awsService)
         {
             _userManager = userManager;
             _authService = authService;
+            _awsService = awsService;
 
         }
 
@@ -51,5 +54,34 @@ namespace Gym_Community.API.Controllers.GeneralUser
 
 
         }
+
+
+        [HttpPost("changeProfilePic")]
+        public async Task<IActionResult> ChangeProfilePic([FromForm] IFormFile img)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+            // Assuming you have a method to upload the file and get the URL
+
+            string imageUrl = string.Empty;
+            if (img != null)
+            {
+                imageUrl = await _awsService.UploadFileAsync(img, "ProfileImages");
+
+            }
+            user.ProfileImg = imageUrl;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Failed to update profile picture");
+            }
+            return Ok(new { success = true, message = "Profile picture updated successfully", imgUrl= user.ProfileImg });
+        }
+
+
     }
 }
