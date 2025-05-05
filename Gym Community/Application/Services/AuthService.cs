@@ -111,10 +111,11 @@ namespace Gym_Community.Application.Services
             {
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
-                // check for email validation 
-                //if(!await _userManager.IsEmailConfirmedAsync(user)) { 
-                //    return "notConfirmed";
-                //}
+                //check for email validation
+                if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        return "notConfirmed";
+                    }
 
                 if (await _userManager.CheckPasswordAsync(user, loginDto.Password)) 
                 {
@@ -164,16 +165,16 @@ namespace Gym_Community.Application.Services
                 await _userManager.AddToRoleAsync(User, registerDTO.Role);
 
             #region Email confirmation pls dont delete
-            //var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(User);
-            //var param = new Dictionary<string, string?>
-            //    {
-            //        { "token", confirmationToken },
-            //        { "email", User.Email }
-            //    };
+            var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(User);
+            var param = new Dictionary<string, string?>
+                {
+                    { "token", confirmationToken },
+                    { "email", User.Email }
+                };
 
-            //var callback =QueryHelpers.AddQueryString(registerDTO.ClientUri!, param);
+            var callback = QueryHelpers.AddQueryString(registerDTO.ClientUri!, param);
 
-            //await _emailService.SendEmailAsync(registerDTO.Email, "Confirm your email", $"<h1>Confirm your email</h1><p>Please confirm your email by clicking <a href='{callback}'>here</a></p>");
+            await _emailService.SendEmailAsync(registerDTO.Email, "Confirm your email", $"<h1>Confirm your email</h1><p>Please confirm your email by clicking <a href='{callback}'>here</a></p>");
             //await _emailService.SendEmailAsync(registerDTO.Email, "Confirm your email", callback);
             #endregion
 

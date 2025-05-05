@@ -52,7 +52,8 @@ namespace Gym_Community.API.Controllers
             else if (result == "falseRole")
             {
                 return BadRequest(new { message = "Role dont exist" });
-            }
+            }            
+
 
 
             return Ok(new { message = "Account Created", status = result });
