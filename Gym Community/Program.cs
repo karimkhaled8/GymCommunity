@@ -284,10 +284,11 @@ namespace Gym_Community
                 app.MapScalarApiReference();
             }
 
+            app.UseRouting(); 
             app.UseCors("AllowAngularApp"); // Apply CORS policy before routing            app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.MapControllers();
+            app.UseEndpoints(endpoins => endpoins.MapControllers()); 
             app.MapHub<ChatHub>("/chatHub");
             app.MapHub<NotificationHub>("api/notificationHub");
             app.Run();
